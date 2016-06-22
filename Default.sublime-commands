@@ -1,0 +1,6 @@
+[
+    {
+        "caption": "ColorSchemeUnit: Run all tests",
+        "command": "run_color_scheme_tests"
+    }
+]
