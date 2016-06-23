@@ -1,6 +1,6 @@
 # gerardroche/sublime_color_scheme_unit
 
-## Unreleased
+## 0.3.0
 
 * Added: run a single test file
 * Fixed: assertion fail when a scope inherits from another scope
