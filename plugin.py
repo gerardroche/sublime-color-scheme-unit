@@ -217,7 +217,7 @@ class Style(object):
                 if score:
                     if score > matched_style['score']:
                         matched_style['score'] = score
-                        matched_style['settings'] = scheme_selector['settings']
+                        matched_style['settings'].update(scheme_selector['settings'])
 
         styles.update(matched_style['settings'])
 
