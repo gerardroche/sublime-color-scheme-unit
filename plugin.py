@@ -257,9 +257,24 @@ class OutputView(object):
             'scroll_to_end': True
         })
 
-class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
+class ColorSchemeUnitCommand(sublime_plugin.WindowCommand):
 
     def run(self):
+
+        command_args = None
+
+        view = self.window.active_view()
+
+        if view:
+            fname = view.file_name()
+            if fname and re.match('.+/color_scheme_test.*\.[a-z]+$', fname):
+                command_args = { 'test_file': fname }
+
+        self.window.run_command('run_color_scheme_tests', command_args)
+
+class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
+
+    def run(self, test_file = None):
 
         output = OutputView(True)
         output.append('ColorSchemeUnit %s' % VERSION)
@@ -269,6 +284,13 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         total_assertions = 0
 
         tests = sublime.find_resources('color_scheme_test*')
+
+        if test_file:
+            for test in tests:
+                abs_test = os.path.join(os.path.dirname(sublime.packages_path()), test)
+                if test_file == abs_test:
+                    tests = [test]
+                    break
 
         for test in tests:
             test_result = run_color_scheme_test(test)

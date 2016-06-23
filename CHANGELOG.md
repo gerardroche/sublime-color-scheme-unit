@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Added: run a single test file
 * Fixed: assertion fail when a scope inherits from another scope
 
 ## 0.2.0
