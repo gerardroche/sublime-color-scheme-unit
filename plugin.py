@@ -100,6 +100,8 @@ class ColorSchemeTest(object):
 
             style_util = Style(test_view.view)
 
+            debug_message('running test: %s' % self.test)
+
             for assertion in self.assertions:
 
                 for col in range(assertion['begin'], assertion['end']):
