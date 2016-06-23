@@ -12,10 +12,6 @@ A testing framework for for Sublime Text 3 color schemes.
 
 ## Installation
 
-### [Package Control](https://packagecontrol.io) installation
-
-This is the preferred method of installation. Search for "[color_scheme_unit](https://packagecontrol.io/search/color_scheme_unit)".
-
 ### Manual installation
 
 1. Close Sublime Text.
