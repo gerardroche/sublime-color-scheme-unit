@@ -23,9 +23,19 @@ A testing framework for for Sublime Text 3 color schemes.
 
 ## Usage
 
-From the command palette run: `ColorSchemeUnit: run all tests`.
+From the command palette:
 
-Test files are files named with prefix "color_scheme_test". See [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) for examples of usage.
+* `ColorSchemeUnit: run tests`
+* `ColorSchemeUnit: run test`
+
+Or define your own keymaps:
+
+```
+{ "keys": ["ctrl+t"], "command": "run_color_scheme_tests" },
+{ "keys": ["ctrl+r"], "command": "run_color_scheme_test" },
+```
+
+Test files are files prefixed with "color_scheme_test". See [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) for examples of test and assertion format.
 
 ## Contributing
 

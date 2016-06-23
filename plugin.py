@@ -6,7 +6,7 @@ import os
 import re
 import plistlib
 
-VERSION = '0.3.0';
+VERSION = '0.4.0';
 
 DEBUG_MODE=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT'))
 DEV_TOOLS=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS'))
@@ -257,20 +257,28 @@ class OutputView(object):
             'scroll_to_end': True
         })
 
-class ColorSchemeUnitCommand(sublime_plugin.WindowCommand):
+class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
     def run(self):
+        if self.is_enabled():
+            self.window.run_command('run_color_scheme_tests', {
+                'test_file': self.window.active_view().file_name()
+            })
 
-        command_args = None
-
+    def is_enabled(self):
         view = self.window.active_view()
 
-        if view:
-            fname = view.file_name()
-            if fname and re.match('.+/color_scheme_test.*\.[a-z]+$', fname):
-                command_args = { 'test_file': fname }
+        if not view:
+            return False
 
-        self.window.run_command('run_color_scheme_tests', command_args)
+        fname = view.file_name()
+        if not fname:
+            return False
+
+        if re.match('.+/color_scheme_test.*\.[a-z]+$', fname):
+            return True
+
+        return False
 
 class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 

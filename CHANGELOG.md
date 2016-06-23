@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## 0.4.0
+
+* Added: run single test command
+
 ## 0.3.0
 
 * Added: run a single test file
