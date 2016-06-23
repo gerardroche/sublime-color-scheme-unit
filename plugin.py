@@ -35,7 +35,14 @@ class ColorSchemeTest(object):
             raise RuntimeError('Invalid color test: no color')
 
         self.color = m.group('color')
-        self.syntax = sublime.find_resources(m.group('syntax') + '.sublime-syntax')[0]
+
+        syntaxes_found = sublime.find_resources(m.group('syntax') + '.sublime-syntax')
+        if len(syntaxes_found) > 1:
+            raise RuntimeError('Invalid syntax: found more than one')
+        if len(syntaxes_found) is not 1:
+            raise RuntimeError('Invalid syntax: not found')
+
+        self.syntax = syntaxes_found[0]
         self.content = self.content.replace('COLOR TEST "%s"\nSYNTAX TEST "%s"\n' % (self.color, self.syntax), '')
 
         self.assertions = []
