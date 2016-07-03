@@ -220,7 +220,7 @@ class Style(object):
             if 'scope' in scheme_selector:
                 score = sublime.score_selector(scope, scheme_selector['scope'])
                 if score:
-                    if score > matched_style['score']:
+                    if score >= matched_style['score']:
                         matched_style['score'] = score
                         matched_style['settings'].update(scheme_selector['settings'])
 

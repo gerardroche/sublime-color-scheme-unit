@@ -4,6 +4,7 @@
 
 * Added: assertions can now be written with html style comments
 * Fixed: COLOR TEST does not fallback tmLanguage syntaxes
+* Fixed: incorrect style when styles have the same score
 
 ## 0.4.0
 
