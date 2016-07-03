@@ -1,6 +1,6 @@
 # gerardroche/sublime_color_scheme_unit
 
-## Unreleased
+## 0.5.0
 
 * Added: assertions can now be written with html style comments
 * Fixed: COLOR TEST does not fallback tmLanguage syntaxes
