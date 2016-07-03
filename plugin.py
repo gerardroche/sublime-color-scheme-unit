@@ -298,12 +298,16 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
         tests = sublime.find_resources('color_scheme_test*')
 
+        test_files = []
         if test_file:
             for test in tests:
                 abs_test = os.path.join(os.path.dirname(sublime.packages_path()), test)
                 if test_file == abs_test:
-                    tests = [test]
+                    test_files = [test]
                     break
+
+        if len(test_files) > 0:
+            tests = test_files
 
         for test in tests:
             test_result = run_color_scheme_test(test)
