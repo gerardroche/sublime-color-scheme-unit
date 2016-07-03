@@ -4,22 +4,11 @@ A testing framework for for Sublime Text 3 color schemes.
 
 ## Overview
 
-* [Installation](#installation)
 * [Usage](#usage)
+* [Installation](#installation)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
-
-## Installation
-
-### Manual installation
-
-1. Close Sublime Text.
-2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text Packages directory for your platform:
-    * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
-    * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
-    * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
-3. The features listed above will be available the next time Sublime Text is started.
 
 ## Usage
 
@@ -36,6 +25,17 @@ Or define your own keymaps:
 ```
 
 Test files are files prefixed with "color_scheme_test". See [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) for examples of test and assertion format.
+
+## Installation
+
+### Manual installation
+
+1. Close Sublime Text.
+2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text Packages directory for your platform:
+    * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
+    * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
+    * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
+3. The features listed above will be available the next time Sublime Text is started.
 
 ## Contributing
 
