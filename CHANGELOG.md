@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Added: assertions can now be written with html style comments
 * Fixed: COLOR TEST does not fallback tmLanguage syntaxes
 
 ## 0.4.0
