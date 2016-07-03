@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## Unreleased
+
+* Fixed: COLOR TEST does not fallback tmLanguage syntaxes
+
 ## 0.4.0
 
 * Added: run single test command

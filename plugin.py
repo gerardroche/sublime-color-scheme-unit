@@ -32,13 +32,18 @@ class ColorSchemeTest(object):
         m = re.match('^COLOR TEST "(?P<color>[^"]+)" "(?P<syntax>[^"]+)"\n', self.content)
 
         if not m:
-            raise RuntimeError('Invalid color test: no color')
+            raise RuntimeError('Invalid COLOR TEST: first line')
 
         self.color = m.group('color')
 
         syntaxes_found = sublime.find_resources(m.group('syntax') + '.sublime-syntax')
+
+        if len(syntaxes_found) == 0:
+            syntaxes_found = sublime.find_resources(m.group('syntax') + '.tmLanguage')
+
         if len(syntaxes_found) > 1:
             raise RuntimeError('Invalid syntax: found more than one')
+
         if len(syntaxes_found) is not 1:
             raise RuntimeError('Invalid syntax: not found')
 
