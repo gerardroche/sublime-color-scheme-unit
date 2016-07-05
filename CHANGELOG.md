@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## 0.5.1
+
+* Fixed: environment debug variable
+
 ## 0.5.0
 
 * Added: assertions can now be written with html style comments

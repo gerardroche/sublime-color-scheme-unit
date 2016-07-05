@@ -6,9 +6,9 @@ import os
 import re
 import plistlib
 
-VERSION = '0.5.0';
+VERSION = '0.5.1';
 
-DEBUG_MODE=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT'))
+DEBUG_MODE=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
 DEV_TOOLS=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS'))
 
 if DEBUG_MODE:
