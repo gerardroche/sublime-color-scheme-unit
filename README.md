@@ -1,5 +1,14 @@
 # gerardroche/sublime_color_scheme_unit
 
+[![Author](http://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat)](https://twitter.com/gerardroche)
+[![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit)
+[![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers)
+[![License](https://img.shields.io/badge/license-BSD--3-blue.svg?style=flat)](https://raw.githubusercontent.com/gerardroche/sublime_color_scheme_unit/master/LICENSE)
+
+[![Sublime version](https://img.shields.io/badge/sublime-v3-lightgrey.svg?style=flat)](http://sublimetext.com)
+[![Latest version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?maxAge=2592000?style=flat&label=release)](https://github.com/gerardroche/sublime_color_scheme_unit/tags)
+[![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?maxAge=2592000?style=flat)](https://packagecontrol.io/packages/color_scheme_unit)
+
 A testing framework for for Sublime Text 3 color schemes.
 
 ## Overview
@@ -24,7 +33,9 @@ Or define your own keymaps:
 { "keys": ["ctrl+r"], "command": "run_color_scheme_test" },
 ```
 
-Test files are files prefixed with "color_scheme_test". See [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) for examples of test and assertion format.
+Test assertions are very similar to syntax tests. See [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) for examples of test and assertion format.
+
+*Test file names are prefixed with "color_scheme_test".*
 
 ## Installation
 
