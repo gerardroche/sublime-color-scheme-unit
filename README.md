@@ -9,7 +9,7 @@
 [![Latest version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?maxAge=2592000?style=flat&label=release)](https://github.com/gerardroche/sublime_color_scheme_unit/tags)
 [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?maxAge=2592000?style=flat)](https://packagecontrol.io/packages/color_scheme_unit)
 
-A testing framework for for Sublime Text 3 color schemes.
+A testing framework for Sublime Text color schemes.
 
 ## Overview
 
