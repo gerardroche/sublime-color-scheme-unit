@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Added: timer; prints the time it took to run the tests
 * Removed SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS envvar, use SUBLIME_COLOR_SCHEME_UNIT_DEBUG insead
 
 ## 0.5.1

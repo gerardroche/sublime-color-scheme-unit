@@ -5,6 +5,7 @@ import sublime_plugin
 import os
 import re
 import plistlib
+from timeit import default_timer as timer
 
 VERSION = '0.6.0-dev';
 
@@ -308,15 +309,20 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         if len(test_files) > 0:
             tests = test_files
 
+        start = timer()
+
         for test in tests:
             test_result = run_color_scheme_test(test)
 
             failures += test_result['failures']
             total_assertions += test_result['assertions']
 
+        elapsed = timer() - start
+
         if len(failures) > 0:
 
             output.append('')
+            output.append('Time: %.2f secs' % (elapsed))
             output.append('')
             output.append('There were %s failures:' % len(failures))
             output.append('')
@@ -336,6 +342,7 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
             output.append('Tests: %d, Assertions: %d, Failures: %d.' % (len(tests), total_assertions, len(failures)))
         else:
             output.append('')
+            output.append('Time: %.2f secs' % (elapsed))
             output.append('')
             output.append('OK (%d tests, %d assertions)' % (len(tests), total_assertions))
 
