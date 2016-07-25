@@ -88,9 +88,7 @@ class ColorSchemeTest(object):
                     'assertion': assertion
                 })
 
-    def run(self):
-
-        output = OutputView()
+    def run(self, output):
 
         assertion_count = 0
         failures = []
@@ -228,8 +226,8 @@ class Style(object):
 
         return styles
 
-def run_color_scheme_test(test):
-    return ColorSchemeTest(test).run()
+def run_color_scheme_test(test, output):
+    return ColorSchemeTest(test).run(output)
 
 class _color_scheme_unit_set_content(sublime_plugin.TextCommand):
 
@@ -238,19 +236,14 @@ class _color_scheme_unit_set_content(sublime_plugin.TextCommand):
 
 class OutputView(object):
 
-    def __init__(self, clear = False):
+    def __init__(self):
         self.window = sublime.active_window()
 
-        if clear:
-            self.view = self.window.create_output_panel('exec')
-            self.view.settings().set('result_file_regex', '^([^\n:]+):([0-9]+):([0-9]+)$')
-        else:
-            self.view = self.window.find_output_panel('exec')
-
-        self.show()
+        self.view = self.window.create_output_panel('color_scheme_unit')
+        self.view.settings().set('result_file_regex', '^([^\n:]+):([0-9]+):([0-9]+)$')
 
     def show(self):
-        self.window.run_command('show_panel', {'panel': 'output.exec'})
+        self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
     def append(self, text, newline = True):
         if newline:
@@ -289,9 +282,10 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
     def run(self, test_file = None):
 
-        output = OutputView(True)
+        output = OutputView()
         output.append('ColorSchemeUnit %s' % VERSION)
         output.append('')
+        output.show()
 
         failures = []
         total_assertions = 0
@@ -312,7 +306,7 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         start = timer()
 
         for test in tests:
-            test_result = run_color_scheme_test(test)
+            test_result = run_color_scheme_test(test, output)
 
             failures += test_result['failures']
             total_assertions += test_result['assertions']
