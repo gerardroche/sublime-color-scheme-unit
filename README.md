@@ -11,6 +11,8 @@
 
 A testing framework for Sublime Text color schemes.
 
+![Screenshot](screenshot.png)
+
 ## Overview
 
 * [Usage](#usage)
@@ -26,16 +28,49 @@ From the command palette:
 * `ColorSchemeUnit: run tests`
 * `ColorSchemeUnit: run test`
 
-Or define your own keymaps:
+Tip: define keymaps for development:
 
 ```
 { "keys": ["ctrl+t"], "command": "run_color_scheme_tests" },
 { "keys": ["ctrl+r"], "command": "run_color_scheme_test" },
 ```
 
-Test assertions are very similar to syntax tests. See [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) for examples of test and assertion format.
 
-*Test file names are prefixed with "color_scheme_test".*
+### Test file syntax
+
+Tests are very similar to syntax tests.
+
+1. Ensure the file name starts with "color_scheme_test".
+2. Ensure the first line of the file starts with: `COLOR TEST "<color_scheme_file>" "<syntax_name>"`
+
+Each test in the syntax test file must first start the comment token (established on the first line, it doesn't actually have to be a comment according to the syntax), and then a `^` token.
+
+The is one type of test:
+
+* Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: `fg=#<color>`, `bg=#<color>`, and `fs=<comma_delimited_list>` e.g `fs=bold,italic` or none `fs=`. *One or more assertions are required, and must be specified in the order listed above.*
+
+Once the above conditions are met, running the test will show the results in an output panel. Next Result (F4) can be used to navigate to the first failing test and Shift+F4 to navigate to the previous failing test.
+
+### Example
+
+`Packages/five_easy_color_schemes/test/monokai_dark/color_scheme_test.php`
+
+```
+COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "PHP"
+    <?php
+//  ^^^^^ fg=#f8f8f2 bg=#272822 fs=bold
+
+    // comment
+//  ^^^^^^^^^^ fg=#75715e fs=italic
+
+echo 'str';
+// ^ fg=#dc322f fs=
+//   ^ fg=#839496 fs=
+//    ^^^ fg=#2aa198 fs=
+//       ^ fg=#839496 fs=
+```
+
+For more examples see [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes).
 
 ## Installation
 
