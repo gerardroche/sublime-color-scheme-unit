@@ -95,7 +95,7 @@ To enable set the debug environment environment variable to a non-blank value.
 SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
 ```
 
-On Linux Sublime Text can be started at the Terminal with an exported environment variable.
+Tip: Start Sublime Text at the Terminal with an exported environment variable:
 
 ```
 $ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; subl
