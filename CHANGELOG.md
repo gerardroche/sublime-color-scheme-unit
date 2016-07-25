@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## Unreleased
+
+* Removed SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS envvar, use SUBLIME_COLOR_SCHEME_UNIT_DEBUG insead
+
 ## 0.5.1
 
 * Fixed: environment debug variable

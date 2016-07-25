@@ -52,19 +52,21 @@ Test assertions are very similar to syntax tests. See [Five Easy Color Schemes](
 
 Your issue reports and pull requests are always welcome.
 
-**Debug messages**
+** Debug messages & Dev tools (default=disabled)**
 
-Debug messages are disabled by default. To enable them set an environment variable to a non-blank value e.g. `SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y`. To disable them set unset it or set it to a blank value e.g. `SUBLIME_COLOR_SCHEME_UNIT_DEBUG=`.
-
-To enable extra color scheme unit development tools set the environment variable `SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS` to a non blank value.
-
-On Linux, for example, Sublime Text can be started at the Terminal with an exported environment variable.
+To enable set the debug environment environment variable to a non-blank value.
 
 ```
-$ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; export SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS=y; ~/sublime_text_3/sublime_text
+SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
 ```
 
-Add the folllowing to your keymaps for the show scope name and style dev helper:
+On Linux Sublime Text can be started at the Terminal with an exported environment variable.
+
+```
+$ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; subl
+```
+
+To enable the show scope name and style helper add the following keymap:
 
 ```
 { "keys": ["ctrl+shift+alt+p"], "command": "show_scope_name_and_styles" },

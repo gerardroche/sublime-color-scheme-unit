@@ -6,10 +6,9 @@ import os
 import re
 import plistlib
 
-VERSION = '0.5.1';
+VERSION = '0.6.0-dev';
 
 DEBUG_MODE=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
-DEV_TOOLS=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS'))
 
 if DEBUG_MODE:
     def debug_message(message):
@@ -340,7 +339,7 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
             output.append('')
             output.append('OK (%d tests, %d assertions)' % (len(tests), total_assertions))
 
-if DEV_TOOLS:
+if DEBUG_MODE:
 
     class ShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
 
