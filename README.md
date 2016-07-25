@@ -73,6 +73,8 @@ For more examples see the [Five Easy Color Schemes](https://github.com/gerardroc
 
 ## Installation
 
+The preferred method of installation is via [Package Control](https://packagecontrol.io).
+
 ### Manual installation
 
 1. Close Sublime Text.
