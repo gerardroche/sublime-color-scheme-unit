@@ -54,7 +54,7 @@ class ColorSchemeTest(object):
 
         consecutive_test_lines = 0
 
-        for line_number, line in enumerate(self.content.split('\n')):
+        for line_number, line in enumerate(self.content.splitlines()):
             m = re.match('^(//|#|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$', line.lower().rstrip(' -->'))
 
             if not m:
