@@ -23,10 +23,10 @@ A testing framework for Sublime Text color schemes.
 
 ## Usage
 
-From the command palette:
+Command palette:
 
-* `ColorSchemeUnit: run tests`
-* `ColorSchemeUnit: run test`
+* `ColorSchemeUnit: Run tests`
+* `ColorSchemeUnit: Run test`
 
 Tip: define keymaps for development:
 
@@ -34,7 +34,6 @@ Tip: define keymaps for development:
 { "keys": ["ctrl+t"], "command": "run_color_scheme_tests" },
 { "keys": ["ctrl+r"], "command": "run_color_scheme_test" },
 ```
-
 
 ### Test file syntax
 
