@@ -21,13 +21,9 @@ else:
 class ColorSchemeTest(object):
 
     def __init__(self, test):
-
         self.file = os.path.join(os.path.dirname(sublime.packages_path()), test)
         self.test = test
         self.content = sublime.load_resource(test)
-
-        if not self.content:
-            raise RuntimeError('Invalid color test: no content')
 
         m = re.match('^COLOR TEST "(?P<color>[^"]+)" "(?P<syntax>[^"]+)"\n', self.content)
 
@@ -196,35 +192,30 @@ class Style(object):
 
     def __init__(self, view):
         self.view = view
-        self.parse_color_scheme_file(self.view.settings().get('color_scheme'))
+
+        color_scheme = self.view.settings().get('color_scheme')
+        color_scheme_resource = sublime.load_resource(color_scheme)
+        color_scheme_plist = plistlib.readPlistFromBytes(bytes(color_scheme_resource, 'UTF-8'))
+        self.color_scheme_plist_settings = color_scheme_plist['settings']
+
+        self.default_style = dict()
+        for color_scheme_plist_dict in self.color_scheme_plist_settings:
+            if 'scope' not in color_scheme_plist_dict:
+                self.default_style.update(color_scheme_plist_dict['settings'])
 
     def at_point(self, point):
-        return self.get_styles_for_scope(self.view.scope_name(point).strip())
+        scope = self.view.scope_name(point).strip()
 
-    def parse_color_scheme_file(self, color_scheme_file):
-        color_scheme_content = sublime.load_resource(color_scheme_file)
-        color_scheme_dict = plistlib.readPlistFromBytes(bytes(color_scheme_content, 'UTF-8'))
-        self.selectors_in_scheme = color_scheme_dict['settings']
+        last_selector_score = -1
+        style = self.default_style.copy()
+        for color_scheme_definition in self.color_scheme_plist_settings:
+            if 'scope' in color_scheme_definition:
+                score = sublime.score_selector(scope, color_scheme_definition['scope'])
+                if score and score >= last_selector_score:
+                    last_selector_score = score
+                    style.update(color_scheme_definition['settings'])
 
-    def get_styles_for_scope(self, scope):
-        styles = dict()
-
-        for scheme_selector in self.selectors_in_scheme:
-            if 'scope' not in scheme_selector:
-                styles.update(scheme_selector['settings'])
-
-        matched_style = {'settings': {}, 'score': 0}
-        for scheme_selector in self.selectors_in_scheme:
-            if 'scope' in scheme_selector:
-                score = sublime.score_selector(scope, scheme_selector['scope'])
-                if score:
-                    if score >= matched_style['score']:
-                        matched_style['score'] = score
-                        matched_style['settings'].update(scheme_selector['settings'])
-
-        styles.update(matched_style['settings'])
-
-        return styles
+        return style
 
 def run_color_scheme_test(test, output):
     return ColorSchemeTest(test).run(output)
