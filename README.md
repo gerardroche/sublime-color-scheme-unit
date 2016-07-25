@@ -40,18 +40,18 @@ Tip: define keymaps for development:
 
 Tests are very similar to syntax tests.
 
-1. Ensure the file name starts with "color_scheme_test".
+1. Ensure the file name starts with `color_scheme_test`.
 2. Ensure the first line of the file starts with: `COLOR TEST "<color_scheme_file>" "<syntax_name>"`
 
 Each test in the syntax test file must first start the comment token (established on the first line, it doesn't actually have to be a comment according to the syntax), and then a `^` token.
 
-The is one type of test:
+There is one type of test:
 
 * Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: `fg=#<color>`, `bg=#<color>`, and `fs=<comma_delimited_list>` e.g `fs=bold,italic` or none `fs=`. *One or more assertions are required, and must be specified in the order listed above.*
 
-Once the above conditions are met, running the test will show the results in an output panel. Next Result (F4) can be used to navigate to the first failing test and Shift+F4 to navigate to the previous failing test.
+Once the above conditions are met, running the tests will show the results in an output panel. Next Result (F4) can be used to navigate to the first failing test and Previous Result (Shift+F4) to navigate to the previous failing test.
 
-### Example
+#### Example
 
 `Packages/five_easy_color_schemes/test/monokai_dark/color_scheme_test.php`
 
@@ -70,7 +70,7 @@ echo 'str';
 //       ^ fg=#839496 fs=
 ```
 
-For more examples see [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes).
+For more examples see the [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
 
 ## Installation
 
