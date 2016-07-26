@@ -1,13 +1,7 @@
 # gerardroche/sublime_color_scheme_unit
 
-[![Author](http://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat)](https://twitter.com/gerardroche)
-[![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit)
-[![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers)
-[![License](https://img.shields.io/badge/license-BSD--3-blue.svg?style=flat)](https://raw.githubusercontent.com/gerardroche/sublime_color_scheme_unit/master/LICENSE)
-
-[![Sublime version](https://img.shields.io/badge/sublime-v3-lightgrey.svg?style=flat)](http://sublimetext.com)
-[![Latest version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?maxAge=2592000?style=flat&label=release)](https://github.com/gerardroche/sublime_color_scheme_unit/tags)
-[![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?maxAge=2592000?style=flat)](https://packagecontrol.io/packages/color_scheme_unit)
+[![Author](https://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat)](https://twitter.com/gerardroche) [![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit) [![License](https://img.shields.io/badge/license-BSD--3-blue.svg?style=flat)](https://raw.githubusercontent.com/gerardroche/sublime_color_scheme_unit/master/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers)
+[![Sublime version](https://img.shields.io/badge/sublime-v3-lightgrey.svg?style=flat)](https://sublimetext.com) [![Latest version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?maxAge=2592000?style=flat&label=release)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?maxAge=2592000?style=flat)](https://packagecontrol.io/packages/color_scheme_unit)
 
 A testing framework for Sublime Text color schemes.
 
@@ -23,7 +17,7 @@ A testing framework for Sublime Text color schemes.
 
 ## Usage
 
-Command palette:
+Commands:
 
 * `ColorSchemeUnit: Run tests`
 * `ColorSchemeUnit: Run test`
@@ -78,35 +72,21 @@ The preferred method of installation is via [Package Control](https://packagecon
 ### Manual installation
 
 1. Close Sublime Text.
-2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text Packages directory for your platform:
+2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text packages directory:
     * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
     * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
     * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
-3. The features listed above will be available the next time Sublime Text is started.
 
 ## Contributing
 
 Your issue reports and pull requests are always welcome.
 
-** Debug messages & Dev tools (default=disabled)**
+To enable **debug messages** and extra **development tools** set the package debug environment variable to a non-blank value: `SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y`.
 
-To enable set the debug environment environment variable to a non-blank value.
+Tip: Start Sublime Text at the Terminal with an exported environment variable: `
+$ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; subl`.
 
-```
-SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
-```
-
-Tip: Start Sublime Text at the Terminal with an exported environment variable:
-
-```
-$ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; subl
-```
-
-To enable the show scope name and style helper add the following keymap:
-
-```
-{ "keys": ["ctrl+shift+alt+p"], "command": "show_scope_name_and_styles" },
-```
+To enable the show style development tool add a keymap: `{ "keys": ["ctrl+shift+alt+p"], "command": "show_scope_name_and_styles" }`.
 
 ## Changelog
 
