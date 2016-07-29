@@ -320,10 +320,6 @@ if DEBUG_MODE:
     class SetColorSchemeOnLoad(sublime_plugin.EventListener):
 
         def on_load_async(self, view):
-
-            m = re.match('^COLOR TEST "(?P<color>[^"]+)" "(?P<syntax>[^"]+)"', view.substr(sublime.Region(0, view.size())))
-
-            if not m:
-                return
-
-            view.settings().set('color_scheme', m.group('color'))
+            color_test_params = re.match('^COLOR TEST "(?P<color>[^"]+)" "(?P<syntax>[^"]+)"', view.substr(sublime.Region(0, view.size())))
+            if color_test_params:
+                view.settings().set('color_scheme', color_test_params.group('color'))
