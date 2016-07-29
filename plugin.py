@@ -184,6 +184,9 @@ class OutputPanel(object):
 
         self.output_view = self.window.create_output_panel('color_scheme_unit')
 
+        output_view_settings = self.output_view.settings()
+        output_view_settings.set('result_file_regex', '^(.+):([0-9]+):([0-9]+)$')
+
     def show(self):
         self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
