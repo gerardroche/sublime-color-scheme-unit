@@ -192,7 +192,7 @@ class OutputPanel(object):
         output_view_settings.set("rulers", [])
         output_view_settings.set("scroll_past_end", False)
 
-        self.output_view.assign_syntax('Packages/color_scheme_unit/test_result.hidden-tmLanguage')
+        self.output_view.assign_syntax('Packages/color_scheme_unit/test_result.sublime-syntax')
 
         view = self.window.active_view()
         if view:

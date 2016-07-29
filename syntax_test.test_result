@@ -1,0 +1,59 @@
+# SYNTAX TEST "Packages/color_scheme_unit/test_result.hidden-sublime-syntax"
+
+ColorSchemeUnit 1.0.0
+
+.
+#<- markup.color-scheme-unit
+E
+#<- markup.deleted.color-scheme-unit
+
+F
+#<- markup.deleted.color-scheme-unit
+
+I
+#<- markup.changed.color-scheme-unit
+
+R
+#<- markup.changed.color-scheme-unit
+
+I
+#<- markup.changed.color-scheme-unit
+
+.EFIRS
+#<- markup.color-scheme-unit
+#^ markup.deleted.color-scheme-unit
+# ^ markup.deleted.color-scheme-unit
+#  ^ markup.changed.color-scheme-unit
+#   ^ markup.changed.color-scheme-unit
+#    ^ markup.changed.color-scheme-unit
+...
+#<- markup.color-scheme-unit
+#^^ markup.color-scheme-unit
+
+F..S...
+#<- markup.deleted.color-scheme-unit
+#^^ markup.color-scheme-unit
+#  ^ markup.changed.color-scheme-unit
+#   ^^. markup.color-scheme-unit
+
+Time: 385 ms, Memory: 5.50MB
+
+No tests executed!
+#<- markup.changed.color-scheme-unit
+#^^^^^^^^^^^^^^^^^ markup.changed.color-scheme-unit
+
+OK (45 tests, 81 assertions)
+#<- markup.inserted.color-scheme-unit
+#^^^^^^^^ markup.inserted.color-scheme-unit
+
+OK, but incomplete, skipped, or risky tests!
+#<- markup.changed.color-scheme-unit
+#^^^^^^^^ markup.changed.color-scheme-unit
+
+FAILURES!
+#<- markup.deleted.color-scheme-unit
+#^^^^^^^^ markup.deleted.color-scheme-unit
+
+Tests: 46, Assertions: 82, Failures: 2.
+#<- markup.deleted.color-scheme-unit
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ markup.deleted.color-scheme-unit
