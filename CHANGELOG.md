@@ -1,6 +1,6 @@
 # gerardroche/sublime_color_scheme_unit
 
-## Unreleased
+## 0.6.0
 
 * Added: test results are now displayed in color
 * Added: tests are now run asynchronously
