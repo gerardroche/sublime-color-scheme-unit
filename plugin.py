@@ -18,154 +18,6 @@ else:
     def debug_message(message):
         pass
 
-class ColorSchemeTest(object):
-
-    def __init__(self, test):
-        self.file = os.path.join(os.path.dirname(sublime.packages_path()), test)
-        self.test = test
-        self.content = sublime.load_resource(test)
-
-        m = re.match('^COLOR TEST "(?P<color>[^"]+)" "(?P<syntax>[^"]+)"\n', self.content)
-
-        if not m:
-            raise RuntimeError('Invalid COLOR TEST: first line')
-
-        self.color = m.group('color')
-
-        syntaxes_found = sublime.find_resources(m.group('syntax') + '.sublime-syntax')
-
-        if len(syntaxes_found) == 0:
-            syntaxes_found = sublime.find_resources(m.group('syntax') + '.tmLanguage')
-
-        if len(syntaxes_found) > 1:
-            raise RuntimeError('Invalid syntax: found more than one')
-
-        if len(syntaxes_found) is not 1:
-            raise RuntimeError('Invalid syntax: not found')
-
-        self.syntax = syntaxes_found[0]
-        self.content = self.content.replace('COLOR TEST "%s"\nSYNTAX TEST "%s"\n' % (self.color, self.syntax), '')
-
-        self.assertions = []
-
-        consecutive_test_lines = 0
-
-        for line_number, line in enumerate(self.content.splitlines()):
-            m = re.match('^(//|#|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$', line.lower().rstrip(' -->'))
-
-            if not m:
-                consecutive_test_lines = 0
-            else:
-                consecutive_test_lines += 1
-
-                style = {}
-
-                if m.group('fg') is not None:
-                    style['foreground'] = m.group('fg')
-
-                if m.group('bg') is not None:
-                    style['background'] = m.group('bg')
-
-                if m.group('fs') is not None:
-                    style['fontStyle'] = m.group('fs')
-
-                assertion = m.group(0)
-                row = line_number - consecutive_test_lines
-                begin = line.find('^')
-                count = len(m.group('repeat'))
-                end = begin + count
-
-                self.assertions.append({
-                    'style': style,
-                    'count': count,
-                    'row': row,
-                    'begin': begin,
-                    'end': end,
-                    'assertion': assertion
-                })
-
-    def run(self, output):
-
-        assertion_count = 0
-        failures = []
-
-        test_view = TestView()
-        test_view.setUp()
-
-        try:
-            test_view.assign_color(self.color)
-            test_view.assign_syntax(self.syntax)
-            test_view.set_content(self.content)
-
-            style_util = Style(test_view.view)
-
-            debug_message('running test: %s' % self.test)
-
-            for assertion in self.assertions:
-
-                for col in range(assertion['begin'], assertion['end']):
-
-                    style = style_util.at_point(
-                        test_view.view.text_point(
-                            assertion['row'],
-                            col
-                        )
-                    )
-
-                    actual = {}
-
-                    for style_key in assertion['style']:
-                        if style_key in style:
-                            if style[style_key]:
-                                actual[style_key] = style[style_key].lower()
-                            else:
-                                actual[style_key] = style[style_key]
-                        else:
-                            actual[style_key] = ''
-
-                    expected = assertion['style']
-
-                    progress_character='.'
-
-                    if actual != expected:
-
-                        failure_trace = {
-                            'assertion': assertion['assertion'],
-                            'file': self.file,
-                            'row': assertion['row'] + 1,
-                            'col': col + 1,
-                            'actual': actual,
-                            'expected': expected,
-                        }
-
-                        debug_message('')
-                        debug_message('----- Assertion FAILED! -----')
-                        debug_message('')
-                        debug_message('Trace: %s' % str(failure_trace))
-                        debug_message('')
-
-                        failures.append(failure_trace)
-
-                        progress_character='F'
-
-                    assertion_count += 1
-
-                    output.append(progress_character, True if assertion_count % 80 == 0 else False)
-
-            if len(self.assertions) > 0:
-                output.append('')
-
-        except:
-            test_view.tearDown()
-            raise
-
-        test_view.tearDown()
-
-        return {
-            'assertions': assertion_count,
-            'failures': failures
-        }
-
 class TestView(object):
 
     def setUp(self):
@@ -179,16 +31,16 @@ class TestView(object):
     def assign_syntax(self, syntax):
         self.view.assign_syntax(syntax)
 
-    def assign_color(self, color):
-        self.view.settings().set('color_scheme', color)
+    def assign_color_scheme(self, color_scheme):
+        self.view.settings().set('color_scheme', color_scheme)
 
     def set_content(self, content):
-        self.view.run_command('_color_scheme_unit_set_content', {'text': content})
+        self.view.run_command('append', {'characters': content})
 
     def get_content(self):
         return self.view.substr(sublime.Region(0, self.view.size()))
 
-class Style(object):
+class ColorSchemeStyle(object):
 
     def __init__(self, view):
         self.view = view
@@ -218,31 +70,126 @@ class Style(object):
         return style
 
 def run_color_scheme_test(test, output):
-    return ColorSchemeTest(test).run(output)
+    debug_message('running test: %s' % test)
 
-class _color_scheme_unit_set_content(sublime_plugin.TextCommand):
+    failures = []
+    assertion_count = 0
 
-    def run(self, edit, text):
-        self.view.replace(edit, sublime.Region(0, self.view.size()), text)
+    test_view = TestView()
+    test_view.setUp()
 
-class OutputView(object):
+    try:
+        test_content = sublime.load_resource(test)
+
+        color_test_params = re.match('^COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"\n', test_content)
+        if not color_test_params:
+            raise RuntimeError('Invalid color test params (first line): COLOR TEST "<color_scheme>" "<syntax_name>"')
+
+        test_color_scheme = color_test_params.group('color_scheme')
+
+        syntaxes = sublime.find_resources(color_test_params.group('syntax_name') + '.sublime-syntax')
+        if len(syntaxes) == 0: # fallback to old syntax
+            syntaxes = sublime.find_resources(color_test_params.group('syntax_name') + '.tmLanguage')
+        if len(syntaxes) > 1:
+            raise RuntimeError('Invalid syntax: found more than one')
+        if len(syntaxes) is not 1:
+            raise RuntimeError('Invalid syntax: not found')
+        test_syntax = syntaxes[0]
+
+        test_content = test_content.replace('COLOR TEST "%s"\nSYNTAX TEST "%s"\n' % (test_color_scheme, test_syntax), '')
+
+        test_view.assign_syntax(test_syntax)
+        test_view.assign_color_scheme(test_color_scheme)
+        test_view.set_content(test_content)
+
+        color_scheme_style = ColorSchemeStyle(test_view.view)
+
+        consecutive_test_lines = 0
+        for line_number, line in enumerate(test_content.splitlines()):
+            assertion_params = re.match('^(//|#|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$', line.lower().rstrip(' -->'))
+            if not assertion_params:
+                consecutive_test_lines = 0
+                continue
+
+            consecutive_test_lines += 1
+
+            assertion = assertion_params.group(0)
+            assertion_row = line_number - consecutive_test_lines
+            assertion_begin = line.find('^')
+            assertion_end = assertion_begin + len(assertion_params.group('repeat'))
+            expected_styles = {}
+            if assertion_params.group('fg') is not None:
+                expected_styles['foreground'] = assertion_params.group('fg')
+            if assertion_params.group('bg') is not None:
+                expected_styles['background'] = assertion_params.group('bg')
+            if assertion_params.group('fs') is not None:
+                expected_styles['fontStyle'] = assertion_params.group('fs')
+
+            for col in range(assertion_begin, assertion_end):
+                assertion_count += 1
+                assertion_point = test_view.view.text_point(assertion_row, col)
+                actual_styles_at_point = color_scheme_style.at_point(assertion_point)
+
+                actual_styles = {}
+                for style in expected_styles:
+                    if style in actual_styles_at_point:
+                        if actual_styles_at_point[style]:
+                            actual_styles[style] = actual_styles_at_point[style].lower()
+                        else:
+                            actual_styles[style] = actual_styles_at_point[style]
+                    else:
+                        actual_styles[style] = ''
+
+                progress_character='.'
+                if actual_styles != expected_styles:
+                    progress_character='F'
+
+                    failure_trace = {
+                        'assertion': assertion,
+                        'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                        'row': assertion_row + 1,
+                        'col': col + 1,
+                        'actual': actual_styles,
+                        'expected': expected_styles,
+                    }
+
+                    debug_message('')
+                    debug_message('----- Assertion FAILED! -----')
+                    debug_message('')
+                    debug_message('Trace: %s' % str(failure_trace))
+                    debug_message('')
+
+                    failures.append(failure_trace)
+
+                output.append(progress_character)
+                if assertion_count % 80 == 0:
+                    output.append("\n")
+
+        output.append("\n")
+    except:
+        test_view.tearDown()
+        raise
+
+    test_view.tearDown()
+
+    return {
+        'assertions': assertion_count,
+        'failures': failures
+    }
+
+class OutputPanel(object):
 
     def __init__(self):
         self.window = sublime.active_window()
 
-        self.view = self.window.create_output_panel('color_scheme_unit')
-        self.view.settings().set('result_file_regex', '^([^\n:]+):([0-9]+):([0-9]+)$')
+        self.output_view = self.window.create_output_panel('color_scheme_unit')
 
     def show(self):
         self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
-    def append(self, text, newline = True):
-        if newline:
-            text += "\n"
-
-        self.view.run_command('append', {
+    def append(self, text):
+        self.output_view.run_command('append', {
             'characters': text,
-            'force': True,
             'scroll_to_end': True
         })
 
@@ -276,9 +223,8 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
     def run_async(self, test_file):
 
-        output = OutputView()
-        output.append('ColorSchemeUnit %s' % VERSION)
-        output.append('')
+        output = OutputPanel()
+        output.append("ColorSchemeUnit %s\n\n" % VERSION)
         output.show()
 
         failures = []
@@ -309,40 +255,32 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
         if len(failures) > 0:
 
-            output.append('')
-            output.append('Time: %.2f secs' % (elapsed))
-            output.append('')
-            output.append('There were %s failures:' % len(failures))
-            output.append('')
+            output.append("\nTime: %.2f secs\n" % (elapsed))
+            output.append("\nThere were %s failures:\n\n" % len(failures))
 
             for i, failure in enumerate(failures, start=1):
-                output.append('%d) %s' % (i, failure['assertion']))
-                output.append('Failed asserting %s equals %s' % (str(failure['actual']), str(failure['expected'])))
-                output.append('--- Expected')
-                output.append('+++ Actual')
-                output.append('@@ @@')
-                output.append('{{diff}}')
-                output.append('')
-                output.append('%s:%d:%d' % (failure['file'], failure['row'], failure['col']))
-                output.append('')
+                output.append("%d) %s\n" % (i, failure['assertion']))
+                output.append("Failed asserting %s equals %s\n" % (str(failure['actual']), str(failure['expected'])))
+                output.append("--- Expected\n")
+                output.append("+++ Actual\n")
+                output.append("@@ @@\n")
+                output.append("{{diff}}\n\n")
+                output.append("%s:%d:%d\n\n" % (failure['file'], failure['row'], failure['col']))
 
-            output.append('FAILURES!')
-            output.append('Tests: %d, Assertions: %d, Failures: %d.' % (len(tests), total_assertions, len(failures)))
+            output.append("FAILURES!\n")
+            output.append("Tests: %d, Assertions: %d, Failures: %d.\n" % (len(tests), total_assertions, len(failures)))
         else:
-            output.append('')
-            output.append('Time: %.2f secs' % (elapsed))
-            output.append('')
-            output.append('OK (%d tests, %d assertions)' % (len(tests), total_assertions))
+            output.append("\nTime: %.2f secs\n" % (elapsed))
+            output.append("\nOK (%d tests, %d assertions)\n" % (len(tests), total_assertions))
 
 if DEBUG_MODE:
 
     class ShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
 
         def run(self, edit):
-
             point = self.view.sel()[-1].b
             scope = self.view.scope_name(point)
-            style = Style(self.view).at_point(point)
+            style = ColorSchemeStyle(self.view).at_point(point)
 
             style_html = '<ul>'
 
