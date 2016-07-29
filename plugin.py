@@ -186,6 +186,19 @@ class OutputPanel(object):
 
         output_view_settings = self.output_view.settings()
         output_view_settings.set('result_file_regex', '^(.+):([0-9]+):([0-9]+)$')
+        output_view_settings.set("word_wrap", False)
+        output_view_settings.set("line_numbers", False)
+        output_view_settings.set("gutter", False)
+        output_view_settings.set("rulers", [])
+        output_view_settings.set("scroll_past_end", False)
+
+        self.output_view.assign_syntax('Packages/color_scheme_unit/test_result.hidden-tmLanguage')
+
+        view = self.window.active_view()
+        if view:
+            color_scheme = view.settings().get('color_scheme')
+            if color_scheme:
+                output_view_settings.set('color_scheme', color_scheme)
 
     def show(self):
         self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
