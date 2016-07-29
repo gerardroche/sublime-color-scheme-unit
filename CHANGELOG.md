@@ -5,7 +5,7 @@
 * Added: test results are now displayed in color
 * Added: tests are now run asynchronously
 * Added: timer; prints the time it took to run the tests
-* Removed SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS envvar, use SUBLIME_COLOR_SCHEME_UNIT_DEBUG insead
+* Removed SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS envvar, use SUBLIME_COLOR_SCHEME_UNIT_DEBUG instead
 
 ## 0.5.1
 
