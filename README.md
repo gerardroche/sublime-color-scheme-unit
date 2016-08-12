@@ -1,4 +1,4 @@
-# gerardroche/sublime_color_scheme_unit
+# color_scheme_unit
 
 [![Author](https://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat)](https://twitter.com/gerardroche)
 [![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit)
@@ -73,7 +73,9 @@ For more examples see the [Five Easy Color Schemes](https://github.com/gerardroc
 
 ## Installation
 
-The preferred method of installation is via [Package Control](https://packagecontrol.io).
+### Package Control installation
+
+The preferred method of installation is via [Package Control].
 
 ### Manual installation
 
@@ -101,3 +103,5 @@ See [CHANGELOG.md](CHANGELOG.md).
 ## License
 
 Released under the [BSD 3-Clause License](LICENSE).
+
+[Package Control]: https://packagecontrol.io/browse/authors/gerardroche
