@@ -217,6 +217,29 @@ class OutputPanel(object):
             'scroll_to_end': True
         })
 
+class RunColorSchemePackageTestsCommand(sublime_plugin.WindowCommand):
+
+    def run(self):
+        view = self.window.active_view()
+        if not view:
+            return
+
+        file_name = view.file_name()
+        if not file_name:
+            return
+
+        packages = []
+        for color_scheme_test in sublime.find_resources('color_scheme_test*'):
+            package = color_scheme_test.split(os.sep)[1]
+            if package not in packages:
+                packages.append(package)
+
+        for package in packages:
+            if file_name.find(os.path.join(sublime.packages_path(), package)) == 0:
+                self.window.run_command('run_color_scheme_tests', {
+                    'package': package
+                })
+
 class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
     def run(self):
@@ -242,10 +265,10 @@ class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
 class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
-    def run(self, test_file = None):
-        sublime.set_timeout_async(lambda: self.run_async(test_file), 100)
+    def run(self, test_file = None, package = None):
+        sublime.set_timeout_async(lambda: self.run_async(test_file, package), 100)
 
-    def run_async(self, test_file):
+    def run_async(self, test_file, package):
 
         output = OutputPanel()
         output.append("color_scheme_unit %s\n\n" % VERSION)
@@ -258,12 +281,19 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         tests = sublime.find_resources('color_scheme_test*')
 
         test_files = []
+
         if test_file:
             for test in tests:
                 abs_test = os.path.join(os.path.dirname(sublime.packages_path()), test)
                 if test_file == abs_test:
                     test_files = [test]
                     break
+        elif package:
+            abs_package = os.path.join(sublime.packages_path(), package)
+            for test in tests:
+                abs_test = os.path.join(os.path.dirname(sublime.packages_path()), test)
+                if abs_test.find(abs_package) == 0:
+                    test_files.append(test)
 
         if len(test_files) > 0:
             tests = test_files

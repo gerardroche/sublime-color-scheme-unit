@@ -4,6 +4,7 @@
 
 * Added: improved error handling; prints error information in test results
 * Added: allow tests to begin with comments and tags e.g. `<?php // COLOR TEST ...`
+* Added: ColorSchemeUnit - Run package tests command which only runs current package tests
 
 ## 0.6.0
 

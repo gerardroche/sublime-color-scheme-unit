@@ -6,5 +6,9 @@
     {
         "caption": "ColorSchemeUnit: Run test",
         "command": "run_color_scheme_test"
+    },
+    {
+        "caption": "ColorSchemeUnit: Run package tests",
+        "command": "run_color_scheme_package_tests"
     }
 ]
