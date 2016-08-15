@@ -13,7 +13,7 @@ DEBUG_MODE=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
 
 if DEBUG_MODE:
     def debug_message(message):
-        print('DEBUG [ColorSchemeUnit] %s' % str(message))
+        print('DEBUG [color_scheme_unit] %s' % str(message))
 else:
     def debug_message(message):
         pass
@@ -72,6 +72,7 @@ class ColorSchemeStyle(object):
 def run_color_scheme_test(test, output):
     debug_message('running test: %s' % test)
 
+    error = False
     failures = []
     assertion_count = 0
 
@@ -83,7 +84,14 @@ def run_color_scheme_test(test, output):
 
         color_test_params = re.match('^COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"\n', test_content)
         if not color_test_params:
-            raise RuntimeError('Invalid color test params (first line): COLOR TEST "<color_scheme>" "<syntax_name>"')
+            error = {
+                'message': 'Invalid color test',
+                'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                'row': 0,
+                'col': 0
+            }
+
+            raise RuntimeError(error['message'])
 
         test_color_scheme = color_test_params.group('color_scheme')
 
@@ -166,15 +174,17 @@ def run_color_scheme_test(test, output):
                     output.append("\n")
 
         output.append("\n")
-    except:
+    except Exception as e:
         test_view.tearDown()
-        raise
+        if not error:
+            output.append(str(e))
 
     test_view.tearDown()
 
     return {
-        'assertions': assertion_count,
-        'failures': failures
+        'error': error,
+        'failures': failures,
+        'assertions': assertion_count
     }
 
 class OutputPanel(object):
@@ -240,9 +250,10 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
     def run_async(self, test_file):
 
         output = OutputPanel()
-        output.append("ColorSchemeUnit %s\n\n" % VERSION)
+        output.append("color_scheme_unit %s\n\n" % VERSION)
         output.show()
 
+        errors = []
         failures = []
         total_assertions = 0
 
@@ -263,15 +274,23 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
         for test in tests:
             test_result = run_color_scheme_test(test, output)
-
+            if test_result['error']:
+                errors += [test_result['error']]
             failures += test_result['failures']
             total_assertions += test_result['assertions']
 
         elapsed = timer() - start
 
+        output.append("\nTime: %.2f secs\n" % (elapsed))
+
+        if len(errors) > 0:
+            output.append("\nThere were %s errors:\n\n" % len(errors))
+            for i, error in enumerate(errors, start=1):
+                output.append("%d) %s\n" % (i, error['message']))
+                output.append("%s:%d:%d\n\n" % (error['file'], error['row'], error['col']))
+
         if len(failures) > 0:
 
-            output.append("\nTime: %.2f secs\n" % (elapsed))
             output.append("\nThere were %s failures:\n\n" % len(failures))
 
             for i, failure in enumerate(failures, start=1):
@@ -283,11 +302,19 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
                 output.append("{{diff}}\n\n")
                 output.append("%s:%d:%d\n\n" % (failure['file'], failure['row'], failure['col']))
 
-            output.append("FAILURES!\n")
-            output.append("Tests: %d, Assertions: %d, Failures: %d.\n" % (len(tests), total_assertions, len(failures)))
-        else:
-            output.append("\nTime: %.2f secs\n" % (elapsed))
+        if len(errors) == 0 and len(failures) == 0:
             output.append("\nOK (%d tests, %d assertions)\n" % (len(tests), total_assertions))
+        else:
+            output.append("FAILURES!\n")
+
+            output.append("Tests: %d, Assertions: %d" % (len(tests), total_assertions))
+
+            if len(errors) > 0:
+                output.append(", Errors: %d" % (len(errors)))
+
+            output.append(", Failures: %d" % (len(failures)))
+
+            output.append(".\n")
 
 if DEBUG_MODE:
 

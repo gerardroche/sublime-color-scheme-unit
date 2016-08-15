@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## Unreleased
+
+* Added: improved error handling; prints error information in test results
+
 ## 0.6.0
 
 * Added: test results are now displayed in color
