@@ -27,12 +27,14 @@ Commands:
 
 * `ColorSchemeUnit: Run tests`
 * `ColorSchemeUnit: Run test`
+* `ColorSchemeUnit: Run package tests`
 
 Tip: define keymaps for development:
 
 ```
 { "keys": ["ctrl+t"], "command": "run_color_scheme_tests" },
 { "keys": ["ctrl+r"], "command": "run_color_scheme_test" },
+{ "keys": ["ctrl+e"], "command": "run_color_scheme_package_tests" },
 ```
 
 ### Test file syntax
