@@ -82,7 +82,7 @@ def run_color_scheme_test(test, output):
     try:
         test_content = sublime.load_resource(test)
 
-        color_test_params = re.match('^COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"\n', test_content)
+        color_test_params = re.match('^(?:(?:\<\?php )?(?://|#|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"\n', test_content)
         if not color_test_params:
             error = {
                 'message': 'Invalid color test',
@@ -103,8 +103,6 @@ def run_color_scheme_test(test, output):
         if len(syntaxes) is not 1:
             raise RuntimeError('Invalid syntax: not found')
         test_syntax = syntaxes[0]
-
-        test_content = test_content.replace('COLOR TEST "%s"\nSYNTAX TEST "%s"\n' % (test_color_scheme, test_syntax), '')
 
         test_view.assign_syntax(test_syntax)
         test_view.assign_color_scheme(test_color_scheme)

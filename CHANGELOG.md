@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Added: improved error handling; prints error information in test results
+* Added: allow tests to begin with comments and tags e.g. `<?php // COLOR TEST ...`
 
 ## 0.6.0
 
