@@ -7,7 +7,7 @@ import re
 import plistlib
 from timeit import default_timer as timer
 
-VERSION = '0.6.0';
+VERSION = '0.7.0';
 
 DEBUG_MODE=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
 
