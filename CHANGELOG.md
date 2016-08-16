@@ -4,6 +4,7 @@
 
 * Changed: Reworded some run color tests commands
 * Fixed: Set Color Scheme On Load development helper
+* Fixed: allow trailing HTML comment tag on first fline
 
 ## 0.7.0
 
