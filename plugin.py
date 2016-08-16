@@ -69,6 +69,9 @@ class ColorSchemeStyle(object):
 
         return style
 
+COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"\n')
+COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
+
 def run_color_scheme_test(test, output):
     debug_message('running test: %s' % test)
 
@@ -82,7 +85,7 @@ def run_color_scheme_test(test, output):
     try:
         test_content = sublime.load_resource(test)
 
-        color_test_params = re.match('^(?:(?:\<\?php )?(?://|#|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"\n', test_content)
+        color_test_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
         if not color_test_params:
             error = {
                 'message': 'Invalid color test',
@@ -112,7 +115,7 @@ def run_color_scheme_test(test, output):
 
         consecutive_test_lines = 0
         for line_number, line in enumerate(test_content.splitlines()):
-            assertion_params = re.match('^(//|#|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$', line.lower().rstrip(' -->'))
+            assertion_params = COLOR_TEST_ASSERTION_COMPILED_PATTERN.match(line.lower().rstrip(' -->'))
             if not assertion_params:
                 consecutive_test_lines = 0
                 continue
@@ -391,6 +394,6 @@ if DEBUG_MODE:
     class SetColorSchemeOnLoad(sublime_plugin.EventListener):
 
         def on_load_async(self, view):
-            color_test_params = re.match('^COLOR TEST "(?P<color>[^"]+)" "(?P<syntax>[^"]+)"', view.substr(sublime.Region(0, view.size())))
+            color_test_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
             if color_test_params:
-                view.settings().set('color_scheme', color_test_params.group('color'))
+                view.settings().set('color_scheme', color_test_params.group('color_scheme'))

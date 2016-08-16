@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Changed: Reworded some run color tests commands
+* Fixed: Set Color Scheme On Load development helper
 
 ## 0.7.0
 
