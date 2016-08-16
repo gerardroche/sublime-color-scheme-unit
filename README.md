@@ -25,16 +25,16 @@ A testing framework for Sublime Text color schemes.
 
 Commands:
 
-* `ColorSchemeUnit: Run tests`
-* `ColorSchemeUnit: Run test`
-* `ColorSchemeUnit: Run package tests`
+* `ColorSchemeUnit: Run Package Tests`
+* `ColorSchemeUnit: Run All Tests`
+* `ColorSchemeUnit: Run Test`
 
 Tip: define keymaps for development:
 
 ```
-{ "keys": ["ctrl+t"], "command": "run_color_scheme_tests" },
+{ "keys": ["ctrl+t"], "command": "run_color_scheme_package_tests" },
+{ "keys": ["ctrl+a"], "command": "run_color_scheme_tests" },
 { "keys": ["ctrl+r"], "command": "run_color_scheme_test" },
-{ "keys": ["ctrl+e"], "command": "run_color_scheme_package_tests" },
 ```
 
 ### Test file syntax
