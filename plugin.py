@@ -7,7 +7,7 @@ import re
 import plistlib
 from timeit import default_timer as timer
 
-VERSION = '0.7.0';
+VERSION = '0.8.0-dev';
 
 DEBUG_MODE=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
 
@@ -86,6 +86,7 @@ def run_color_scheme_test(test, output):
         test_content = sublime.load_resource(test)
 
         color_test_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
+
         if not color_test_params:
             error = {
                 'message': 'Invalid color test',
@@ -93,22 +94,30 @@ def run_color_scheme_test(test, output):
                 'row': 0,
                 'col': 0
             }
-
             raise RuntimeError(error['message'])
 
-        test_color_scheme = color_test_params.group('color_scheme')
-
         syntaxes = sublime.find_resources(color_test_params.group('syntax_name') + '.sublime-syntax')
-        if len(syntaxes) == 0: # fallback to old syntax
-            syntaxes = sublime.find_resources(color_test_params.group('syntax_name') + '.tmLanguage')
-        if len(syntaxes) > 1:
-            raise RuntimeError('Invalid syntax: found more than one')
-        if len(syntaxes) is not 1:
-            raise RuntimeError('Invalid syntax: not found')
-        test_syntax = syntaxes[0]
 
-        test_view.assign_syntax(test_syntax)
-        test_view.assign_color_scheme(test_color_scheme)
+        if len(syntaxes) > 1:
+            error = {
+                'message': 'Too many syntaxes found',
+                'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                'row': 0,
+                'col': 0
+            }
+            raise RuntimeError(error['message'])
+
+        if len(syntaxes) is not 1:
+            error = {
+                'message': 'Syntaxes not found',
+                'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                'row': 0,
+                'col': 0
+            }
+            raise RuntimeError(error['message'])
+
+        test_view.assign_color_scheme(color_test_params.group('color_scheme'))
+        test_view.assign_syntax(syntaxes[0])
         test_view.set_content(test_content)
 
         color_scheme_style = ColorSchemeStyle(test_view.view)
