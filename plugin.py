@@ -21,8 +21,7 @@ else:
 class TestView(object):
 
     def setUp(self):
-        self.view = sublime.active_window().new_file()
-        self.view.set_scratch(True)
+        self.view = sublime.active_window().create_output_panel('color_scheme_unit_test_view')
 
     def tearDown(self):
         if self.view:

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Added: Tests are now run in background
 * Added: File or Package details is printed in test results output
 * Changed: Reworded some run color tests commands
 * Fixed: Set Color Scheme On Load development helper
