@@ -68,8 +68,8 @@ class ColorSchemeStyle(object):
 
         return style
 
-COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*--\>)?\n')
-COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
+COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\*\/))?\n')
+COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
 def run_color_scheme_test(test, output):
     debug_message('running test: %s' % test)
@@ -123,7 +123,7 @@ def run_color_scheme_test(test, output):
 
         consecutive_test_lines = 0
         for line_number, line in enumerate(test_content.splitlines()):
-            assertion_params = COLOR_TEST_ASSERTION_COMPILED_PATTERN.match(line.lower().rstrip(' -->'))
+            assertion_params = COLOR_TEST_ASSERTION_COMPILED_PATTERN.match(line.lower().rstrip(' -->').rstrip(' */'))
             if not assertion_params:
                 consecutive_test_lines = 0
                 continue

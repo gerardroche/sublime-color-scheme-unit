@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+* Added: allow tests using CSS comments e.g.
+  ```
+  /* COLOR TEST "Packages/Theme - Cobalt2/cobalt2.tmTheme" "CSS" */
+  @media all and (max-width: 470px) {
+  /* ^ fg=#ff9d00 fs= */
+  }
+  ```
 * Added: Default keymaps (disabled by default)
 * Added: Tests are now run in background
 * Added: File or Package details is printed in test results output
@@ -10,9 +17,9 @@
   by default. Previously it ran all tests including tests from other packages.
   Color scheme tests are slow and it doesn't make sense to run all test.
 * Fixed: Set Color Scheme On Load development helper
-* Fixed: allow trailing HTML comment tag on first fline
-* Removed: "run_color_scheme_package_tests" command. Use "run_color_scheme_tests"
-    command instead which now runs packages tests.
+* Fixed: allow trailing HTML comment tag on first line i.e. `COLOR TEST ... -->`
+* Removed: "run_color_scheme_package_tests" command. Use
+  "run_color_scheme_tests" command instead which now runs packages tests.
 
 ## 0.7.0
 
