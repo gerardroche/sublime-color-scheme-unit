@@ -283,8 +283,13 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
     def run_async(self, test_file, package):
 
         output = OutputPanel()
-        output.append("color_scheme_unit %s\n\n" % VERSION)
+        output.append("ColorSchemeUnit %s\n\n" % VERSION)
         output.show()
+
+        if test_file:
+            output.append("File: %s\n\n" % test_file)
+        else:
+            output.append("Package: %s\n\n" % package)
 
         errors = []
         failures = []

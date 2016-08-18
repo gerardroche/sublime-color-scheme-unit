@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Added: File or Package details is printed in test results output
 * Changed: Reworded some run color tests commands
 * Fixed: Set Color Scheme On Load development helper
 * Fixed: allow trailing HTML comment tag on first fline
