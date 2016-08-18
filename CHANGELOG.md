@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Added: Default keymaps (disabled by default)
 * Added: Tests are now run in background
 * Added: File or Package details is printed in test results output
 * Changed: Reworded some run color tests commands

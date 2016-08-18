@@ -23,21 +23,40 @@ A testing framework for Sublime Text color schemes.
 
 ## Usage
 
-Commands:
+### Commands
 
-* `ColorSchemeUnit: Run Package Tests`
-* `ColorSchemeUnit: Run All Tests`
-* `ColorSchemeUnit: Run Test`
+* ColorSchemeUnit: Run Package Tests
+* ColorSchemeUnit: Run All Tests
+* ColorSchemeUnit: Run Test
 
-Tip: define keymaps for development:
+### Keymaps
 
+*The keymaps are disabled by default.*
+
+OS X | Windows / Linux | Description
+-----|-----------------|------------
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Run single test
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run package tests
+
+### User Settings
+
+```json
+{
+    "color_scheme_unit.keymaps": true
+}
 ```
-{ "keys": ["ctrl+t"], "command": "run_color_scheme_package_tests" },
-{ "keys": ["ctrl+a"], "command": "run_color_scheme_tests" },
-{ "keys": ["ctrl+r"], "command": "run_color_scheme_test" },
+
+### Per-Project Settings
+
+```json
+{
+    "settings": {
+        "color_scheme_unit.keymaps": true
+    }
+}
 ```
 
-### Test file syntax
+### Test File Syntax
 
 Tests are very similar to syntax tests.
 
@@ -54,12 +73,8 @@ Once the above conditions are met, running the tests will show the results in an
 
 #### Example
 
-`Packages/five_easy_color_schemes/test/monokai_dark/color_scheme_test.php`
-
 ```
-COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "PHP"
-    <?php
-//  ^^^^^ fg=#f8f8f2 bg=#272822 fs=bold
+<?php // COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "PHP"
 
     // comment
 //  ^^^^^^^^^^ fg=#75715e fs=italic
