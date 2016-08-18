@@ -1,5 +1,5 @@
 [
-    { "keys": ["super+shift+t"],     "command": "run_color_scheme_package_tests",    "context": [{ "key": "setting.color_scheme_unit.keymaps" }] },
-    { "keys": ["super+shift+r"],     "command": "run_color_scheme_test",             "context": [{ "key": "setting.color_scheme_unit.keymaps" }] },
-    { "keys": ["super+shift+alt+p"], "command": "show_scope_name_and_styles",        "context": [{ "key": "setting.color_scheme_unit.keymaps" }] }
+    { "keys": ["super+shift+r"],     "command": "run_color_scheme_test",        "context": [{ "key": "setting.color_scheme_unit.keymaps" }] },
+    { "keys": ["super+shift+t"],     "command": "run_color_scheme_tests",       "context": [{ "key": "setting.color_scheme_unit.keymaps" }] },
+    { "keys": ["super+shift+alt+p"], "command": "show_scope_name_and_styles",   "context": [{ "key": "setting.color_scheme_unit.keymaps" }] }
 ]

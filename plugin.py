@@ -255,31 +255,63 @@ class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
     def run(self):
         if self.is_enabled():
+            view = self.window.active_view()
+            if not view:
+                return
+
             self.window.run_command('run_color_scheme_tests', {
-                'test_file': self.window.active_view().file_name()
+                'test_file': view.file_name()
             })
 
     def is_enabled(self):
         view = self.window.active_view()
-
         if not view:
             return False
 
-        fname = view.file_name()
-        if not fname:
+        file_name = view.file_name()
+        if not file_name:
             return False
 
-        if re.match('.+/color_scheme_test.*\.[a-z]+$', fname):
-            return True
+        if not re.match('^.+/color_scheme_test.*\.[a-z]+$', file_name):
+            return False
 
-        return False
+        return True
 
 class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
-    def run(self, test_file = None, package = None):
-        sublime.set_timeout_async(lambda: self.run_async(test_file, package), 100)
+    def run(self, test_file = None):
+        sublime.set_timeout_async(lambda: self.run_async(test_file), 50)
 
-    def run_async(self, test_file, package):
+    def run_async(self, test_file):
+        view = self.window.active_view()
+        if not view:
+            return
+
+        # TODO cleanup
+
+        package = None
+        if not test_file:
+            file_name = view.file_name()
+            if not file_name:
+                return
+
+            packages = []
+            for color_scheme_test in sublime.find_resources('color_scheme_test*'):
+                package = color_scheme_test.split(os.sep)[1]
+                if package not in packages:
+                    packages.append(package)
+
+            package = None
+            for p in packages:
+                if file_name.find(os.path.join(sublime.packages_path(), p)) == 0:
+                    package = p
+                    break
+
+            if not package:
+                return
+
+        if not test_file and not package:
+            return
 
         output = OutputPanel()
         output.append("ColorSchemeUnit %s\n\n" % VERSION)

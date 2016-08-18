@@ -6,8 +6,13 @@
 * Added: Tests are now run in background
 * Added: File or Package details is printed in test results output
 * Changed: Reworded some run color tests commands
+* Changed: "run_color_scheme_tests" command now runs the current package tests
+  by default. Previously it ran all tests including tests from other packages.
+  Color scheme tests are slow and it doesn't make sense to run all test.
 * Fixed: Set Color Scheme On Load development helper
 * Fixed: allow trailing HTML comment tag on first fline
+* Removed: "run_color_scheme_package_tests" command. Use "run_color_scheme_tests"
+    command instead which now runs packages tests.
 
 ## 0.7.0
 

@@ -92,7 +92,7 @@ For more examples see the [Five Easy Color Schemes](https://github.com/gerardroc
 
 ### Package Control installation
 
-The preferred method of installation is via [Package Control].
+The preferred method of installation is via [Package Control](https://packagecontrol.io/browse/authors/gerardroche).
 
 ### Manual installation
 
@@ -111,8 +111,6 @@ To enable **debug messages** and extra **development tools** set the package deb
 Tip: Start Sublime Text at the Terminal with an exported environment variable: `
 $ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; subl`.
 
-To enable the show style development tool add a keymap: `{ "keys": ["ctrl+shift+alt+p"], "command": "show_scope_name_and_styles" }`.
-
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
@@ -120,5 +118,3 @@ See [CHANGELOG.md](CHANGELOG.md).
 ## License
 
 Released under the [BSD 3-Clause License](LICENSE).
-
-[Package Control]: https://packagecontrol.io/browse/authors/gerardroche
