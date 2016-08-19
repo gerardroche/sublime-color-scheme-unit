@@ -1,6 +1,6 @@
 # gerardroche/sublime_color_scheme_unit
 
-## Unreleased
+## 0.8.0
 
 * Added: allow tests using CSS comments e.g.
   ```
