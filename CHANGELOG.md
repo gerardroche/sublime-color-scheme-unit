@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## 0.8.1
+
+* Fixed: Keymaps settings key typo
+
 ## 0.8.0
 
 * Added: allow tests using CSS comments e.g.
