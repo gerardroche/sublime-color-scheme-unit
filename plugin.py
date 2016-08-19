@@ -317,6 +317,8 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         output.append("ColorSchemeUnit %s\n\n" % VERSION)
         output.show()
 
+        output.append("Runtime: %s build %s\n" % (sublime.platform(), sublime.version()))
+
         if test_file:
             output.append("File: %s\n\n" % test_file)
         else:

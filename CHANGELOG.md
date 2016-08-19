@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## Unreleased
+
+* Added: Test results prints additional runtime information
+
 ## 0.8.1
 
 * Fixed: Keymaps settings key typo
