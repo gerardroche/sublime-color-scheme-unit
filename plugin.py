@@ -19,8 +19,12 @@ else:
 
 class TestView(object):
 
+    def __init__(self, window, name):
+        self.window = window
+        self.name = name + '_test_view'
+
     def setUp(self):
-        self.view = sublime.active_window().create_output_panel('color_scheme_unit_test_view')
+        self.view = self.window.create_output_panel(self.name)
 
     def tearDown(self):
         if self.view:
@@ -33,10 +37,21 @@ class TestView(object):
         self.view.settings().set('color_scheme', color_scheme)
 
     def set_content(self, content):
-        self.view.run_command('append', {'characters': content})
+        # TODO is there a way to avoid using this superfluous text command?
+        self.view.run_command('_set_content', {'content': content})
 
     def get_content(self):
         return self.view.substr(sublime.Region(0, self.view.size()))
+
+class _set_content(sublime_plugin.TextCommand):
+
+    """
+    Helper view command for TextView#set_content()
+    """
+
+    def run(self, edit, content):
+        self.view.erase(edit, sublime.Region(0, self.view.size()))
+        self.view.insert(edit, 0, content)
 
 class ColorSchemeStyle(object):
 
@@ -70,14 +85,14 @@ class ColorSchemeStyle(object):
 COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\*\/))?\n')
 COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
-def run_color_scheme_test(test, output):
-    debug_message('running test: %s' % test)
+def run_color_scheme_test(window, output, test):
+    debug_message('running color scheme test: %s' % test)
 
     error = False
     failures = []
     assertion_count = 0
 
-    test_view = TestView()
+    test_view = TestView(window, 'color_scheme_unit')
     test_view.setUp()
 
     try:
@@ -174,16 +189,16 @@ def run_color_scheme_test(test, output):
 
                     failures.append(failure_trace)
 
-                output.append(progress_character)
+                output.write(progress_character)
                 if assertion_count % 80 == 0:
-                    output.append("\n")
+                    output.write("\n")
 
-        output.append("\n")
+        output.write("\n")
     except Exception as e:
         test_view.tearDown()
         if not error:
-            output.append(str(e))
-            output.append("\n")
+            output.write(str(e))
+            output.write("\n")
 
     test_view.tearDown()
 
@@ -193,40 +208,42 @@ def run_color_scheme_test(test, output):
         'assertions': assertion_count
     }
 
-class OutputPanel(object):
+class TestOutputPanel(object):
 
-    def __init__(self):
-        self.window = sublime.active_window()
-        self.view = self.window.create_output_panel('color_scheme_unit')
+    def __init__(self, window, name):
+        self.view = window.create_output_panel(name)
 
         settings = self.view.settings()
-
-        # Settings
         settings.set('result_file_regex', '^(.+):([0-9]+):([0-9]+)$')
-        settings.set("word_wrap", False)
-        settings.set("line_numbers", False)
-        settings.set("gutter", False)
-        settings.set("rulers", [])
-        settings.set("scroll_past_end", False)
+        settings.set('word_wrap', False)
+        settings.set('line_numbers', False)
+        settings.set('gutter', False)
+        settings.set('rulers', [])
+        settings.set('scroll_past_end', False)
+
+        # Assign syntax
+        self.view.assign_syntax('Packages/color_scheme_unit/test_result.sublime-syntax')
 
         # Assign color scheme
-        active_view = self.window.active_view()
+        active_view = window.active_view()
         if active_view:
             active_color_scheme = active_view.settings().get('color_scheme')
             if active_color_scheme:
                 settings.set('color_scheme', active_color_scheme)
 
-        # Assign syntax
-        self.view.assign_syntax('Packages/color_scheme_unit/test_result.sublime-syntax')
+        window.run_command(
+            'show_panel', {
+                'panel': 'output.' + name
+            }
+        )
 
-    def show(self):
-        self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
-
-    def append(self, text):
-        self.view.run_command('append', {
-            'characters': text,
-            'scroll_to_end': True
-        })
+    def write(self, text):
+        self.view.run_command(
+            'append', {
+                'characters': text,
+                'scroll_to_end': True
+            }
+        )
 
 class RunColorSchemePackageTestsCommand(sublime_plugin.WindowCommand):
 
@@ -313,25 +330,22 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         if not test_file and not package:
             return
 
-        output = OutputPanel()
-        output.append("ColorSchemeUnit %s\n\n" % VERSION)
-        output.show()
+        output = TestOutputPanel(self.window, 'color_scheme_unit')
 
-        output.append("Runtime: %s build %s\n" % (sublime.platform(), sublime.version()))
+        output.write("ColorSchemeUnit %s\n\n" % VERSION)
 
-        if test_file:
-            output.append("File: %s\n\n" % test_file)
+        output.write("Runtime: %s build %s\n" % (sublime.platform(), sublime.version()))
+
+        if package:
+            output.write("Package: %s\n\n" % package)
         else:
-            output.append("Package: %s\n\n" % package)
+            output.write("File: %s\n\n" % test_file)
 
         errors = []
         failures = []
         total_assertions = 0
-
         tests = sublime.find_resources('color_scheme_test*')
-
         test_files = []
-
         if test_file:
             for test in tests:
                 abs_test = os.path.join(os.path.dirname(sublime.packages_path()), test)
@@ -351,48 +365,42 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         start = timer()
 
         for test in tests:
-            test_result = run_color_scheme_test(test, output)
+            test_result = run_color_scheme_test(self.window, output, test)
             if test_result['error']:
                 errors += [test_result['error']]
             failures += test_result['failures']
             total_assertions += test_result['assertions']
-
         elapsed = timer() - start
 
-        output.append("\nTime: %.2f secs\n" % (elapsed))
+        output.write("\nTime: %.2f secs\n" % (elapsed))
 
         if len(errors) > 0:
-            output.append("\nThere were %s errors:\n\n" % len(errors))
+            output.write("\nThere were %s errors:\n\n" % len(errors))
             for i, error in enumerate(errors, start=1):
-                output.append("%d) %s\n" % (i, error['message']))
-                output.append("%s:%d:%d\n\n" % (error['file'], error['row'], error['col']))
+                output.write("%d) %s\n" % (i, error['message']))
+                output.write("%s:%d:%d\n\n" % (error['file'], error['row'], error['col']))
 
         if len(failures) > 0:
-
-            output.append("\nThere were %s failures:\n\n" % len(failures))
-
+            output.write("\nThere were %s failures:\n\n" % len(failures))
             for i, failure in enumerate(failures, start=1):
-                output.append("%d) %s\n" % (i, failure['assertion']))
-                output.append("Failed asserting %s equals %s\n" % (str(failure['actual']), str(failure['expected'])))
-                output.append("--- Expected\n")
-                output.append("+++ Actual\n")
-                output.append("@@ @@\n")
-                output.append("{{diff}}\n\n")
-                output.append("%s:%d:%d\n\n" % (failure['file'], failure['row'], failure['col']))
+                output.write("%d) %s\n" % (i, failure['assertion']))
+                output.write("Failed asserting %s equals %s\n" % (str(failure['actual']), str(failure['expected'])))
+                # TODO failure diff
+                # output.write("--- Expected\n")
+                # output.write("+++ Actual\n")
+                # output.write("@@ @@\n")
+                # output.write("{{diff}}\n\n")
+                output.write("%s:%d:%d\n\n" % (failure['file'], failure['row'], failure['col']))
 
         if len(errors) == 0 and len(failures) == 0:
-            output.append("\nOK (%d tests, %d assertions)\n" % (len(tests), total_assertions))
+            output.write("\nOK (%d tests, %d assertions)\n" % (len(tests), total_assertions))
         else:
-            output.append("FAILURES!\n")
-
-            output.append("Tests: %d, Assertions: %d" % (len(tests), total_assertions))
-
+            output.write("FAILURES!\n")
+            output.write("Tests: %d, Assertions: %d" % (len(tests), total_assertions))
             if len(errors) > 0:
-                output.append(", Errors: %d" % (len(errors)))
-
-            output.append(", Failures: %d" % (len(failures)))
-
-            output.append(".\n")
+                output.write(", Errors: %d" % (len(errors)))
+            output.write(", Failures: %d" % (len(failures)))
+            output.write(".\n")
 
 if DEBUG:
 
