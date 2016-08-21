@@ -248,14 +248,18 @@ class TestOutputPanel(object):
 class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
     def run(self):
-        if self.is_enabled():
-            view = self.window.active_view()
-            if not view:
-                return
+        if not self.is_enabled():
+            return
 
-            self.window.run_command('run_color_scheme_tests', {
+        view = self.window.active_view()
+        if not view:
+            return
+
+        self.window.run_command(
+            'run_color_scheme_tests', {
                 'test_file': view.file_name()
-            })
+            }
+        )
 
     def is_enabled(self):
         view = self.window.active_view()
