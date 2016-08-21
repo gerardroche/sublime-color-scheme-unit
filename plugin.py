@@ -245,29 +245,6 @@ class TestOutputPanel(object):
             }
         )
 
-class RunColorSchemePackageTestsCommand(sublime_plugin.WindowCommand):
-
-    def run(self):
-        view = self.window.active_view()
-        if not view:
-            return
-
-        file_name = view.file_name()
-        if not file_name:
-            return
-
-        packages = []
-        for color_scheme_test in sublime.find_resources('color_scheme_test*'):
-            package = color_scheme_test.split(os.sep)[1]
-            if package not in packages:
-                packages.append(package)
-
-        for package in packages:
-            if file_name.find(os.path.join(sublime.packages_path(), package)) == 0:
-                self.window.run_command('run_color_scheme_tests', {
-                    'package': package
-                })
-
 class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
     def run(self):
