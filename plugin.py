@@ -278,7 +278,7 @@ class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
     def run(self, test_file = None):
-        sublime.set_timeout_async(lambda: self.run_async(test_file), 50)
+        sublime.set_timeout_async(lambda: self.run_async(test_file))
 
     def run_async(self, test_file):
         view = self.window.active_view()
