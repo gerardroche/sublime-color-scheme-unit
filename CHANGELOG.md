@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## 0.9.1
+
+* Fixed: test output panel syntax tests
+
 ## 0.9.0
 
 * Added: Prints additional runtime information on test runs
