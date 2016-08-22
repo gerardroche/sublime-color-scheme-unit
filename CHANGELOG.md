@@ -1,8 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
-## Unreleased
+## 0.9.0
 
-* Added: Test results prints additional runtime information
+* Added: Prints additional runtime information on test runs
+* Changed: Run tests timeout uses default 0
 
 ## 0.8.1
 
