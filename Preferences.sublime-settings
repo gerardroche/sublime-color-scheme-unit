@@ -1,4 +1,4 @@
 {
     // Enable the default keymaps.
-    "color_scheme_unit.keymaps": true
+    "color_scheme_unit.keymaps": false
 }

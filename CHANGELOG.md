@@ -1,8 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
-## Unreleased
+## 0.10.0
 
 * Changed: Test views are no longer listed in the panel switcher
+* Fixed: Keymaps are disabled by default
 
 ## 0.9.1
 
