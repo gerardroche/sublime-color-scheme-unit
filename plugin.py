@@ -7,8 +7,9 @@ import re
 import plistlib
 from timeit import default_timer as timer
 
-VERSION = '0.9.0';
-DEBUG=bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
+DEBUG = bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
+
+VERSION = '0.10.0-dev';
 
 if DEBUG:
     def debug_message(message):
@@ -16,6 +17,17 @@ if DEBUG:
 else:
     def debug_message(message):
         pass
+
+# TODO is there a way to avoid needing this superfluous text command?
+class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
+
+    """
+    Helper view command for TestView#set_content()
+    """
+
+    def run(self, edit, content):
+        self.view.erase(edit, sublime.Region(0, self.view.size()))
+        self.view.insert(edit, 0, content)
 
 class TestView(object):
 
@@ -31,21 +43,54 @@ class TestView(object):
             self.view.close()
 
     def set_content(self, content):
-        # TODO is there a way to avoid running the following superfluous text command?
-        self.view.run_command('_set_content', {'content': content})
+        self.view.run_command(
+            '_color_scheme_unit_test_view_set_content',
+            {
+                'content': content
+            }
+        )
 
     def get_content(self):
         return self.view.substr(sublime.Region(0, self.view.size()))
 
-class _set_content(sublime_plugin.TextCommand):
+class TestOutputPanel(object):
 
-    """
-    Helper view command for TextView#set_content()
-    """
+    def __init__(self, name, window):
+        self.view = window.create_output_panel(name)
 
-    def run(self, edit, content):
-        self.view.erase(edit, sublime.Region(0, self.view.size()))
-        self.view.insert(edit, 0, content)
+        settings = self.view.settings()
+        settings.set('result_file_regex', '^(.+):([0-9]+):([0-9]+)$')
+        settings.set('word_wrap', False)
+        settings.set('line_numbers', False)
+        settings.set('gutter', False)
+        settings.set('rulers', [])
+        settings.set('scroll_past_end', False)
+
+        # Assign syntax
+        self.view.assign_syntax('Packages/color_scheme_unit/test_output_panel.sublime-syntax')
+
+        # Assign the active color scheme
+        active_view = window.active_view()
+        if active_view:
+            active_color_scheme = active_view.settings().get('color_scheme')
+            if active_color_scheme:
+                settings.set('color_scheme', active_color_scheme)
+
+        window.run_command(
+            'show_panel',
+            {
+                'panel': 'output.' + name
+            }
+        )
+
+    def write(self, text):
+        self.view.run_command(
+            'append',
+            {
+                'characters': text,
+                'scroll_to_end': True
+            }
+        )
 
 class ColorSchemeStyle(object):
 
@@ -202,58 +247,15 @@ def run_color_scheme_test(test, window, output):
         'assertions': assertion_count
     }
 
-class TestOutputPanel(object):
-
-    def __init__(self, name, window):
-        self.view = window.create_output_panel(name)
-
-        settings = self.view.settings()
-        settings.set('result_file_regex', '^(.+):([0-9]+):([0-9]+)$')
-        settings.set('word_wrap', False)
-        settings.set('line_numbers', False)
-        settings.set('gutter', False)
-        settings.set('rulers', [])
-        settings.set('scroll_past_end', False)
-
-        # Assign syntax
-        self.view.assign_syntax('Packages/color_scheme_unit/test_output_panel.sublime-syntax')
-
-        # Assign the active color scheme
-        active_view = window.active_view()
-        if active_view:
-            active_color_scheme = active_view.settings().get('color_scheme')
-            if active_color_scheme:
-                settings.set('color_scheme', active_color_scheme)
-
-        window.run_command(
-            'show_panel', {
-                'panel': 'output.' + name
-            }
-        )
-
-    def write(self, text):
-        self.view.run_command(
-            'append', {
-                'characters': text,
-                'scroll_to_end': True
-            }
-        )
-
 class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
     def run(self):
-        if not self.is_enabled():
-            return
-
-        view = self.window.active_view()
-        if not view:
-            return
-
-        self.window.run_command(
-            'run_color_scheme_tests', {
-                'test_file': view.file_name()
-            }
-        )
+        if self.is_enabled():
+            self.window.run_command(
+                'run_color_scheme_tests', {
+                    'test_file': self.test_file
+                }
+            )
 
     def is_enabled(self):
         view = self.window.active_view()
@@ -266,6 +268,8 @@ class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
         if not re.match('^.+/color_scheme_test.*\.[a-z]+$', file_name):
             return False
+
+        self.test_file = file_name
 
         return True
 
