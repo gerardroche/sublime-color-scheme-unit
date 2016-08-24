@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## Unreleased
+
+* Changed: Test views are no longer listed in the panel switcher
+
 ## 0.9.1
 
 * Fixed: test output panel syntax tests

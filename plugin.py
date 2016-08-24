@@ -24,7 +24,7 @@ class TestView(object):
         self.window = window
 
     def setUp(self):
-        self.view = self.window.create_output_panel(self.name)
+        self.view = self.window.create_output_panel(self.name, True)
 
     def tearDown(self):
         if self.view:
