@@ -27,7 +27,7 @@ A testing framework for Sublime Text color schemes.
 ## Commands
 
 * ColorSchemeUnit: Run Test
-* ColorSchemeUnit: Run Package Tests
+* ColorSchemeUnit: Run Tests
 
 ## Keymaps
 
@@ -36,7 +36,7 @@ Disabled by default.
 OS X | Windows / Linux | Description
 -----|-----------------|------------
 <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Run Test
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run Package Tests
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run Tests
 
 ## Settings
 
@@ -76,7 +76,7 @@ Color scheme tests are very similar to [syntax definition tests](https://www.sub
 
         <comment_token> COLOR TEST "<color_scheme_file>" "<syntax_name>"
 
-Once the above conditions are met, running a test or the package tests with a color sccheme test selected will run a single test or all the package tests, and show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
+Once the above conditions are met, running a test or running all the tests with a color scheme test in an active view will run a single test or all the package tests for that test, and then show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
 
 Each test in the syntax test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
 
