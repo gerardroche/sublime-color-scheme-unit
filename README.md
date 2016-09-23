@@ -42,7 +42,7 @@ OS X | Windows / Linux | Description
 
 Key | Description | Type | Default
 ----|-------------|------|--------
-`phpunit.keymaps` | Enable the default keymaps. | `boolean` | `false`
+`color_scheme_unit.keymaps` | Enable the default keymaps. | `boolean` | `false`
 
 ### User Settings
 
@@ -50,7 +50,7 @@ Key | Description | Type | Default
 
 ```json
 {
-    "phpunit.{Key}": "{Value}"
+    "color_scheme_unit.{Key}": "{Value}"
 }
 ```
 
@@ -61,7 +61,7 @@ Key | Description | Type | Default
 ```json
 {
     "settings": {
-        "phpunit.{Key}": "{Value}"
+        "color_scheme_unit.{Key}": "{Value}"
     }
 }
 ```
