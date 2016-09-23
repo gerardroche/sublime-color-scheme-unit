@@ -117,13 +117,43 @@ The preferred method of installation is via [Package Control](https://packagecon
 
 Your issue reports and pull requests are always welcome.
 
-To enable debug messages and extra development tools set a `SUBLIME_COLOR_SCHEME_UNIT_DEBUG` environment variable to a non-blank value.
+### Debug messages
 
-Tip: Start Sublime Text at the Terminal with an exported environment variable.
+Debug messages are disabled by default. To enable them set an environment variable to a non-blank value e.g. `SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y`. To disable them set unset it or set it to a blank value e.g. `SUBLIME_COLOR_SCHEME_UNIT_DEBUG=`.
+
+For more information on environment variables read [What are PATH and other environment variables, and how can I set or use them?](http://superuser.com/questions/284342/what-are-path-and-other-environment-variables-and-how-can-i-set-or-use-them)
+
+#### Example &mdash; Linux
+
+Sublime Text can be started at the Terminal with an exported environment variable.
 
 ```
 $ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; subl
 ```
+
+To set the environment permanently set it in `~/.profile` (requires restart).
+
+```
+export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
+```
+
+Alternatively, create a [debug script (subld)](https://github.com/gerardroche/dotfiles/blob/1a27abed589f2fea9126a0496ef4d1cae0479722/src/bin/subld) with debugging environment variables enabled.
+
+#### Example &mdash; Windows
+
+Sublime Text can be started at the Command Prompt with an exported environment variable.
+
+```
+> set SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y& "C:\Program Files\Sublime Text 3\subl.exe"
+```
+
+To set the environment permanently set it as a *system* environment variable (requires restart).
+
+1. Control Panel > System and Security > System > Advanced system settings
+2. Advanced > Environment Variables
+3. System variables > New...
+4. Add Variable name `SUBLIME_COLOR_SCHEME_UNIT_DEBUG` with Variable value `y`
+5. Restart Windows
 
 ## Changelog
 
