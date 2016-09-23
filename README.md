@@ -44,6 +44,28 @@ Key | Description | Type | Default
 ----|-------------|------|--------
 `phpunit.keymaps` | Enable the default keymaps. | `boolean` | `false`
 
+### User Settings
+
+`Preferences > Settings - User`
+
+```json
+{
+    "phpunit.{Key}": "{Value}"
+}
+```
+
+### Per-Project Settings
+
+`Project > Edit Project`
+
+```json
+{
+    "settings": {
+        "phpunit.{Key}": "{Value}"
+    }
+}
+```
+
 ## Tests
 
 Color scheme tests are very similar to [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
