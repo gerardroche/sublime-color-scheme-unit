@@ -15,20 +15,21 @@ A testing framework for Sublime Text color schemes.
 
 ## Overview
 
+* [Commands](#commands)
+* [Keymaps](#keymaps)
+* [Settings](#settings)
 * [Usage](#usage)
 * [Installation](#installation)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
 
-## Usage
-
-### Commands
+## Commands
 
 * ColorSchemeUnit: Run Test
 * ColorSchemeUnit: Run Package Tests
 
-### Keymaps
+## Keymaps
 
 The keymaps are disabled by default.
 
@@ -37,39 +38,35 @@ OS X | Windows / Linux | Description
 <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Run Test
 <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run Package Tests
 
-### Settings
+## Settings
 
 Key | Description | Type | Default
 ----|-------------|------|--------
 `phpunit.keymaps` | Enable the default keymaps. | `boolean` | `false`
 
-### User Settings
+## Tests
 
-`Preferences > Settings - User`
+Color scheme tests are very similar to [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
 
-```json
-{
-    "color_scheme_unit.{Key}": "{Value}"
-}
-```
+1. Ensure the file name starts with `color_scheme_test_`.
+2. Ensure the file is saved somwhere within the Packages directory.
+3. Ensure the first line of the file starts with:
 
-### Per-Project Settings
+        <comment_token> COLOR TEST "<color_scheme_file>" "<syntax_name>"
 
-`Project > Edit Project`
+Once the above conditions are met, running a test or the package tests with a color sccheme test selected will run a single test or all the package tests, and show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
 
-```json
-{
-    "settings": {
-        "color_scheme_unit.{Key}": "{Value}"
-    }
-}
-```
+Each test in the syntax test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
 
-### Testing
+There is one type of test:
 
-Tests are very similar to [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
+* Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: foregound (`fg=#<color>`), background (`bg=#<color>`), and font style (`fs=<comma_delimited_list>`). One or more assertions are required, and must be specified in the order listed above.
 
-PHP
+### Examples
+
+For more examples see the [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
+
+#### Example &mdash; PHP Test
 
 ```
 <?php // COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "PHP"
@@ -88,46 +85,19 @@ interface Filter {
 }
 ```
 
-HTML
+#### Example &mdash; HTML Test
 
 ```
 <!-- COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "HTML" -->
 <!-- assertions... -->
 ```
 
-CSS
+#### Example &mdash; CSS Test
 
 ```
 /* COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "CSS" */
 /* assertions... */
 ```
-
-For more examples see the [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
-
-#### Rules
-
-1. Ensure the file name starts with `color_scheme_test_`.
-2. Ensure the file is saved somwhere within the Packages directory. Within a directory named `test` inside the color scheme package is recommended.
-  ```
-  .
-  ├── name.tmTheme
-  └── test
-      ├── color_scheme_test.css
-      ├── color_scheme_test.html
-      ├── color_scheme_test.js
-      └── issue
-          ├── color_scheme_test_104.php
-          └── color_scheme_test_98.php
-  ```
-3. Ensure the first line of the file starts with: `<comment_token> COLOR TEST "<color_scheme_file>" "<syntax_name>"`
-
-Once the above conditions are met, running a test or the package tests with a color sccheme test selected will run a single test or all the package tests, and show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
-
-Each test in the syntax test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
-
-There is one type of test:
-
-* Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: foregound (`fg=#<color>`), background (`bg=#<color>`), and font style (`fs=<comma_delimited_list>`). One or more assertions are required, and must be specified in the order listed above.
 
 ## Installation
 
