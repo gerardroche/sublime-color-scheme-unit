@@ -31,7 +31,7 @@ A testing framework for Sublime Text color schemes.
 
 ## Keymaps
 
-The keymaps are disabled by default.
+Disabled by default.
 
 OS X | Windows / Linux | Description
 -----|-----------------|------------
