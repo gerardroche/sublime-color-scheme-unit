@@ -9,7 +9,7 @@ from timeit import default_timer as timer
 
 DEBUG = bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
 
-VERSION = '0.10.0-dev';
+VERSION = '0.11.0';
 
 if DEBUG:
     def debug_message(message):
@@ -362,51 +362,61 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
 if DEBUG:
 
-    class ShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
+    def copy(view, text):
+        sublime.set_clipboard(text)
+        view.hide_popup()
+        sublime.status_message('Scope name copied to clipboard')
 
+    class ShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
         def run(self, edit):
-            point = self.view.sel()[-1].b
-            scope = self.view.scope_name(point)
-            style = ColorSchemeStyle(self.view).at_point(point)
+            scope = self.view.scope_name(self.view.sel()[-1].b)
+            style = ColorSchemeStyle(self.view).at_point(self.view.sel()[-1].b)
 
             style_html = '<ul>'
-
             if 'foreground' in style:
-                style_html += "<li>foreground: %s</li>" % style['foreground']
+                style_html += "<li>foreground: <a href=\"{0}\">{0}</a></li>".format(style['foreground'])
                 del style['foreground']
-
             if 'background' in style:
-                style_html += "<li>background: %s</li>" % style['background']
+                style_html += "<li>background: <a href=\"{0}\">{0}</a></li>".format(style['background'])
                 del style['background']
-
             if 'fontStyle' in style:
-                style_html += "<li>fontStyle: %s</li>" % style['fontStyle']
+                style_html += "<li>fontStyle: <a href=\"{0}\">{0}</a></li>".format(style['fontStyle'])
                 del style['fontStyle']
-
             for x in sorted(style):
-                style_html += "<li>%s: %s</li>" % (x, style[x])
-
+                style_html += "<li>{0}: <a href=\"{1}\">{1}</a></li>".format(x, style[x])
             style_html += '</ul>';
 
             html = """
-                <style>
-                * { margin: 0; padding: 0; }
-                body { padding: 8; background-color: #f8f8f8; color: #222; }
-                </style>
-                <p>%s</p><p><a href="%s">Copy</a></p><br>%s
+                <body id=show-scope>
+                    <style>
+                        p {
+                            margin-top: 0;
+                        }
+                        a {
+                            font-family: sans-serif;
+                            font-size: 1.05rem;
+                        }
+                        ul {
+                            padding: 0;
+                        }
+                    </style>
+                    <p>%s</p>
+                    <a href="%s">Copy</a>
+                    %s
+                </body>
             """ % (scope.replace(' ', '<br>'), scope.rstrip(), style_html)
 
-            def copy_to_clipboard(view, text):
-
-                sublime.set_clipboard(text)
-                view.hide_popup()
-                sublime.status_message('Scope name copied to clipboard')
-
-            self.view.show_popup(html, on_navigate=lambda x: copy_to_clipboard(self.view, x))
+            self.view.show_popup(html, max_width=512, on_navigate=lambda x: copy(self.view, x))
 
     class SetColorSchemeOnLoad(sublime_plugin.EventListener):
 
         def on_load_async(self, view):
-            color_test_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
-            if color_test_params:
-                view.settings().set('color_scheme', color_test_params.group('color_scheme'))
+
+            file_name = view.file_name()
+            if file_name:
+                if not re.match('.*color_scheme_test[a-zA-Z0-9_]+.[a-zA-Z0-9]+$', file_name):
+                    return
+
+            color_scheme_test = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
+            if color_scheme_test:
+                view.settings().set('color_scheme', color_scheme_test.group('color_scheme'))

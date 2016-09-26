@@ -1,5 +1,9 @@
 # gerardroche/sublime_color_scheme_unit
 
+## 0.11.0
+
+* Added: Colors in the Show Scope Name and Styles can now be copied with mouse click
+
 ## 0.10.0
 
 * Changed: Test views are no longer listed in the panel switcher

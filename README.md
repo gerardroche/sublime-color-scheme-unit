@@ -1,80 +1,42 @@
-# color_scheme_unit
+# WHAT COLOR_SCHEME_UNIT IS
 
-[![Author](https://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat)](https://twitter.com/gerardroche)
-[![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit)
-[![License](https://img.shields.io/badge/license-BSD--3-blue.svg?style=flat)](https://raw.githubusercontent.com/gerardroche/sublime_color_scheme_unit/master/LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers)
+[![Author](https://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat-square&maxAge=86400)](https://twitter.com/gerardroche) [![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat-square&maxAge=86400)](https://github.com/gerardroche/sublime_color_scheme_unit) [![License](https://img.shields.io/badge/license-BSD--3-blue.svg?style=flat-square&maxAge=86400)](https://raw.githubusercontent.com/gerardroche/sublime_color_scheme_unit/master/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&maxAge=86400)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Sublime version](https://img.shields.io/badge/sublime-v3.0.0-green.svg?style=flat-square&maxAge=86400)](https://sublimetext.com) [![Latest version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&maxAge=86400&label=release)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square&maxAge=86400)](https://packagecontrol.io/packages/color_scheme_unit)
 
-[![Sublime version](https://img.shields.io/badge/sublime-v3-lightgrey.svg?style=flat)](https://sublimetext.com)
-[![Latest version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?label=release&style=flat&maxAge=2592000)](https://github.com/gerardroche/sublime_color_scheme_unit/tags)
-[![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat&maxAge=2592000)](https://packagecontrol.io/packages/color_scheme_unit)
-
-A testing framework for Sublime Text color schemes.
+COLOR_SCHEME_UNIT is a testing framework for Sublime Text color schemes.
 
 ![Screenshot](screenshot.png)
 
-## Overview
+## OVERVIEW
 
+* [Writing Tests](#writing-tests)
 * [Commands](#commands)
-* [Keymaps](#keymaps)
-* [Settings](#settings)
-* [Usage](#usage)
+* [Key Bindings](#key-bindings)
+* [Configuration](#configuration)
 * [Installation](#installation)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
 
-## Commands
-
-* ColorSchemeUnit: Run Test
-* ColorSchemeUnit: Run Tests
-
-## Keymaps
-
-Disabled by default.
-
-OS X | Windows / Linux | Description
------|-----------------|------------
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Run Test
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run Tests
-
-## Settings
-
-Key | Description | Type | Default
-----|-------------|------|--------
-`color_scheme_unit.keymaps` | Enable the default keymaps. | `boolean` | `false`
-
-### User Settings
-
-`Preferences > Settings - User`
-
-```json
-{
-    "color_scheme_unit.{Key}": "{Value}"
-}
-```
-
-### Per-Project Settings
-
-`Project > Edit Project`
-
-```json
-{
-    "settings": {
-        "color_scheme_unit.{Key}": "{Value}"
-    }
-}
-```
-
-## Tests
+## WRITING TESTS
 
 Color scheme tests are very similar to [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
 
 1. Ensure the file name starts with `color_scheme_test_`.
-2. Ensure the file is saved somwhere within the Packages directory.
+2. Ensure the file is saved somewhere within the Packages directory.
 3. Ensure the first line of the file starts with:
+   `<comment_token> COLOR TEST "<color_scheme_file>" "<syntax_name>"`
 
-        <comment_token> COLOR TEST "<color_scheme_file>" "<syntax_name>"
+Suggested package layout:
+
+    .
+    ├── name.tmTheme
+    └── test
+      ├── color_scheme_test.css
+      ├── color_scheme_test.html
+      ├── color_scheme_test.js
+      └── issue
+          ├── color_scheme_test_104.php
+          └── color_scheme_test_98.php
 
 Once the above conditions are met, running a test or running all the tests with a color scheme test in an active view will run a single test or all the package tests for that test, and then show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
 
@@ -82,7 +44,7 @@ Each test in the syntax test file must first start the comment token (establishe
 
 There is one type of test:
 
-* Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: foregound (`fg=#<color>`), background (`bg=#<color>`), and font style (`fs=<comma_delimited_list>`). One or more assertions are required, and must be specified in the order listed above.
+* Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: foreground (`fg=#<color>`), background (`bg=#<color>`), and font style (`fs=<comma_delimited_list>`). One or more assertions are required, and must be specified in the order listed above.
 
 ### Examples
 
@@ -121,21 +83,64 @@ interface Filter {
 /* assertions... */
 ```
 
-## Installation
+## INSTALLATION
 
-### Package Control installation
+### Package Control
 
 The preferred method of installation is via [Package Control](https://packagecontrol.io/browse/authors/gerardroche).
 
-### Manual installation
+### Manual
 
 1. Close Sublime Text.
 2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text packages directory:
     * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
     * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
     * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
+3. Done!
 
-## Contributing
+## COMMANDS
+
+* ColorSchemeUnit: Run Test
+* ColorSchemeUnit: Run Tests
+
+## KEY BINDINGS
+
+Disabled by default.
+
+OS X | Windows / Linux | Description
+-----|-----------------|------------
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Run Test
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run Tests
+
+## Configuration
+
+Key | Description | Type | Default
+----|-------------|------|--------
+`color_scheme_unit.keymaps` | Enable the default keymaps. | `boolean` | `false`
+
+### User Settings
+
+`Preferences > Settings - User`
+
+```json
+{
+    "color_scheme_unit.{Key}": "{Value}"
+}
+```
+
+### Per-Project Settings
+
+`Project > Edit Project`
+
+```json
+{
+    "settings": {
+        "color_scheme_unit.{Key}": "{Value}"
+    }
+}
+```
+
+## CONTRIBUTING
 
 Your issue reports and pull requests are always welcome.
 
@@ -177,10 +182,10 @@ To set the environment permanently set it as a *system* environment variable (re
 4. Add Variable name `SUBLIME_COLOR_SCHEME_UNIT_DEBUG` with Variable value `y`
 5. Restart Windows
 
-## Changelog
+## CHANGELOG
 
 See [CHANGELOG.md](CHANGELOG.md).
 
-## License
+## LICENSE
 
 Released under the [BSD 3-Clause License](LICENSE).
