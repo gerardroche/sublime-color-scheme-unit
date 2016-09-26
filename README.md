@@ -112,7 +112,7 @@ OS X | Windows / Linux | Description
 <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Run Test
 <kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run Tests
 
-## Configuration
+## CONFIGURATION
 
 Key | Description | Type | Default
 ----|-------------|------|--------
