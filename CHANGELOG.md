@@ -1,5 +1,9 @@
 # COLOR_SCHEME_UNIT CHANGELOG
 
+## Unreleased
+
+* Fixed [#5](https://github.com/gerardroche/sublime_color_scheme_unit/issues/5): PHP test definition with trailing `?>` does not work
+
 ## [0.11.0]
 
 * Added: Colors in the Show Scope Name and Styles can now be copied with mouse click
