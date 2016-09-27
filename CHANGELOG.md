@@ -1,9 +1,10 @@
 # COLOR_SCHEME_UNIT CHANGELOG
 
-## Unreleased
+## [0.12.0]
 
 * Fixed [#5](https://github.com/gerardroche/sublime_color_scheme_unit/issues/5): PHP test definition with trailing `?>` does not work
 * Deprecated [#6](https://github.com/gerardroche/sublime_color_scheme_unit/issues/6): Color scheme paths should no longer be prefixed with "Packages/"
+* Deprecated [#7](https://github.com/gerardroche/sublime_color_scheme_unit/issues/7): Color scheme tests should use the keyword "COLOR SCHEME TEST" instead of "COLOR TEST"
 
 ## [0.11.0]
 
@@ -84,6 +85,7 @@
 
 * Initial import
 
+[0.12.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.11.0...0.12.0
 [0.11.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.9.0...0.10.0
 [0.9.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.9.0...0.9.1

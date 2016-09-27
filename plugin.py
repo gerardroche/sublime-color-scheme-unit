@@ -17,7 +17,7 @@ else:
     def debug_message(message):
         pass
 
-COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?\n')
+COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR(?P<keyword> SCHEME)? TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?\n')
 COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
 class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
@@ -120,6 +120,12 @@ def run_color_scheme_test(test, window, output):
         test_content = sublime.load_resource(test)
 
         color_test_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
+
+        # TODO remove this deprecated behaviour in v1.0.0
+        if not color_test_params.group('keyword'):
+            output.write("\n")
+            output.write("DEPRECATED: \"COLOR TEST\" in %s:0\n" % test)
+            output.write("  Use 'COLOR SCHEME TEST ...' instead; see https://github.com/gerardroche/sublime_color_scheme_unit/issues/7\n\n")
 
         if not color_test_params:
             error = {
