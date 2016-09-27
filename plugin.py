@@ -150,7 +150,16 @@ def run_color_scheme_test(test, window, output):
             }
             raise RuntimeError(error['message'])
 
-        test_view.view.settings().set('color_scheme', color_test_params.group('color_scheme'))
+        # TODO remove this deprecated behaviour in v1.0.0
+        color_scheme = 'Packages/' + color_test_params.group('color_scheme')
+        if 'Packages/Packages/' in color_scheme:
+            color_scheme = re.sub('Packages/Packages/', 'Packages/', color_scheme)
+            output.write("\n")
+            output.write("DEPRECATED: \"Packages/...\" in %s:0\n" % test)
+            output.write(" Rename '%s'\n     to          '%s'\n" % (color_scheme, color_scheme[9:]))
+            output.write(" See https://github.com/gerardroche/sublime_color_scheme_unit/issues/6\n\n")
+
+        test_view.view.settings().set('color_scheme', color_scheme)
         test_view.view.assign_syntax(syntaxes[0])
         test_view.set_content(test_content)
 

@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Fixed [#5](https://github.com/gerardroche/sublime_color_scheme_unit/issues/5): PHP test definition with trailing `?>` does not work
+* Deprecated [#6](https://github.com/gerardroche/sublime_color_scheme_unit/issues/6): Color scheme paths should no longer be prefixed with "Packages/"
 
 ## [0.11.0]
 
