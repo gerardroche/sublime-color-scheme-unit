@@ -5,8 +5,8 @@ import re
 import plistlib
 from timeit import default_timer as timer
 
-__version__ = "0.11.0"
-__version_info__ = (0, 11, 0)
+__version__ = "0.12.0"
+__version_info__ = (0, 12, 0)
 
 if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
     def debug_message(message):
