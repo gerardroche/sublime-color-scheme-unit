@@ -7,54 +7,51 @@ import re
 import plistlib
 from timeit import default_timer as timer
 
-DEBUG = bool(os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'))
+__version__ = "0.11.0"
+__version_info__ = (0, 11, 0)
 
-VERSION = '0.11.0';
-
-if DEBUG:
+if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
     def debug_message(message):
-        print('DEBUG [color_scheme_unit] %s' % str(message))
+        print('DEBUG color_scheme_unit: %s' % str(message))
 else:
     def debug_message(message):
         pass
 
-# TODO is there a way to avoid needing this superfluous text command?
+COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\*\/))?\n')
+COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
+
 class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
 
     """
     Helper view command for TestView#set_content()
+    TODO is there a way to avoid needing this superfluous text command?
     """
 
     def run(self, edit, content):
         self.view.erase(edit, sublime.Region(0, self.view.size()))
         self.view.insert(edit, 0, content)
 
-class TestView(object):
-
+class TestView():
     def __init__(self, name, window):
         self.name = name + '_test_view'
         self.window = window
 
     def setUp(self):
-        self.view = self.window.create_output_panel(self.name, True)
+        self.view = self.window.create_output_panel(self.name, unlisted=True)
 
     def tearDown(self):
         if self.view:
             self.view.close()
 
     def set_content(self, content):
-        self.view.run_command(
-            '_color_scheme_unit_test_view_set_content',
-            {
-                'content': content
-            }
-        )
+        self.view.run_command('_color_scheme_unit_test_view_set_content', {
+            'content': content
+        })
 
     def get_content(self):
         return self.view.substr(sublime.Region(0, self.view.size()))
 
-class TestOutputPanel(object):
-
+class TestOutputPanel():
     def __init__(self, name, window):
         self.view = window.create_output_panel(name)
 
@@ -66,33 +63,21 @@ class TestOutputPanel(object):
         settings.set('rulers', [])
         settings.set('scroll_past_end', False)
 
-        # Assign syntax
         self.view.assign_syntax('Packages/color_scheme_unit/test_output_panel.sublime-syntax')
 
-        # Assign the active color scheme
+        # Assign panel with color scheme of active view
         active_view = window.active_view()
         if active_view:
             active_color_scheme = active_view.settings().get('color_scheme')
             if active_color_scheme:
                 settings.set('color_scheme', active_color_scheme)
 
-        window.run_command(
-            'show_panel',
-            {
-                'panel': 'output.' + name
-            }
-        )
+        window.run_command('show_panel', { 'panel': 'output.' + name })
 
     def write(self, text):
-        self.view.run_command(
-            'append',
-            {
-                'characters': text,
-                'scroll_to_end': True
-            }
-        )
+        self.view.run_command('append', { 'characters': text, 'scroll_to_end': True })
 
-class ColorSchemeStyle(object):
+class ColorSchemeStyle():
 
     def __init__(self, view):
         self.view = view
@@ -120,9 +105,6 @@ class ColorSchemeStyle(object):
                     style.update(color_scheme_definition['settings'])
 
         return style
-
-COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\*\/))?\n')
-COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
 def run_color_scheme_test(test, window, output):
     debug_message('running color scheme test: %s' % test)
@@ -304,7 +286,7 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
             return
 
         output = TestOutputPanel('color_scheme_unit', self.window)
-        output.write("ColorSchemeUnit %s\n\n" % VERSION)
+        output.write("ColorSchemeUnit %s\n\n" % __version__)
         output.write("Runtime: %s build %s\n" % (sublime.platform(), sublime.version()))
         output.write("Package: %s\n" % tests_package_name)
         if test_file:
@@ -360,7 +342,7 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
             output.write(".")
             output.write("\n")
 
-if DEBUG:
+if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
 
     def copy(view, text):
         sublime.set_clipboard(text)
@@ -368,6 +350,7 @@ if DEBUG:
         sublime.status_message('Scope name copied to clipboard')
 
     class ShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
+
         def run(self, edit):
             scope = self.view.scope_name(self.view.sel()[-1].b)
             style = ColorSchemeStyle(self.view).at_point(self.view.sel()[-1].b)
@@ -411,7 +394,6 @@ if DEBUG:
     class SetColorSchemeOnLoad(sublime_plugin.EventListener):
 
         def on_load_async(self, view):
-
             file_name = view.file_name()
             if file_name:
                 if not re.match('.*color_scheme_test[a-zA-Z0-9_]+.[a-zA-Z0-9]+$', file_name):
