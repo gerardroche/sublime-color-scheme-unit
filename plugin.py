@@ -1,9 +1,10 @@
-import sublime
-import sublime_plugin
 import os
 import re
 import plistlib
 from timeit import default_timer as timer
+
+import sublime
+import sublime_plugin
 
 __version__ = "0.12.0"
 __version_info__ = (0, 12, 0)
