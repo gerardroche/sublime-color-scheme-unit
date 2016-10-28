@@ -414,6 +414,11 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
                 if not re.match('.*color_scheme_test[a-zA-Z0-9_]+.[a-zA-Z0-9]+$', file_name):
                     return
 
-            color_scheme_test = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
-            if color_scheme_test:
-                view.settings().set('color_scheme', color_scheme_test.group('color_scheme'))
+            color_scheme_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
+            if color_scheme_params:
+                # TODO remove this deprecated behaviour in v1.0.0
+                color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
+                if 'Packages/Packages/' in color_scheme:
+                    color_scheme = re.sub('Packages/Packages/', 'Packages/', color_scheme)
+
+                view.settings().set('color_scheme', color_scheme)

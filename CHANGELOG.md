@@ -1,5 +1,9 @@
 # COLOR_SCHEME_UNIT CHANGELOG
 
+## [0.12.1]
+
+* Fixed: Show styles popup helper not working
+
 ## [0.12.0]
 
 * Fixed [#5](https://github.com/gerardroche/sublime_color_scheme_unit/issues/5): PHP test definition with trailing `?>` does not work
@@ -85,6 +89,7 @@
 
 * Initial import
 
+[0.12.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.11.0...0.12.0
 [0.11.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.9.0...0.10.0
