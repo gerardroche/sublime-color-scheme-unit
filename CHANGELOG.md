@@ -1,5 +1,9 @@
 # COLOR_SCHEME_UNIT CHANGELOG
 
+## [0.12.2]
+
+* Fixed [#9](https://github.com/gerardroche/sublime_color_scheme_unit/issues/9): IndexError: list index out of range
+
 ## [0.12.1]
 
 * Fixed: Show styles popup helper not working
@@ -89,6 +93,7 @@
 
 * Initial import
 
+[0.12.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.1...0.12.2
 [0.12.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.11.0...0.12.0
 [0.11.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.10.0...0.11.0

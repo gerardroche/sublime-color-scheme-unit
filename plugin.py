@@ -17,7 +17,7 @@ else:
     def debug_message(message):
         pass
 
-COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR(?P<keyword> SCHEME)? TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?\n')
+COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR(?P<keyword> SCHEME)? TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')
 COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
 class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
@@ -263,7 +263,7 @@ class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
         if not file_name:
             return False
 
-        if not re.match('^.+/color_scheme_test.*\.[a-z]+$', file_name):
+        if not re.match('^.+(\\\\|/)color_scheme_test.*\.[a-z]+$', file_name):
             return False
 
         self.test_file = file_name
@@ -284,14 +284,19 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
         if not file_name:
             return
 
+        def normalise_resource_path(path):
+            if sublime.platform() == 'windows':
+                path = re.sub(r"/", r"\\", path)
+            return path
+
         tests = []
         for resource in sublime.find_resources('color_scheme_test*'):
-            package = resource.split(os.sep)[1]
+            package = resource.split('/')[1]
             package_path = os.path.join(sublime.packages_path(), package)
             if file_name.startswith(package_path):
                 tests_package_name = package
                 if test_file:
-                    resource_file = os.path.join(os.path.dirname(sublime.packages_path()), resource)
+                    resource_file = os.path.join(os.path.dirname(sublime.packages_path()), normalise_resource_path(resource))
                     if test_file == resource_file:
                         tests.append(resource)
                 else:
@@ -411,7 +416,7 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
         def on_load_async(self, view):
             file_name = view.file_name()
             if file_name:
-                if not re.match('.*color_scheme_test[a-zA-Z0-9_]+.[a-zA-Z0-9]+$', file_name):
+                if not re.match('.*color_scheme_test[a-zA-Z0-9_]*.[a-zA-Z0-9]+$', file_name):
                     return
 
             color_scheme_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
