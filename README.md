@@ -46,6 +46,18 @@ There is one type of test:
 
 * Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: foreground (`fg=#<color>`), background (`bg=#<color>`), and font style (`fs=<comma_delimited_list>`). One or more assertions are required, and must be specified in the order listed above.
 
+### Rules
+
+If you do not follow these rules, you will have unexpected errors in test output.
+
+1. [**Convert tabs to spaces**](https://css-tricks.com/changing-spaces-tabs-sublime-text/) in your `color_scheme_test` files. sublime_color_scheme_unit don't work with tabs indentation.
+2. Necessarily use type `fs`, even if you scopes not bold or/and italic.  
+    + ![Incorrect icon](https://cdn1.iconfinder.com/data/icons/ui-navigation-1/152/close-32.png) — `^ fg=yellow`
+    + ![Done](https://cdn4.iconfinder.com/data/icons/icocentre-free-icons/137/f-check_256-32.png) — `^ fg=yellow fs=`  
+3. Do not reverse types. Correct sequence: `fg`, `fs`, `bg`.  
+    + ![Incorrect icon](https://cdn1.iconfinder.com/data/icons/ui-navigation-1/152/close-32.png) — `^^^^^ fg=#FA8537 bg=#7A4A2299 fs=bold`
+    + ![Done](https://cdn4.iconfinder.com/data/icons/icocentre-free-icons/137/f-check_256-32.png) — `^^^^^ fg=#FA8537 fs=bold bg=#7A4A2299`
+
 ### Examples
 
 For more examples see the [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
