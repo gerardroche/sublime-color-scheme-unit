@@ -137,7 +137,7 @@ def run_color_scheme_test(test, window, output):
 
         if not color_test_params:
             error = {
-                'message': 'Invalid color test',
+                'message': 'Invalid color scheme test: unable to find valid COLOR SCHEME TEST marker',
                 'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
                 'row': 0,
                 'col': 0
