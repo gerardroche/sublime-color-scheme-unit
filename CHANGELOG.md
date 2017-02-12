@@ -1,5 +1,7 @@
 # COLOR_SCHEME_UNIT CHANGELOG
 
+* Removed [#8](https://github.com/gerardroche/sublime_color_scheme_unit/issues/8): Deprecated code
+
 ## [0.12.2]
 
 * Fixed [#9](https://github.com/gerardroche/sublime_color_scheme_unit/issues/9): IndexError: list index out of range

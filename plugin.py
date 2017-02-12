@@ -1,5 +1,5 @@
 
-__version__ = "0.12.0"
+__version__ = "0.13.0-dev"
 __version_info__ = (0, 12, 0)
 
 
@@ -21,15 +21,11 @@ else:
         pass
 
 
-COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR(?P<keyword> SCHEME)? TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')
+COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')
 COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
 
 class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
-    """
-    Helper view command for TestView#set_content()
-    TODO is there a way to avoid needing this superfluous text command?
-    """
 
     def run(self, edit, content):
         self.view.erase(edit, sublime.Region(0, self.view.size()))
@@ -37,6 +33,7 @@ class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
 
 
 class TestView():
+
     def __init__(self, name, window):
         self.name = name + '_test_view'
         self.window = window
@@ -58,6 +55,7 @@ class TestView():
 
 
 class TestOutputPanel():
+
     def __init__(self, name, window):
         self.view = window.create_output_panel(name)
 
@@ -129,12 +127,6 @@ def run_color_scheme_test(test, window, output):
 
         color_test_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
 
-        # TODO remove this deprecated behaviour in v1.0.0
-        if not color_test_params.group('keyword'):
-            output.write("\n")
-            output.write("DEPRECATED: \"COLOR TEST\" in %s:0\n" % test)
-            output.write("  Use 'COLOR SCHEME TEST ...' instead; see https://github.com/gerardroche/sublime_color_scheme_unit/issues/7\n\n")
-
         if not color_test_params:
             error = {
                 'message': 'Invalid color scheme test: unable to find valid COLOR SCHEME TEST marker',
@@ -164,14 +156,7 @@ def run_color_scheme_test(test, window, output):
             }
             raise RuntimeError(error['message'])
 
-        # TODO remove this deprecated behaviour in v1.0.0
         color_scheme = 'Packages/' + color_test_params.group('color_scheme')
-        if 'Packages/Packages/' in color_scheme:
-            color_scheme = re.sub('Packages/Packages/', 'Packages/', color_scheme)
-            output.write("\n")
-            output.write("DEPRECATED: \"Packages/...\" in %s:0\n" % test)
-            output.write(" Rename '%s'\n     to          '%s'\n" % (color_scheme, color_scheme[9:]))
-            output.write(" See https://github.com/gerardroche/sublime_color_scheme_unit/issues/6\n\n")
 
         test_view.view.settings().set('color_scheme', color_scheme)
         test_view.view.assign_syntax(syntaxes[0])
@@ -429,9 +414,4 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
                 if is_valid_color_scheme_test_file_name(file_name):
                     color_scheme_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
                     if color_scheme_params:
-                        # TODO remove this deprecated behaviour in v1.0.0
-                        color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
-                        if 'Packages/Packages/' in color_scheme:
-                            color_scheme = re.sub('Packages/Packages/', 'Packages/', color_scheme)
-
-                        view.settings().set('color_scheme', color_scheme)
+                        view.settings().set('color_scheme', 'Packages/' + color_scheme_params.group('color_scheme'))
