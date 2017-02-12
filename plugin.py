@@ -2,13 +2,16 @@
 __version__ = "0.12.0"
 __version_info__ = (0, 12, 0)
 
+
 import os
 import re
 import plistlib
 from timeit import default_timer as timer
 
+
 import sublime
 import sublime_plugin
+
 
 if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
     def debug_message(message):
@@ -17,11 +20,12 @@ else:
     def debug_message(message):
         pass
 
+
 COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR(?P<keyword> SCHEME)? TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')
 COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
-class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
 
+class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
     """
     Helper view command for TestView#set_content()
     TODO is there a way to avoid needing this superfluous text command?
@@ -30,6 +34,7 @@ class _color_scheme_unit_test_view_set_content(sublime_plugin.TextCommand):
     def run(self, edit, content):
         self.view.erase(edit, sublime.Region(0, self.view.size()))
         self.view.insert(edit, 0, content)
+
 
 class TestView():
     def __init__(self, name, window):
@@ -50,6 +55,7 @@ class TestView():
 
     def get_content(self):
         return self.view.substr(sublime.Region(0, self.view.size()))
+
 
 class TestOutputPanel():
     def __init__(self, name, window):
@@ -76,6 +82,7 @@ class TestOutputPanel():
 
     def write(self, text):
         self.view.run_command('append', { 'characters': text, 'scroll_to_end': True })
+
 
 class ColorSchemeStyle():
 
@@ -105,6 +112,7 @@ class ColorSchemeStyle():
                     style.update(color_scheme_definition['settings'])
 
         return style
+
 
 def run_color_scheme_test(test, window, output):
     debug_message('running color scheme test: %s' % test)
@@ -362,12 +370,14 @@ class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
             output.write(".")
             output.write("\n")
 
+
 if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
 
     def copy(view, text):
         sublime.set_clipboard(text)
         view.hide_popup()
         sublime.status_message('Scope name copied to clipboard')
+
 
     class ShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
 
@@ -410,6 +420,7 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
             """ % (scope.replace(' ', '<br>'), scope.rstrip(), style_html)
 
             self.view.show_popup(html, max_width=512, on_navigate=lambda x: copy(self.view, x))
+
 
     class SetColorSchemeOnLoad(sublime_plugin.EventListener):
 
