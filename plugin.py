@@ -252,36 +252,35 @@ def run_color_scheme_test(test, window, output):
         'assertions': assertion_count
     }
 
-class RunColorSchemeTestCommand(sublime_plugin.WindowCommand):
 
-    def run(self):
-        if self.is_enabled():
-            self.window.run_command(
-                'run_color_scheme_tests', {
-                    'test_file': self.test_file
-                }
-            )
+def is_valid_color_scheme_test_file_name(file_name):
+    return bool(re.match('^color_scheme_test.*\.[a-zA-Z0-9]+$', os.path.basename(file_name)))
 
-    def is_enabled(self):
-        view = self.window.active_view()
-        if not view:
-            return False
 
-        file_name = view.file_name()
-        if not file_name:
-            return False
+class RunColorSchemeTestCommand(sublime_plugin.TextCommand):
 
-        if not re.match('^.+(\\\\|/)color_scheme_test.*\.[a-z]+$', file_name):
-            return False
+    def run(self, edit):
+        file_name = self.view.file_name()
+        if file_name:
+            if is_valid_color_scheme_test_file_name(file_name):
+                window = self.view.window()
+                if window:
+                    ColorSchemeUnit(window).run(file_name)
 
-        self.test_file = file_name
-
-        return True
 
 class RunColorSchemeTestsCommand(sublime_plugin.WindowCommand):
 
-    def run(self, test_file = None):
-        sublime.set_timeout_async(lambda: self.run_async(test_file))
+    def run(self):
+        ColorSchemeUnit(self.window).run()
+
+
+class ColorSchemeUnit():
+
+    def __init__(self, window):
+        self.window = window
+
+    def run(self, file = None):
+        sublime.set_timeout_async(lambda: self.run_async(file))
 
     def run_async(self, test_file):
         view = self.window.active_view()
@@ -427,14 +426,12 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
         def on_load_async(self, view):
             file_name = view.file_name()
             if file_name:
-                if not re.match('.*color_scheme_test[a-zA-Z0-9_]*.[a-zA-Z0-9]+$', file_name):
-                    return
+                if is_valid_color_scheme_test_file_name(file_name):
+                    color_scheme_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
+                    if color_scheme_params:
+                        # TODO remove this deprecated behaviour in v1.0.0
+                        color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
+                        if 'Packages/Packages/' in color_scheme:
+                            color_scheme = re.sub('Packages/Packages/', 'Packages/', color_scheme)
 
-            color_scheme_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(sublime.Region(0, view.size())))
-            if color_scheme_params:
-                # TODO remove this deprecated behaviour in v1.0.0
-                color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
-                if 'Packages/Packages/' in color_scheme:
-                    color_scheme = re.sub('Packages/Packages/', 'Packages/', color_scheme)
-
-                view.settings().set('color_scheme', color_scheme)
+                        view.settings().set('color_scheme', color_scheme)
