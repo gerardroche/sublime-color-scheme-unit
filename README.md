@@ -19,14 +19,92 @@ COLOR_SCHEME_UNIT is a testing framework for Sublime Text color schemes.
 
 ## WRITING TESTS
 
-Color scheme tests are very similar to [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
+Color scheme tests are very similar to the sublime text [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
 
-1. Ensure the file name starts with `color_scheme_test_`.
-2. Ensure the file is saved somewhere within the Packages directory.
-3. Ensure the first line of the file starts with:
-   `<comment_token> COLOR TEST "<color_scheme_file>" "<syntax_name>"`
+Test file names must start with `color_scheme_test`.
 
-Suggested package layout:
+```
+color_scheme_test.css
+color_scheme_test.html
+color_scheme_test.js
+color_scheme_test_104.php
+color_scheme_test_short_desciption.css
+```
+
+They must be saved within the Packages directory.
+
+Test files **must uses spaces (not tabs) [#15](https://github.com/gerardroche/sublime_color_scheme_unit/issues/15)**.
+
+The first line of a test file must specify the color scheme and syntax for the tests.
+
+```
+<comment_token> COLOR SCHEME TEST "<color_scheme>" "<syntax>"
+```
+
+**Examples**
+
+```
+# COLOR SCHEME TEST "package/name.tmTheme" "Python"
+```
+
+```
+<?php // COLOR SCHEME TEST "package/name.tmTheme" "PHP"
+```
+
+```
+/* COLOR SCHEME TEST "package/name.tmTheme" "CSS" */
+```
+
+```
+<!-- COLOR SCHEME TEST "package/name.tmTheme" "HTML" -->
+```
+
+Each test in the syntax test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
+
+There is one type of test:
+
+* Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: foreground (`fg=#<color>`), background (`bg=#<color>`), and font style (`fs=<comma_delimited_list>`). One or more assertions are required, and **must be specified in the order fg, bg, and fs**.
+
+    ```
+    # COLOR SCHEME TEST "package/name.tmTheme" "Python"
+
+    def somefunc(param1='', param2=0):
+    # ^ fg=#66d9ef
+    # ^ bg=#272822
+    # ^ fs=italic
+    # ^ fg=#66d9ef bg=#272822 fs=italic
+    # ^ fg=#66d9ef bg=#272822
+    # ^ fg=#66d9ef fs=italic
+    # ^ bg=#272822 fs=italic
+    # ^ fg=#66d9ef fs=italic
+
+    >>> message = '''interpreter
+    #             ^^^^^^^^^^^^^^ fg=#e6db74
+    #             ^^^^^^^^^^^^^^ fs=
+    ```
+
+    ```
+    <?php // COLOR SCHEME TEST "package/name.tmTheme" "PHP"
+
+    // comment
+    // ^^^^^^^ fg=#75715e bg=#272822 fs=italic
+
+    interface Filter {
+    // ^ fg=#66d9ef fs=italic
+    //        ^ fg=#a6e22e fs=
+        public function filter();
+    //  ^ fg=#f92672 fs=
+    //         ^ fg=#66d9ef fs=italic
+    //                  ^ fg=#a6e22e fs=
+    }
+    ```
+
+
+    For more examples see [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
+
+Once the above conditions are met, running a test or running all the tests with a color scheme test in an active view will run a single test or all the package tests for that test, and then show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
+
+A suggested package layout for color schemes.
 
     .
     ├── name.tmTheme
@@ -37,51 +115,6 @@ Suggested package layout:
       └── issue
           ├── color_scheme_test_104.php
           └── color_scheme_test_98.php
-
-Once the above conditions are met, running a test or running all the tests with a color scheme test in an active view will run a single test or all the package tests for that test, and then show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
-
-Each test in the syntax test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
-
-There is one type of test:
-
-* Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret. There are three types of assertions: foreground (`fg=#<color>`), background (`bg=#<color>`), and font style (`fs=<comma_delimited_list>`). One or more assertions are required, and must be specified in the order listed above.
-
-### Examples
-
-For more examples see the [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
-
-#### Example &mdash; PHP Test
-
-```
-<?php // COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "PHP"
-
-    // comment
-//  ^^^^^^^^^^ fg=#75715e bg=#272822 fs=italic
-
-interface Filter {
-// ^ fg=#66d9ef fs=italic
-//        ^ fg=#a6e22e fs=
-
-    public function filter();
-//  ^ fg=#f92672 fs=
-//         ^ fg=#66d9ef fs=italic
-//                  ^ fg=#a6e22e fs=
-}
-```
-
-#### Example &mdash; HTML Test
-
-```
-<!-- COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "HTML" -->
-<!-- assertions... -->
-```
-
-#### Example &mdash; CSS Test
-
-```
-/* COLOR TEST "Packages/five_easy_color_schemes/Monokai (Dark).tmTheme" "CSS" */
-/* assertions... */
-```
 
 ## INSTALLATION
 
@@ -124,7 +157,7 @@ Key | Description | Type | Default
 
 ```json
 {
-    "color_scheme_unit.{Key}": "{Value}"
+    "color_scheme_unit.keymaps": true
 }
 ```
 
@@ -135,7 +168,7 @@ Key | Description | Type | Default
 ```json
 {
     "settings": {
-        "color_scheme_unit.{Key}": "{Value}"
+        "color_scheme_unit.keymaps": true
     }
 }
 ```
