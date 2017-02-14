@@ -1,5 +1,9 @@
 # COLOR_SCHEME_UNIT CHANGELOG
 
+## [0.13.1]
+
+* Fixed: row:column failure off by 1 row
+
 ## [0.13.0]
 
 * Removed [#8](https://github.com/gerardroche/sublime_color_scheme_unit/issues/8): Deprecated code
@@ -98,6 +102,8 @@
 
 * Initial import
 
+[0.13.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.0...0.13.1
+[0.13.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.2...0.13.0
 [0.12.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.1...0.12.2
 [0.12.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.0...0.12.1
 [0.12.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.11.0...0.12.0
