@@ -113,7 +113,7 @@ class ColorSchemeStyle():
 
 
 def run_color_scheme_test(test, window, output):
-    debug_message('running color scheme test: %s' % test)
+    debug_message('running test "%s"' % test)
 
     error = False
     failures = []
@@ -126,7 +126,6 @@ def run_color_scheme_test(test, window, output):
         test_content = sublime.load_resource(test)
 
         color_test_params = COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
-
         if not color_test_params:
             error = {
                 'message': 'Invalid color scheme test: unable to find valid COLOR SCHEME TEST marker',
@@ -137,7 +136,6 @@ def run_color_scheme_test(test, window, output):
             raise RuntimeError(error['message'])
 
         syntaxes = sublime.find_resources(color_test_params.group('syntax_name') + '.sublime-syntax')
-
         if len(syntaxes) > 1:
             error = {
                 'message': 'Too many syntaxes found',
@@ -146,7 +144,6 @@ def run_color_scheme_test(test, window, output):
                 'col': 0
             }
             raise RuntimeError(error['message'])
-
         if len(syntaxes) is not 1:
             error = {
                 'message': 'Syntaxes not found',
@@ -157,9 +154,13 @@ def run_color_scheme_test(test, window, output):
             raise RuntimeError(error['message'])
 
         color_scheme = 'Packages/' + color_test_params.group('color_scheme')
+        syntax = syntaxes[0]
+
+        debug_message('color_scheme "%s"' % color_scheme)
+        debug_message('syntax "%s"' % syntax)
 
         test_view.view.settings().set('color_scheme', color_scheme)
-        test_view.view.assign_syntax(syntaxes[0])
+        test_view.view.assign_syntax(syntax)
         test_view.set_content(test_content)
 
         color_scheme_style = ColorSchemeStyle(test_view.view)
@@ -213,8 +214,7 @@ def run_color_scheme_test(test, window, output):
                         'expected': expected_styles,
                     }
 
-                    debug_message('----- Assertion FAILED! -----')
-                    debug_message('Trace: %s' % str(failure_trace))
+                    debug_message('Failure trace: %s' % str(failure_trace))
 
                     failures.append(failure_trace)
 
