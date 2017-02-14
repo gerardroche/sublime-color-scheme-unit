@@ -1,6 +1,9 @@
 # COLOR_SCHEME_UNIT CHANGELOG
 
+## [0.13.0]
+
 * Removed [#8](https://github.com/gerardroche/sublime_color_scheme_unit/issues/8): Deprecated code
+* Minor fixes
 
 ## [0.12.2]
 
