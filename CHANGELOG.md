@@ -1,4 +1,6 @@
-# COLOR_SCHEME_UNIT CHANGELOG
+# COLOR SCHEME UNIT CHANGELOG
+
+* Revert 0.13.1 off by one fix
 
 ## [0.13.1]
 

@@ -1,5 +1,5 @@
 
-__version__ = "0.13.1"
+__version__ = "0.13.2-dev"
 __version_info__ = (0, 12, 0)
 
 
@@ -208,7 +208,7 @@ def run_color_scheme_test(test, window, output):
                     failure_trace = {
                         'assertion': assertion,
                         'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
-                        'row': assertion_row + 2,
+                        'row': assertion_row + 1,
                         'col': col + 1,
                         'actual': actual_styles,
                         'expected': expected_styles,
