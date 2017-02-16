@@ -69,7 +69,6 @@ class TestOutputPanel():
 
         self.view.assign_syntax('Packages/color_scheme_unit/test_output_panel.sublime-syntax')
 
-        # Assign panel with color scheme of active view
         active_view = window.active_view()
         if active_view:
             active_color_scheme = active_view.settings().get('color_scheme')
@@ -158,7 +157,7 @@ def run_color_scheme_test(test, window, output):
         color_scheme = 'Packages/' + color_test_params.group('color_scheme')
         syntax = syntaxes[0]
 
-        debug_message('color_scheme "%s"' % color_scheme)
+        debug_message('color scheme "%s"' % color_scheme)
         debug_message('syntax "%s"' % syntax)
 
         test_view.view.settings().set('color_scheme', color_scheme)
