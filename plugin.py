@@ -100,17 +100,19 @@ class ColorSchemeStyle():
     def at_point(self, point):
         scope = self.view.scope_name(point).strip()
 
-        last_selector_score = -1
         style = self.default_style.copy()
+        scored_styles = []
         for color_scheme_definition in self.color_scheme_plist_settings:
             if 'scope' in color_scheme_definition:
                 score = sublime.score_selector(scope, color_scheme_definition['scope'])
-                if score and score >= last_selector_score:
-                    last_selector_score = score
-                    style.update(color_scheme_definition['settings'])
+                if score:
+                    color_scheme_definition.update({'score': score})
+                    scored_styles.append(color_scheme_definition)
+
+        for s in sorted(scored_styles, key=lambda k: k['score']):
+            style.update(s['settings'])
 
         return style
-
 
 def run_color_scheme_test(test, window, output):
     debug_message('running test "%s"' % test)

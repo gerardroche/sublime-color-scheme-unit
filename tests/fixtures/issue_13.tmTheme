@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>name</key>
+		<string>Issue 13</string>
+		<key>settings</key>
+		<array>
+			<dict>
+				<key>settings</key>
+				<dict>
+					<key>background</key>
+					<string>#000000</string>
+					<key>foreground</key>
+					<string>#ffffff</string>
+					<key>shadow</key>
+					<string>#F08080</string>
+					<key>shadowWidth</key>
+					<string>25</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>scope</key>
+				<string>keyword, storage</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string>bold</string>
+					<key>foreground</key>
+					<string>#FF334B</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>scope</key>
+				<string>source.js.embedded.html, source.js</string>
+				<key>settings</key>
+				<dict>
+					<key>background</key>
+					<string>#7A4A2299</string>
+				</dict>
+			</dict>
+			<dict>
+				<key>scope</key>
+				<string>text.html.basic source.js.embedded.html meta.block.js keyword.control.flow.js, source.js.embedded.html meta.block.js keyword.control.flow.js</string>
+				<key>settings</key>
+				<dict>
+					<key>fontStyle</key>
+					<string>bold</string>
+					<key>foreground</key>
+					<string>red</string>
+				</dict>
+			</dict>
+		</array>
+	</dict>
+</plist>

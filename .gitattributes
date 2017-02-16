@@ -7,4 +7,5 @@
 /.gitattributes             export-ignore
 /.gitignore                 export-ignore
 /.gitmodules                export-ignore
-/test/                      export-ignore
+/syntax_test.test_result    export ignore
+/tests/                     export-ignore
