@@ -225,12 +225,11 @@ def run_color_scheme_test(test, window, output):
 
         output.write("\n")
     except Exception as e:
-        test_view.tearDown()
         if not error:
             output.write(str(e))
             output.write("\n")
-
-    test_view.tearDown()
+    finally:
+        test_view.tearDown()
 
     return {
         'error': error,
