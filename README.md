@@ -1,8 +1,8 @@
-# WHAT COLOR_SCHEME_UNIT IS
+# WHAT COLOR SCHEME UNIT IS
 
 [![Author](https://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat-square&maxAge=86400)](https://twitter.com/gerardroche) [![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat-square&maxAge=86400)](https://github.com/gerardroche/sublime_color_scheme_unit) [![License](https://img.shields.io/badge/license-BSD--3-blue.svg?style=flat-square&maxAge=86400)](https://raw.githubusercontent.com/gerardroche/sublime_color_scheme_unit/master/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&maxAge=86400)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Sublime version](https://img.shields.io/badge/sublime-v3.0.0-green.svg?style=flat-square&maxAge=86400)](https://sublimetext.com) [![Latest version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&maxAge=86400&label=release)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square&maxAge=86400)](https://packagecontrol.io/packages/color_scheme_unit)
 
-COLOR_SCHEME_UNIT is a testing framework for Sublime Text color schemes.
+COLOR SCHEME UNIT is a testing framework for Sublime Text color schemes.
 
 ![Screenshot](screenshot.png)
 
@@ -98,7 +98,6 @@ There is one type of test:
     //                  ^ fg=#a6e22e fs=
     }
     ```
-
 
     For more examples see [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
 
