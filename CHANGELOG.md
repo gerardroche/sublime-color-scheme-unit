@@ -1,5 +1,7 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [0.13.2]
+
 * Fixed [#13](https://github.com/gerardroche/sublime_color_scheme_unit/pull/13): Edge case test assertion failures
 
 ## [0.13.1]
@@ -104,6 +106,7 @@
 
 * Initial import
 
+[0.13.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.1...0.13.2
 [0.13.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.2...0.13.0
 [0.12.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.1...0.12.2
