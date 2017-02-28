@@ -178,11 +178,9 @@ Your issue reports and pull requests are always welcome.
 
 ### Debug messages
 
-Debug messages are output to the Console (not the tests results output panel). To open the console `Menu > View > Console` or click the icon in the bottom right of the status bar which will display a menu with panels to choose from.
+Debug messages are output to the Console (not the tests results output panel). Open the console: `Menu > View > Console` or click the icon in the bottom right of the status bar.
 
-Debug messages are disabled by default.
-
-To enable the debug messages set an environment variable to a **non-blank** value.
+Debug messages are disabled by default. To enable the debug messages set an environment variable to a **non-blank** value.
 
 ```
 SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
@@ -196,7 +194,7 @@ SUBLIME_COLOR_SCHEME_UNIT_DEBUG=
 
 For more information on environment variables read [What are PATH and other environment variables, and how can I set or use them?](http://superuser.com/questions/284342/what-are-path-and-other-environment-variables-and-how-can-i-set-or-use-them)
 
-#### Example &mdash; Linux
+#### Linux
 
 Sublime Text can be started at the Terminal with an exported environment variable.
 
@@ -212,7 +210,7 @@ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
 
 Alternatively, create a [debug script (subld)](https://github.com/gerardroche/dotfiles/blob/1a27abed589f2fea9126a0496ef4d1cae0479722/src/bin/subld) with debugging environment variables enabled.
 
-#### Example &mdash; Windows
+#### Windows
 
 Sublime Text can be started at the Command Prompt with an exported environment variable.
 
