@@ -1,8 +1,3 @@
-
-__version__ = "0.13.2"
-__version_info__ = (0, 12, 0)
-
-
 import os
 import re
 import plistlib
@@ -10,6 +5,9 @@ from timeit import default_timer as timer
 
 import sublime
 import sublime_plugin
+
+__version__ = "1.0.0"
+__version_info__ = (1, 0, 0)
 
 
 if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
