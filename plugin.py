@@ -8,7 +8,6 @@ import re
 import plistlib
 from timeit import default_timer as timer
 
-
 import sublime
 import sublime_plugin
 
@@ -75,10 +74,10 @@ class TestOutputPanel():
             if active_color_scheme:
                 settings.set('color_scheme', active_color_scheme)
 
-        window.run_command('show_panel', { 'panel': 'output.' + name })
+        window.run_command('show_panel', {'panel': 'output.' + name})
 
     def write(self, text):
-        self.view.run_command('append', { 'characters': text, 'scroll_to_end': True })
+        self.view.run_command('append', {'characters': text, 'scroll_to_end': True})
 
 
 class ColorSchemeStyle():
@@ -112,6 +111,7 @@ class ColorSchemeStyle():
             style.update(s['settings'])
 
         return style
+
 
 def run_color_scheme_test(test, window, output):
     debug_message('running test "%s"' % test)
@@ -202,9 +202,9 @@ def run_color_scheme_test(test, window, output):
                     else:
                         actual_styles[style] = ''
 
-                progress_character='.'
+                progress_character = '.'
                 if actual_styles != expected_styles:
-                    progress_character='F'
+                    progress_character = 'F'
 
                     failure_trace = {
                         'assertion': assertion,
@@ -264,7 +264,7 @@ class ColorSchemeUnit():
     def __init__(self, window):
         self.window = window
 
-    def run(self, file = None):
+    def run(self, file=None):
         sublime.set_timeout_async(lambda: self.run_async(file))
 
     def run_async(self, test_file):
@@ -362,7 +362,6 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
         view.hide_popup()
         sublime.status_message('Scope name copied to clipboard')
 
-
     class ShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
 
         def run(self, edit):
@@ -381,7 +380,7 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
                 del style['fontStyle']
             for x in sorted(style):
                 style_html += "<li>{0}: <a href=\"{1}\">{1}</a></li>".format(x, style[x])
-            style_html += '</ul>';
+            style_html += '</ul>'
 
             html = """
                 <body id=show-scope>
@@ -404,7 +403,6 @@ if os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG'):
             """ % (scope.replace(' ', '<br>'), scope.rstrip(), style_html)
 
             self.view.show_popup(html, max_width=512, on_navigate=lambda x: copy(self.view, x))
-
 
     class SetColorSchemeOnLoad(sublime_plugin.EventListener):
 
