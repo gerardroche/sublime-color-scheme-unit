@@ -8,14 +8,29 @@ Color Scheme Unit is a testing framework for Sublime Text color schemes.
 
 ## OVERVIEW
 
+* [Installation](#installation)
+* [Configuration](#configuration)
 * [Writing Tests](#writing-tests)
 * [Commands](#commands)
 * [Key Bindings](#key-bindings)
-* [Configuration](#configuration)
-* [Installation](#installation)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
+
+## INSTALLATION
+
+### Package Control
+
+The preferred method of installation is via [Package Control](https://packagecontrol.io/browse/authors/gerardroche).
+
+### Manual
+
+1. Close Sublime Text.
+2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text packages directory:
+    * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
+    * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
+    * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
+3. Done!
 
 ## WRITING TESTS
 
@@ -115,59 +130,47 @@ A suggested package layout for color schemes.
           ├── color_scheme_test_104.php
           └── color_scheme_test_98.php
 
-## INSTALLATION
-
-### Package Control
-
-The preferred method of installation is via [Package Control](https://packagecontrol.io/browse/authors/gerardroche).
-
-### Manual
-
-1. Close Sublime Text.
-2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text packages directory:
-    * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
-    * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
-    * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
-3. Done!
-
 ## COMMANDS
 
-* ColorSchemeUnit: Run Test
-* ColorSchemeUnit: Run Tests
+Command | Description
+------- | -----------
+ColorSchemeUnit: Test File | Run the whole test suite
+ColorSchemeUnit: Test Suite | Run the current test file
 
 ## KEY BINDINGS
 
-Disabled by default.
+**Disabled by default.**
 
 OS X | Windows / Linux | Description
 -----|-----------------|------------
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Run Test
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Run Tests
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Test File
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Test Suite
 
 ## CONFIGURATION
 
 Key | Description | Type | Default
 ----|-------------|------|--------
 `color_scheme_unit.keymaps` | Enable the default keymaps. | `boolean` | `false`
+`color_scheme_unit.debug` | Enable console debug messages. | `boolean` | `false`
 
-### User Settings
+*Debug messages are output to the Console (not the tests results output panel). Open the console: `Menu > View > Console` or click the icon in the bottom right of the status bar.*
 
-`Preferences > Settings - User`
+Set settings globally: `Preferences > Settings - User`
 
 ```json
 {
-    "color_scheme_unit.keymaps": true
+    "color_scheme_unit.keymaps": true,
+    "color_scheme_unit.debug": true
 }
 ```
 
-### Per-Project Settings
-
-`Project > Edit Project`
+Or set them per-project: `Project > Edit Project`
 
 ```json
 {
     "settings": {
-        "color_scheme_unit.keymaps": true
+        "color_scheme_unit.keymaps": true,
+        "color_scheme_unit.debug": true
     }
 }
 ```
@@ -176,55 +179,7 @@ Key | Description | Type | Default
 
 Your issue reports and pull requests are always welcome.
 
-### Debug messages
-
-Debug messages are output to the Console (not the tests results output panel). Open the console: `Menu > View > Console` or click the icon in the bottom right of the status bar.
-
-Debug messages are disabled by default. To enable the debug messages set an environment variable to a **non-blank** value.
-
-```
-SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
-```
-
-To disable the debug messages set it to a **blank value** or unset it.
-
-```
-SUBLIME_COLOR_SCHEME_UNIT_DEBUG=
-```
-
-For more information on environment variables read [What are PATH and other environment variables, and how can I set or use them?](http://superuser.com/questions/284342/what-are-path-and-other-environment-variables-and-how-can-i-set-or-use-them)
-
-#### Linux
-
-Sublime Text can be started at the Terminal with an exported environment variable.
-
-```
-$ export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y; subl
-```
-
-To set the environment permanently set it in `~/.profile` (requires restart).
-
-```
-export SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y
-```
-
-Alternatively, create a [debug script (subld)](https://github.com/gerardroche/dotfiles/blob/1a27abed589f2fea9126a0496ef4d1cae0479722/src/bin/subld) with debugging environment variables enabled.
-
-#### Windows
-
-Sublime Text can be started at the Command Prompt with an exported environment variable.
-
-```
-> set SUBLIME_COLOR_SCHEME_UNIT_DEBUG=y& "C:\Program Files\Sublime Text 3\subl.exe"
-```
-
-To set the environment permanently set it as a *system* environment variable (requires restart).
-
-1. Control Panel > System and Security > System > Advanced system settings
-2. Advanced > Environment Variables
-3. System variables > New...
-4. Add Variable name `SUBLIME_COLOR_SCHEME_UNIT_DEBUG` with Variable value `y`
-5. Restart Windows
+Enable extra development features, such as the "apply test color scheme on load" event, by setting the environment variable `SUBLIME_COLOR_SCHEME_UNIT_DEBUG` to a **non-blank** value. See [Set a Sublime Text environment variable](https://github.com/gerardroche/sublime-phpunit#debugging) for a step by step guide on how to set an environment variable for Sublime Text.
 
 ## CHANGELOG
 

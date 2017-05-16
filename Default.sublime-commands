@@ -1,10 +1,10 @@
 [
     {
-        "caption": "ColorSchemeUnit: Run Test",
-        "command": "run_color_scheme_test"
+        "caption": "ColorSchemeUnit: Test File",
+        "command": "color_scheme_unit_test_file"
     },
     {
-        "caption": "ColorSchemeUnit: Run Tests",
-        "command": "run_color_scheme_tests"
+        "caption": "ColorSchemeUnit: Test Suite",
+        "command": "color_scheme_unit_test_suite"
     }
 ]
