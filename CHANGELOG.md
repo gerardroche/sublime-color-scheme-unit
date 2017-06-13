@@ -1,5 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.2.0] - 2017-06-13
+
+### Changed
+
+* Auto applying the color scheme when tests are opened is now enabled by default
+
 ## [1.1.0] - 2017-05-17
 
 ### Added
@@ -180,6 +186,7 @@
 
 * Initial import
 
+[1.2.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.2...1.0.0
 [0.13.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.1...0.13.2
