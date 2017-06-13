@@ -9,8 +9,6 @@ import sublime_plugin
 __version__ = "1.1.0"
 __version_info__ = (1, 1, 0)
 
-_DEBUG = os.getenv('SUBLIME_COLOR_SCHEME_UNIT_DEBUG')
-
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')
 
@@ -394,19 +392,17 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
         self.view.show_popup(html, max_width=512, on_navigate=lambda x: copy(self.view, x))
 
 
-if _DEBUG:
+class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
 
-    class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
-
-        def on_load_async(self, view):
-            file_name = view.file_name()
-            if file_name:
-                if is_valid_color_scheme_test_file_name(file_name):
-                    color_scheme_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(
-                        view.substr(sublime.Region(0, view.size()))
-                    )
-                    if color_scheme_params:
-                        view.settings().set('color_scheme', 'Packages/' + color_scheme_params.group('color_scheme'))
+    def on_load_async(self, view):
+        file_name = view.file_name()
+        if file_name:
+            if is_valid_color_scheme_test_file_name(file_name):
+                color_scheme_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(
+                    view.substr(sublime.Region(0, view.size()))
+                )
+                if color_scheme_params:
+                    view.settings().set('color_scheme', 'Packages/' + color_scheme_params.group('color_scheme'))
 
 
 class ColorSchemeUnitSetViewContent(sublime_plugin.TextCommand):

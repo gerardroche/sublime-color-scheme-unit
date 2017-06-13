@@ -1,8 +1,8 @@
 # WHAT COLOR SCHEME UNIT IS
 
-[![Minimum Sublime version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square)](https://packagecontrol.io/packages/color_scheme_unit) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&label=packagecontrol)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![Source Code](https://img.shields.io/badge/source-GitHub-blue.svg?style=flat-square)](https://github.com/gerardroche/sublime_color_scheme_unit) [![Author](https://img.shields.io/badge/author-@gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
+[![Minimum Sublime version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg)](https://sublimetext.com) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg)](https://packagecontrol.io/packages/color_scheme_unit) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?label=stable)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![Source Code](https://img.shields.io/badge/source-github-blue.svg)](https://github.com/gerardroche/sublime_color_scheme_unit) [![Author](https://img.shields.io/badge/author-gerardroche-blue.svg)](https://twitter.com/gerardroche)
 
-Color Scheme Unit is a testing framework for Sublime Text color schemes.
+Color scheme unit is a testing framework for Sublime Text color schemes.
 
 ![Screenshot](screenshot.png)
 
@@ -155,7 +155,9 @@ Key | Description | Type | Default
 
 *Debug messages are output to the Console (not the tests results output panel). Open the console: `Menu > View > Console` or click the icon in the bottom right of the status bar.*
 
-Set settings globally: `Preferences > Settings - User`
+Set them globally:
+
+`Menu > Preferences > Settings - User`
 
 ```json
 {
@@ -164,7 +166,9 @@ Set settings globally: `Preferences > Settings - User`
 }
 ```
 
-Or set them per-project: `Project > Edit Project`
+You can also set them per-project:
+
+`Menu > Project > Edit Project`
 
 ```json
 {
@@ -178,8 +182,6 @@ Or set them per-project: `Project > Edit Project`
 ## CONTRIBUTING
 
 Your issue reports and pull requests are always welcome.
-
-Enable extra development features, such as the "apply test color scheme on load" event, by setting the environment variable `SUBLIME_COLOR_SCHEME_UNIT_DEBUG` to a **non-blank** value. See [Set a Sublime Text environment variable](https://github.com/gerardroche/sublime-phpunit#debugging) for a step by step guide on how to set an environment variable for Sublime Text.
 
 ## CHANGELOG
 
