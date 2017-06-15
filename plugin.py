@@ -311,7 +311,11 @@ class ColorSchemeUnit():
         output.write("\n")
 
         if len(errors) > 0:
-            output.write("There were %s errors:\n" % len(errors))
+            output.write("There %s %s errors%s:\n\n" % (
+                'was' if len(errors) == 1 else 'were',
+                len(errors),
+                '' if len(errors) == 1 else 's',
+            ))
             output.write("\n")
             for i, error in enumerate(errors, start=1):
                 output.write("%d) %s\n" % (i, error['message']))
@@ -319,7 +323,12 @@ class ColorSchemeUnit():
                 output.write("\n")
 
         if len(failures) > 0:
-            output.write("There were %s failures:\n\n" % len(failures))
+            output.write("There %s %s failure%s:\n\n" % (
+                'was' if len(failures) == 1 else 'were',
+                len(failures),
+                '' if len(failures) == 1 else 's',
+            ))
+
             for i, failure in enumerate(failures, start=1):
                 output.write("%d) %s\n" % (i, failure['assertion']))
                 output.write("Failed asserting %s equals %s\n" % (str(failure['actual']), str(failure['expected'])))
