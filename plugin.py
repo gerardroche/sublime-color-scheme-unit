@@ -357,13 +357,13 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
 
         style_html = '<ul>'
         if 'foreground' in style:
-            style_html += "<li>foreground: <a href=\"{0}\">{0}</a></li>".format(style['foreground'])
+            style_html += "<li>foreground: <a href=\"{0}\">{0}</a></li>".format(style['foreground'].strip('#'))
             del style['foreground']
         if 'background' in style:
-            style_html += "<li>background: <a href=\"{0}\">{0}</a></li>".format(style['background'])
+            style_html += "<li>background: <a href=\"{0}\">{0}</a></li>".format(style['background'].strip('#'))
             del style['background']
         if 'fontStyle' in style:
-            style_html += "<li>fontStyle: <a href=\"{0}\">{0}</a></li>".format(style['fontStyle'])
+            style_html += "<li>fontStyle: <a href=\"{0}\">{0}</a></li>".format(style['fontStyle'].strip('#'))
             del style['fontStyle']
         for x in sorted(style):
             style_html += "<li>{0}: <a href=\"{1}\">{1}</a></li>".format(x, style[x])

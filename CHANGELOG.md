@@ -7,6 +7,10 @@
 * Added: Command "ColorSchemeUnit: Test Results" for opening the test results panel
 * Added: Command "ColorSchemeUnit: Show Scope and Colors" for showing the scope name and applied colors of scheme at point under cursor
 
+## Changed
+
+* Copying colors from the "Show Scope and Colors" popup no longer copies the # (hash) character
+
 ## [1.2.0] - 2017-06-13
 
 ### Changed
