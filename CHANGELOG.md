@@ -1,5 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## Unreleased
+
+## Added
+
+* Added: Command "ColorSchemeUnit: Test Results" for opening the test results panel
+
 ## [1.2.0] - 2017-06-13
 
 ### Changed

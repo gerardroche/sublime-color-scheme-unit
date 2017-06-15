@@ -6,5 +6,9 @@
     {
         "caption": "ColorSchemeUnit: Test Suite",
         "command": "color_scheme_unit_test_suite"
+    },
+    {
+        "caption": "ColorSchemeUnit: Test Results",
+        "command": "color_scheme_unit_test_results"
     }
 ]
