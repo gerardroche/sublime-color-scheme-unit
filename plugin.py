@@ -444,11 +444,15 @@ class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
         file_name = view.file_name()
         if file_name:
             if is_valid_color_scheme_test_file_name(file_name):
+
                 color_scheme_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(
-                    view.substr(sublime.Region(0, view.size()))
-                )
+                    view.substr(sublime.Region(0, view.size())))
+
                 if color_scheme_params:
-                    view.settings().set('color_scheme', 'Packages/' + color_scheme_params.group('color_scheme'))
+                    color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
+                    view.settings().set('color_scheme', color_scheme)
+                    print('ColorSchemeUnit: applied color scheme \'{}\' to test view=[file=\'{}\''
+                          .format(color_scheme, file_name))
 
 
 class ColorSchemeUnitSetViewContent(sublime_plugin.TextCommand):
