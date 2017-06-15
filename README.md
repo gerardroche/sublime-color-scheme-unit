@@ -133,7 +133,7 @@ There is one type of test:
     }
     ```
 
-    For more examples see [Five Easy Color Schemes](https://github.com/gerardroche/sublime_five_easy_color_schemes) package tests.
+    For more examples see the [Molokai](https://github.com/gerardroche/sublime-molokai) color scheme package.
 
 Once the above conditions are met, running a test or running all the tests with a color scheme test in an active view will run a single test or all the package tests for that test, and then show the results in an output panel. Next Result (<kbd>F4</kbd>) can be used to navigate to the first failing test, and Previous Result (<kbd>Shift</kbd>+<kbd>F4</kbd>) can be used to navigate to the previous failing test.
 
