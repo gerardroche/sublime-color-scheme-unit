@@ -4,12 +4,19 @@
 
 ## Added
 
+* Added: A percentage indicator has also been added to the end of each progress
 * Added: Command "ColorSchemeUnit: Test Results" for opening the test results panel
 * Added: Command "ColorSchemeUnit: Show Scope and Colors" for showing the scope name and applied colors of scheme at point under cursor
 
 ## Changed
 
+* Debugging is now enabled via a `color_scheme_unit.debug` setting instead of an environment variable
+* Debugging messages are now printed in the tests results panel instead of the console
 * Copying colors from the "Show Scope and Colors" popup no longer copies the # (hash) character
+
+## Fixed
+
+* Fixed: Several result progress printing issues e.g. progress lines were not wrapping correctly
 
 ## [1.2.0] - 2017-06-13
 

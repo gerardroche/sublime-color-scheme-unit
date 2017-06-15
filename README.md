@@ -9,10 +9,9 @@ Color scheme unit is a testing framework for Sublime Text color schemes.
 ## OVERVIEW
 
 * [Installation](#installation)
+* [Usage](#usage)
+* [Tests](#tests)
 * [Configuration](#configuration)
-* [Writing Tests](#writing-tests)
-* [Commands](#commands)
-* [Key Bindings](#key-bindings)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
@@ -32,7 +31,27 @@ The preferred method of installation is via [Package Control](https://packagecon
     * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
 3. Done!
 
-## WRITING TESTS
+## USAGE
+
+Command | Description
+------- | -----------
+`:TestSuite` | Run tests for the current file.
+`:TestFile` | Run test suite of the current file.
+`:TestResults` | Show the test results panel.
+`:ShowScopeAndColors` | Show the scope name and applied colors of scheme at point under cursor.
+
+* Jump to Next Failure: <kbd>F4</kbd>
+* Jump to Previous Failure: <kbd>Shift</kbd>+<kbd>F4</kbd>
+
+The following key bindings are disabled by default:
+
+OS X | Windows / Linux | Command
+-----|-----------------|--------
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | `:TestFile`
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | `:TestSuite`
+<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>alt</kbd>+<kbd>p</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>alt</kbd>+<kbd>p</kbd> | `:ShowScopeAndColors`
+
+## TESTS
 
 Color scheme tests are very similar to the sublime text [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
 
@@ -130,30 +149,12 @@ A suggested package layout for color schemes.
           ├── color_scheme_test_104.php
           └── color_scheme_test_98.php
 
-## COMMANDS
-
-Command | Description
-------- | -----------
-ColorSchemeUnit: Test File | Run the whole test suite
-ColorSchemeUnit: Test Suite | Run the current test file
-
-## KEY BINDINGS
-
-**Disabled by default.**
-
-OS X | Windows / Linux | Description
------|-----------------|------------
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | Test File
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | Test Suite
-
 ## CONFIGURATION
 
 Key | Description | Type | Default
 ----|-------------|------|--------
 `color_scheme_unit.keymaps` | Enable the default keymaps. | `boolean` | `false`
-`color_scheme_unit.debug` | Enable console debug messages. | `boolean` | `false`
-
-*Debug messages are output to the Console (not the tests results output panel). Open the console: `Menu > View > Console` or click the icon in the bottom right of the status bar.*
+`color_scheme_unit.debug` | Enable debug messages. | `boolean` | `false`
 
 Set them globally:
 

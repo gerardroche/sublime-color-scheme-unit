@@ -13,14 +13,6 @@ _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')  # noqa: E501
 
 
-def debug_message(message):
-    window = sublime.active_window()
-    if window:
-        view = window.active_view()
-        if view.settings().get('color_scheme_unit.debug'):
-            print('ColorSchemeUnit DEBUG: %s' % str(message))
-
-
 class TestView():
 
     def __init__(self, name, window):
@@ -103,9 +95,56 @@ class ColorSchemeStyle():
         return style
 
 
-def run_color_scheme_test(test, window, output):
-    debug_message('running test "%s"' % test)
+class ResultPrinter():
 
+    def __init__(self, output, debug=True):
+        self.assertions = 0
+        self.tests = 0
+        self.tests_total = 0
+        self.output = output
+        self.debug = debug
+
+    def _wrap_progress(self):
+        if self.assertions % 80 == 0:
+            self.output.write(' %d / %s (%6.2f%%)\n' % (
+                self.tests,
+                self.tests_total,
+                (self.tests / self.tests_total) * 100)
+            )
+
+    def on_tests_start(self, tests):
+        self.tests_total = len(tests)
+        self.start_time = timer()
+
+    def on_tests_end(self):
+        self.output.write('\n\n')
+        self.output.write('Time: %.2f secs\n' % (timer() - self.start_time))
+        self.output.write('\n')
+
+    def on_test_start(self, test, data):
+        if self.debug:
+            self.output.write('\n\nStarting test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n\n'
+                              .format(test, data['color_scheme'], data['syntax']))
+
+    def on_test_end(self):
+        self.tests += 1
+
+    def on_assertion_success(self):
+        self.output.write('.')
+        self.assertions += 1
+        self._wrap_progress()
+
+    def on_assertion_failure(self, failure_trace):
+        self.output.write('F')
+        self.assertions += 1
+
+        # if self.debug:
+        #     self.output.write('\nFailure trace: %s\n' % str(failure_trace))
+
+        self._wrap_progress()
+
+
+def run_color_scheme_test(test, window, result_printer):
     error = False
     failures = []
     assertion_count = 0
@@ -147,8 +186,13 @@ def run_color_scheme_test(test, window, output):
         color_scheme = 'Packages/' + color_test_params.group('color_scheme')
         syntax = syntaxes[0]
 
-        debug_message('color scheme "%s"' % color_scheme)
-        debug_message('syntax "%s"' % syntax)
+        # This is down here rather than at the start of the function so that the
+        # on_test_start method will have extra information like the color
+        # scheme and syntax to print out if debugging is enabled.
+        result_printer.on_test_start(test, {
+            'color_scheme': color_scheme,
+            'syntax': syntax
+        })
 
         test_view.view.settings().set('color_scheme', color_scheme)
         test_view.view.assign_syntax(syntax)
@@ -192,9 +236,9 @@ def run_color_scheme_test(test, window, output):
                     else:
                         actual_styles[style] = ''
 
-                progress_character = '.'
-                if actual_styles != expected_styles:
-                    progress_character = 'F'
+                if actual_styles == expected_styles:
+                    result_printer.on_assertion_success()
+                else:
 
                     failure_trace = {
                         'assertion': assertion,
@@ -205,21 +249,17 @@ def run_color_scheme_test(test, window, output):
                         'expected': expected_styles,
                     }
 
-                    debug_message('Failure trace: %s' % str(failure_trace))
+                    result_printer.on_assertion_failure(failure_trace)
 
                     failures.append(failure_trace)
 
-                output.write(progress_character)
-                if assertion_count % 80 == 0:
-                    output.write("\n")
-
-        output.write("\n")
     except Exception as e:
         if not error:
-            output.write(str(e))
-            output.write("\n")
+            result_printer.write("\nAn error occurred: %s\n" % str(e))
     finally:
         test_view.tearDown()
+
+    result_printer.on_test_end()
 
     return {
         'error': error,
@@ -293,22 +333,20 @@ class ColorSchemeUnit():
             output.write("File:    %s\n" % test_file)
         output.write("\n")
 
+        result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
+
         errors = []
         failures = []
         total_assertions = 0
 
-        start = timer()
-        for test in tests:
-            test_result = run_color_scheme_test(test, self.window, output)
+        result_printer.on_tests_start(tests)
+        for i, test in enumerate(tests):
+            test_result = run_color_scheme_test(test, self.window, result_printer)
             if test_result['error']:
                 errors += [test_result['error']]
             failures += test_result['failures']
             total_assertions += test_result['assertions']
-        elapsed = timer() - start
-        output.write("\n")
-
-        output.write("Time: %.2f secs\n" % (elapsed))
-        output.write("\n")
+        result_printer.on_tests_end()
 
         if len(errors) > 0:
             output.write("There %s %s errors%s:\n\n" % (
