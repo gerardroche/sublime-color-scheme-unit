@@ -343,12 +343,6 @@ class ColorSchemeUnit():
             output.write("\n")
 
 
-def copy(view, text):
-    sublime.set_clipboard(text)
-    view.hide_popup()
-    sublime.status_message('Scope name copied to clipboard')
-
-
 class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
@@ -389,7 +383,12 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
             </body>
         """ % (scope.replace(' ', '<br>'), scope.rstrip(), style_html)
 
-        self.view.show_popup(html, max_width=512, on_navigate=lambda x: copy(self.view, x))
+        def copy(view, text):
+            sublime.set_clipboard(text)
+            view.hide_popup()
+            sublime.status_message('Scope name copied to clipboard')
+
+        self.view.show_popup(html, max_width=512, max_height=700, on_navigate=lambda x: copy(self.view, x))
 
 
 class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
