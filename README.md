@@ -48,7 +48,7 @@ color_scheme_test_short_desciption.css
 
 They must be saved within the Packages directory.
 
-Test files **must uses spaces (not tabs) [#15](https://github.com/gerardroche/sublime_color_scheme_unit/issues/15)**.
+Test files **must** uses spaces (not tabs).
 
 The first line of a test file must specify the color scheme and syntax for the tests.
 
