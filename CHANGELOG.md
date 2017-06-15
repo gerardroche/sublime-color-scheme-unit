@@ -5,6 +5,7 @@
 ## Added
 
 * Added: Command "ColorSchemeUnit: Test Results" for opening the test results panel
+* Added: Command "ColorSchemeUnit: Show Scope and Colors" for showing the scope name and applied colors of scheme at point under cursor
 
 ## [1.2.0] - 2017-06-13
 

@@ -422,3 +422,9 @@ class ColorSchemeUnitTestSuiteCommand(sublime_plugin.WindowCommand):
 
     def run(self):
         ColorSchemeUnit(self.window).run()
+
+
+class ColorSchemeUnitTestResultsCommand(sublime_plugin.WindowCommand):
+
+    def run(self):
+        self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
