@@ -17,6 +17,7 @@
 ## Fixed
 
 * Fixed: Several result progress printing issues e.g. progress lines were not wrapping correctly
+* Fixed [#17](https://github.com/gerardroche/sublime_color_scheme_unit/issues/17): Assertions don't work when prefixed with whitespace
 
 ## [1.2.0] - 2017-06-13
 
