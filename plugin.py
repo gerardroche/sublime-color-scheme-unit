@@ -376,7 +376,7 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
                         margin-top: 0;
                     }
                     a {
-                        font-family: sans-serif;
+                        font-family: system;
                         font-size: 1.05rem;
                     }
                     ul {
