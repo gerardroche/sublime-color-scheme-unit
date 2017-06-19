@@ -1,6 +1,6 @@
 # COLOR SCHEME UNIT CHANGELOG
 
-## Unreleased
+## [1.3.0] - 2017-06-19
 
 ## Added
 
@@ -205,6 +205,7 @@
 
 * Initial import
 
+[1.3.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.2...1.0.0
