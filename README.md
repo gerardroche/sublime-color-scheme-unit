@@ -1,6 +1,6 @@
 # WHAT COLOR SCHEME UNIT IS
 
-[![Minimum Sublime version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg)](https://sublimetext.com) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg)](https://packagecontrol.io/packages/color_scheme_unit) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?label=stable)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![Source Code](https://img.shields.io/badge/source-github-blue.svg)](https://github.com/gerardroche/sublime_color_scheme_unit) [![Author](https://img.shields.io/badge/author-gerardroche-blue.svg)](https://twitter.com/gerardroche)
+[![Minimum Sublime Version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&label=stable)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square)](https://packagecontrol.io/packages/color_scheme_unit) [![Author](https://img.shields.io/badge/twitter-gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
 
 Color scheme unit is a testing framework for Sublime Text color schemes.
 
@@ -18,11 +18,11 @@ Color scheme unit is a testing framework for Sublime Text color schemes.
 
 ## INSTALLATION
 
-### Package Control
+### Package Control installation
 
 The preferred method of installation is via [Package Control](https://packagecontrol.io/browse/authors/gerardroche).
 
-### Manual
+### Manual installation
 
 1. Close Sublime Text.
 2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text packages directory:
