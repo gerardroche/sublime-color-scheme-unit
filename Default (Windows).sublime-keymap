@@ -1,5 +1,0 @@
-[
-    { "keys": ["ctrl+shift+r"], "command": "color_scheme_unit_test_file", "context": [{ "key": "setting.color_scheme_unit.keymaps" }] },
-    { "keys": ["ctrl+shift+t"],  "command": "color_scheme_unit_test_suite", "context": [{ "key": "setting.color_scheme_unit.keymaps" }] },
-    { "keys": ["ctrl+shift+alt+p"], "command": "color_scheme_unit_show_scope_name_and_styles", "context": [{ "key": "setting.color_scheme_unit.keymaps" }] }
-]

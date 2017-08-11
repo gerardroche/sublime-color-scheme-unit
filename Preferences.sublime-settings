@@ -1,7 +1,4 @@
 {
-    // Enable the default keymaps.
-    "color_scheme_unit.keymaps": false,
-
     // Enable console debug messages.
     "color_scheme_unit.debug": false
 }

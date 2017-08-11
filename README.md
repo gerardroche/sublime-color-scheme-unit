@@ -1,8 +1,8 @@
 # WHAT COLOR SCHEME UNIT IS
 
-[![Minimum Sublime Version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&label=stable)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square)](https://packagecontrol.io/packages/color_scheme_unit) [![Author](https://img.shields.io/badge/twitter-gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
+A testing framework for Sublime Text color schemes.
 
-Color scheme unit is a testing framework for Sublime Text color schemes.
+[![Minimum Sublime Version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&label=stable)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square)](https://packagecontrol.io/packages/color_scheme_unit) [![Author](https://img.shields.io/badge/twitter-gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
 
 ![Screenshot](screenshot.png)
 
@@ -10,7 +10,6 @@ Color scheme unit is a testing framework for Sublime Text color schemes.
 
 * [Installation](#installation)
 * [Usage](#usage)
-* [Tests](#tests)
 * [Configuration](#configuration)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
@@ -20,12 +19,12 @@ Color scheme unit is a testing framework for Sublime Text color schemes.
 
 ### Package Control installation
 
-The preferred method of installation is via [Package Control](https://packagecontrol.io/browse/authors/gerardroche).
+The preferred method of installation is [Package Control](https://packagecontrol.io/browse/authors/gerardroche).
 
 ### Manual installation
 
 1. Close Sublime Text.
-2. Download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text packages directory:
+2. Download or clone this repository to a directory named **`color_scheme_unit`** in the Sublime Text Packages directory for your platform:
     * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
     * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
     * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
@@ -33,25 +32,36 @@ The preferred method of installation is via [Package Control](https://packagecon
 
 ## USAGE
 
-Command | Description
-------- | -----------
-`:TestSuite` | Run tests for the current file.
-`:TestFile` | Run test suite of the current file.
-`:TestResults` | Show the test results panel.
-`:ShowScopeAndColors` | Show the scope name and applied colors of scheme at point under cursor.
+Command Palette | Command | Description
+--------------- | ------- | -----------
+`:TestSuite` | `color_scheme_unit_test_suite` | Run test suite of the current file.
+`:TestFile` | `color_scheme_unit_test_file` | Run tests for the current file.
+`:TestResults` | `color_scheme_unit_test_results` | Show the test results panel.
+`:ShowScopeAndColors` | `color_scheme_unit_show_scope_name_and_styles` | Show the scope name and applied colors of scheme at point under cursor.
 
-* Jump to Next Failure: <kbd>F4</kbd>
-* Jump to Previous Failure: <kbd>Shift</kbd>+<kbd>F4</kbd>
+Add your preferred key bindings:
 
-The following key bindings are disabled by default:
+`Menu > Preferences > Key Bindings`
 
-OS X | Windows / Linux | Command
------|-----------------|--------
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>r</kbd> | `:TestFile`
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>t</kbd> | `:TestSuite`
-<kbd>Command</kbd>+<kbd>Shift</kbd>+<kbd>alt</kbd>+<kbd>p</kbd> | <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>alt</kbd>+<kbd>p</kbd> | `:ShowScopeAndColors`
+```json
+[
+    { "keys": ["ctrl+shift+a"], "command": "phpunit_test_suite" },
+    { "keys": ["ctrl+shift+f"], "command": "phpunit_test_file" },
+    { "keys": ["ctrl+shift+r"], "command": "phpunit_test_results" },
+    { "keys": ["ctrl+shift+alt+p"], "command": "color_scheme_unit_show_scope_name_and_styles" },
+]
+```
 
-## TESTS
+On OSX you may prefer to use the `command` key.
+
+Key bindings provided by default:
+
+Key | Description
+--- | -----------
+`F4` | Jump to Next Failure
+`Shift+F4` | Jump to Previous Failure
+
+### Writing tests
 
 Color scheme tests are very similar to the sublime text [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
 
@@ -153,28 +163,21 @@ A suggested package layout for color schemes.
 
 Key | Description | Type | Default
 ----|-------------|------|--------
-`color_scheme_unit.keymaps` | Enable the default keymaps. | `boolean` | `false`
 `color_scheme_unit.debug` | Enable debug messages. | `boolean` | `false`
-
-Set them globally:
 
 `Menu > Preferences > Settings - User`
 
 ```json
 {
-    "color_scheme_unit.keymaps": true,
     "color_scheme_unit.debug": true
 }
 ```
-
-You can also set them per-project:
 
 `Menu > Project > Edit Project`
 
 ```json
 {
     "settings": {
-        "color_scheme_unit.keymaps": true,
         "color_scheme_unit.debug": true
     }
 }

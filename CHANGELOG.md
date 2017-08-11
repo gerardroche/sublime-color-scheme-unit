@@ -1,5 +1,31 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## Unreleased
+
+### Removed
+
+* The default key bindings have been removed, instead add your preferred key bindings:
+
+  `Menu > Preferences > Key Bindings`
+
+  ```json
+  [
+      { "keys": ["ctrl+shift+a"], "command": "phpunit_test_suite" },
+      { "keys": ["ctrl+shift+f"], "command": "phpunit_test_file" },
+      { "keys": ["ctrl+shift+r"], "command": "phpunit_test_results" },
+      { "keys": ["ctrl+shift+alt+p"], "command": "color_scheme_unit_show_scope_name_and_styles" },
+  ]
+  ```
+
+  On OSX you may prefer to use the `command` key.
+
+  The following key bindings remain the same:
+
+  Key | Description
+  --- | -----------
+  `F4` | Jump to Next Failure
+  `Shift+F4` | Jump to Previous Failure
+
 ## [1.3.0] - 2017-06-19
 
 ## Added
