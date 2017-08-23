@@ -17,8 +17,8 @@ from sublime_plugin import EventListener
 from sublime_plugin import TextCommand
 from sublime_plugin import WindowCommand
 
-__version__ = "1.3.1"
-__version_info__ = (1, 3, 1)
+__version__ = "1.4.0"
+__version_info__ = (1, 4, 0)
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')  # noqa: E501
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^\s*(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')  # noqa: E501
@@ -311,6 +311,8 @@ class ColorSchemeUnit():
         file_name = self.view.file_name()
         if not file_name:
             return status_message('ColorSchemeUnit: file not found')
+
+        file_name = os.path.realpath(file_name)
 
         def normalise_resource_path(path):
             if platform() == 'windows':
