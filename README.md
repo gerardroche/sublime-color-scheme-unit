@@ -45,14 +45,12 @@ Add your preferred key bindings:
 
 ```json
 [
-    { "keys": ["ctrl+shift+a"], "command": "phpunit_test_suite" },
-    { "keys": ["ctrl+shift+f"], "command": "phpunit_test_file" },
-    { "keys": ["ctrl+shift+r"], "command": "phpunit_test_results" },
+    { "keys": ["ctrl+shift+a"], "command": "color_scheme_unit_test_suite" },
+    { "keys": ["ctrl+shift+f"], "command": "color_scheme_unit_test_file" },
+    { "keys": ["ctrl+shift+r"], "command": "color_scheme_unit_test_results" },
     { "keys": ["ctrl+shift+alt+p"], "command": "color_scheme_unit_show_scope_name_and_styles" },
 ]
 ```
-
-On OSX you may prefer to use the `command` key.
 
 Key bindings provided by default:
 
