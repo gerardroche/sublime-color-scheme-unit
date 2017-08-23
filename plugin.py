@@ -3,11 +3,22 @@ import re
 import plistlib
 from timeit import default_timer as timer
 
-import sublime
-import sublime_plugin
+from sublime import find_resources
+from sublime import load_resource
+from sublime import packages_path
+from sublime import platform
+from sublime import Region
+from sublime import score_selector
+from sublime import set_clipboard
+from sublime import set_timeout_async
+from sublime import status_message
+from sublime import version
+from sublime_plugin import EventListener
+from sublime_plugin import TextCommand
+from sublime_plugin import WindowCommand
 
-__version__ = "1.3.0"
-__version_info__ = (1, 3, 0)
+__version__ = "1.3.1"
+__version_info__ = (1, 3, 1)
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')  # noqa: E501
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^\s*(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')  # noqa: E501
@@ -32,7 +43,7 @@ class TestView():
         })
 
     def get_content(self):
-        return self.view.substr(sublime.Region(0, self.view.size()))
+        return self.view.substr(Region(0, self.view.size()))
 
 
 class TestOutputPanel():
@@ -68,7 +79,7 @@ class ColorSchemeStyle():
         self.view = view
 
         color_scheme = self.view.settings().get('color_scheme')
-        color_scheme_resource = sublime.load_resource(color_scheme)
+        color_scheme_resource = load_resource(color_scheme)
         color_scheme_plist = plistlib.readPlistFromBytes(bytes(color_scheme_resource, 'UTF-8'))
         self.color_scheme_plist_settings = color_scheme_plist['settings']
 
@@ -84,7 +95,7 @@ class ColorSchemeStyle():
         scored_styles = []
         for color_scheme_definition in self.color_scheme_plist_settings:
             if 'scope' in color_scheme_definition:
-                score = sublime.score_selector(scope, color_scheme_definition['scope'])
+                score = score_selector(scope, color_scheme_definition['scope'])
                 if score:
                     color_scheme_definition.update({'score': score})
                     scored_styles.append(color_scheme_definition)
@@ -153,23 +164,23 @@ def run_color_scheme_test(test, window, result_printer):
     test_view.setUp()
 
     try:
-        test_content = sublime.load_resource(test)
+        test_content = load_resource(test)
 
         color_test_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
         if not color_test_params:
             error = {
                 'message': 'Invalid color scheme test: unable to find valid COLOR SCHEME TEST marker',
-                'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                'file': os.path.join(os.path.dirname(packages_path()), test),
                 'row': 0,
                 'col': 0
             }
             raise RuntimeError(error['message'])
 
-        syntaxes = sublime.find_resources(color_test_params.group('syntax_name') + '.sublime-syntax')
+        syntaxes = find_resources(color_test_params.group('syntax_name') + '.sublime-syntax')
         if len(syntaxes) > 1:
             error = {
                 'message': 'Too many syntaxes found',
-                'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                'file': os.path.join(os.path.dirname(packages_path()), test),
                 'row': 0,
                 'col': 0
             }
@@ -177,7 +188,7 @@ def run_color_scheme_test(test, window, result_printer):
         if len(syntaxes) is not 1:
             error = {
                 'message': 'Syntaxes not found',
-                'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                'file': os.path.join(os.path.dirname(packages_path()), test),
                 'row': 0,
                 'col': 0
             }
@@ -242,7 +253,7 @@ def run_color_scheme_test(test, window, result_printer):
 
                     failure_trace = {
                         'assertion': assertion,
-                        'file': os.path.join(os.path.dirname(sublime.packages_path()), test),
+                        'file': os.path.join(os.path.dirname(packages_path()), test),
                         'row': assertion_row + 1,
                         'col': col + 1,
                         'actual': actual_styles,
@@ -286,32 +297,37 @@ class ColorSchemeUnit():
             if is_valid_color_scheme_test_file_name(file):
                 self.run(file=file)
             else:
-                return sublime.status_message('ColorSchemeUnit: file name not a valid test file name')
+                return status_message('ColorSchemeUnit: file name not a valid test file name')
         else:
-            return sublime.status_message('ColorSchemeUnit: file not found')
+            return status_message('ColorSchemeUnit: file not found')
+
+    def results(self):
+        self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
     def run(self, file=None):
-        sublime.set_timeout_async(lambda: self.run_async(file))
+        set_timeout_async(lambda: self.run_async(file))
 
     def run_async(self, test_file):
         file_name = self.view.file_name()
         if not file_name:
-            return sublime.status_message('ColorSchemeUnit: file not found')
+            return status_message('ColorSchemeUnit: file not found')
 
         def normalise_resource_path(path):
-            if sublime.platform() == 'windows':
+            if platform() == 'windows':
                 path = re.sub(r"/", r"\\", path)
+
             return path
 
         tests = []
-        for resource in sublime.find_resources('color_scheme_test*'):
+        resources = find_resources('color_scheme_test*')
+        for resource in resources:
             package = resource.split('/')[1]
-            package_path = os.path.join(sublime.packages_path(), package)
+            package_path = os.path.join(packages_path(), package)
             if file_name.startswith(package_path):
                 tests_package_name = package
                 if test_file:
                     resource_file = os.path.join(
-                        os.path.dirname(sublime.packages_path()),
+                        os.path.dirname(packages_path()),
                         normalise_resource_path(resource)
                     )
                     if test_file == resource_file:
@@ -320,14 +336,14 @@ class ColorSchemeUnit():
                     tests.append(resource)
 
         if not len(tests):
-            print("ColorSchemeUnit: no test found; be sure run tests from within the packages directory")
-            return sublime.status_message(
-                "ColorSchemeUnit: no test found; be sure run tests from within the packages directory"
-            )
+            print('ColorSchemeUnit: no test found')
+            print('ColorSchemeUnit: make sure you are running tests from within the packages directory')
+
+            return status_message("ColorSchemeUnit: no test found; be sure run tests from within the packages directory")
 
         output = TestOutputPanel('color_scheme_unit', self.window)
         output.write("ColorSchemeUnit %s\n\n" % __version__)
-        output.write("Runtime: %s build %s\n" % (sublime.platform(), sublime.version()))
+        output.write("Runtime: %s build %s\n" % (platform(), version()))
         output.write("Package: %s\n" % tests_package_name)
         if test_file:
             output.write("File:    %s\n" % test_file)
@@ -390,7 +406,7 @@ class ColorSchemeUnit():
             output.write("\n")
 
 
-class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
+class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
 
     def run(self, edit):
         scope = self.view.scope_name(self.view.sel()[-1].b)
@@ -431,14 +447,14 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
         """ % (scope.replace(' ', '<br>'), scope.rstrip(), style_html)
 
         def copy(view, text):
-            sublime.set_clipboard(text)
+            set_clipboard(text)
             view.hide_popup()
-            sublime.status_message('Scope name copied to clipboard')
+            status_message('Scope name copied to clipboard')
 
         self.view.show_popup(html, max_width=512, max_height=700, on_navigate=lambda x: copy(self.view, x))
 
 
-class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
+class ColorSchemeUnitSetColorSchemeOnLoadEvent(EventListener):
 
     def on_load_async(self, view):
         file_name = view.file_name()
@@ -446,7 +462,7 @@ class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
             if is_valid_color_scheme_test_file_name(file_name):
 
                 color_scheme_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(
-                    view.substr(sublime.Region(0, view.size())))
+                    view.substr(Region(0, view.size())))
 
                 if color_scheme_params:
                     color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
@@ -455,26 +471,26 @@ class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
                           .format(color_scheme, file_name))
 
 
-class ColorSchemeUnitSetViewContent(sublime_plugin.TextCommand):
+class ColorSchemeUnitSetViewContent(TextCommand):
 
     def run(self, edit, content):
-        self.view.erase(edit, sublime.Region(0, self.view.size()))
+        self.view.erase(edit, Region(0, self.view.size()))
         self.view.insert(edit, 0, content)
 
 
-class ColorSchemeUnitTestFileCommand(sublime_plugin.WindowCommand):
-
-    def run(self):
-        ColorSchemeUnit(self.window).run_file()
-
-
-class ColorSchemeUnitTestSuiteCommand(sublime_plugin.WindowCommand):
+class ColorSchemeUnitTestSuiteCommand(WindowCommand):
 
     def run(self):
         ColorSchemeUnit(self.window).run()
 
 
-class ColorSchemeUnitTestResultsCommand(sublime_plugin.WindowCommand):
+class ColorSchemeUnitTestFileCommand(WindowCommand):
 
     def run(self):
-        self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
+        ColorSchemeUnit(self.window).run_file()
+
+
+class ColorSchemeUnitTestResultsCommand(WindowCommand):
+
+    def run(self):
+        ColorSchemeUnit(self.window).results()
