@@ -1,6 +1,6 @@
 [
-    { "caption": "ColorSchemeUnit: Show Scope and Colors", "command": "color_scheme_unit_show_scope_name_and_styles" }
+    { "caption": "ColorSchemeUnit: Show Scope and Colors", "command": "color_scheme_unit_show_scope_name_and_styles" },
     { "caption": "ColorSchemeUnit: Test File", "command": "color_scheme_unit_test_file" },
     { "caption": "ColorSchemeUnit: Test Results", "command": "color_scheme_unit_test_results" },
-    { "caption": "ColorSchemeUnit: Test Suite", "command": "color_scheme_unit_test_suite" },
+    { "caption": "ColorSchemeUnit: Test Suite", "command": "color_scheme_unit_test_suite" }
 ]
