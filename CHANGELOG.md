@@ -1,5 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.4.1] - 2017-08-27
+
+### Fixed
+
+* Fixed: Can't run single test when package is symlinked
+
 ## [1.4.0] - 2017-08-23
 
 ### Fixed

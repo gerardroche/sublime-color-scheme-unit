@@ -17,8 +17,8 @@ from sublime_plugin import EventListener
 from sublime_plugin import TextCommand
 from sublime_plugin import WindowCommand
 
-__version__ = "1.4.0"
-__version_info__ = (1, 4, 0)
+__version__ = "1.4.1"
+__version_info__ = (1, 4, 1)
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')  # noqa: E501
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^\s*(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')  # noqa: E501
@@ -294,6 +294,7 @@ class ColorSchemeUnit():
     def run_file(self):
         file = self.view.file_name()
         if file:
+            file = os.path.realpath(file)
             if is_valid_color_scheme_test_file_name(file):
                 self.run(file=file)
             else:
@@ -341,7 +342,8 @@ class ColorSchemeUnit():
             print('ColorSchemeUnit: no test found')
             print('ColorSchemeUnit: make sure you are running tests from within the packages directory')
 
-            return status_message("ColorSchemeUnit: no test found; be sure run tests from within the packages directory")
+            return status_message(
+                'ColorSchemeUnit: no tests found; be sure run tests from within the packages directory')
 
         output = TestOutputPanel('color_scheme_unit', self.window)
         output.write("ColorSchemeUnit %s\n\n" % __version__)
