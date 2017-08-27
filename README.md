@@ -9,8 +9,10 @@ A testing framework for Sublime Text color schemes.
 ## OVERVIEW
 
 * [Installation](#installation)
-* [Usage](#usage)
+* [Commands](#commands)
+* [Keybindings](#key-bindings)
 * [Configuration](#configuration)
+* [Writing tests](#writing-tests)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
@@ -30,7 +32,7 @@ The preferred method of installation is [Package Control](https://packagecontrol
     * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
 3. Done!
 
-## USAGE
+## COMMANDS
 
 Command Palette | Command | Description
 --------------- | ------- | -----------
@@ -38,6 +40,8 @@ Command Palette | Command | Description
 `:TestFile` | `color_scheme_unit_test_file` | Run tests for the current file.
 `:TestResults` | `color_scheme_unit_test_results` | Show the test results panel.
 `:ShowScopeAndColors` | `color_scheme_unit_show_scope_name_and_styles` | Show the scope name and applied colors of scheme at point under cursor.
+
+## KEY BINDINGS
 
 Add your preferred key bindings:
 
@@ -59,7 +63,31 @@ Key | Description
 `F4` | Jump to Next Failure
 `Shift+F4` | Jump to Previous Failure
 
-### Writing tests
+## CONFIGURATION
+
+Key | Description | Type | Default
+----|-------------|------|--------
+`color_scheme_unit.debug` | Enable debug messages. | `boolean` | `false`
+
+`Menu > Preferences > Settings - User`
+
+```json
+{
+    "color_scheme_unit.debug": true
+}
+```
+
+`Menu > Project > Edit Project`
+
+```json
+{
+    "settings": {
+        "color_scheme_unit.debug": true
+    }
+}
+```
+
+## Writing tests
 
 Color scheme tests are very similar to the sublime text [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
 
@@ -156,30 +184,6 @@ A suggested package layout for color schemes.
       └── issue
           ├── color_scheme_test_104.php
           └── color_scheme_test_98.php
-
-## CONFIGURATION
-
-Key | Description | Type | Default
-----|-------------|------|--------
-`color_scheme_unit.debug` | Enable debug messages. | `boolean` | `false`
-
-`Menu > Preferences > Settings - User`
-
-```json
-{
-    "color_scheme_unit.debug": true
-}
-```
-
-`Menu > Project > Edit Project`
-
-```json
-{
-    "settings": {
-        "color_scheme_unit.debug": true
-    }
-}
-```
 
 ## CONTRIBUTING
 
