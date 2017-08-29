@@ -72,6 +72,7 @@ Key | Description
 Key | Description | Type | Default
 ----|-------------|------|--------
 `color_scheme_unit.debug` | Enable debug messages. | `boolean` | `false`
+`color_scheme_unit.coverage` | Enable coverage report. | `boolean` | `false`
 
 `Menu > Preferences > Settings - User`
 

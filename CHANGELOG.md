@@ -1,7 +1,8 @@
 # COLOR SCHEME UNIT CHANGELOG
 
-## Unreleased
+## [1.5.0] - 2017-08-29
 
+* Added: Basic code coverage report
 * Added: Performance improvements
 * Added: More debug mode messages
 
@@ -252,6 +253,7 @@
 
 * Initial import
 
+[1.5.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.2...1.5.0
 [1.4.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.3.0...1.4.0

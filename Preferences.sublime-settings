@@ -1,4 +1,7 @@
 {
+    // Enable coverage report.
+    "color_scheme_unit.coverage": false,
+
     // Enable console debug messages.
     "color_scheme_unit.debug": false
 }

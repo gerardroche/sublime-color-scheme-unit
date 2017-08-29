@@ -201,7 +201,130 @@ class ResultPrinter():
         self._wrap_progress()
 
 
-def run_color_scheme_test(test, window, result_printer):
+class CodeCoverage():
+
+    def __init__(self, output, enabled):
+        self.output = output
+        self.tests_info = {}
+        self.enabled = enabled
+
+    def on_test_start(self, test, info):
+        self.tests_info[test] = info
+
+    def on_tests_end(self):
+        if not self.enabled:
+            return
+
+        self.output.write('\n')
+        self.output.write('Generating code coverage report ...\n\n')
+
+        minimal_scopes = [
+            'comment',
+            'constant',
+            'constant.character.escape',
+            'constant.language',
+            'constant.numeric',
+            'entity.name',
+            'entity.name.section',
+            'entity.name.tag',
+            'entity.other.attribute-name',
+            'entity.other.inherited-class',
+            'invalid',
+            'keyword',
+            'keyword.control',
+            'keyword.operator',
+            'storage.modifier',
+            'storage.type',
+            'string',
+            'support',
+            'variable',
+            'variable.function',
+            'variable.language',
+            'variable.parameter',
+        ]
+
+        cs_tested_syntaxes = {}
+        for test, info in self.tests_info.items():
+            cs = info['color_scheme']
+            s = info['syntax']
+            if cs not in cs_tested_syntaxes:
+                cs_tested_syntaxes[cs] = []
+            cs_tested_syntaxes[cs].append(s)
+
+        report_data = []
+        for color_scheme, syntaxes in cs_tested_syntaxes.items():
+            color_scheme_plist = plistlib.readPlistFromBytes(bytes(load_resource(color_scheme), 'UTF-8'))
+            syntaxes = set(syntaxes)
+            colors = set()
+            scopes = set()
+            styles = set()
+
+            for struct in color_scheme_plist['settings']:
+                if 'scope' in struct:
+                    for scope in struct['scope'].split(','):
+                        scopes.add(scope.strip())
+
+                if 'settings' in struct:
+                    if 'foreground' in struct['settings']:
+                        colors.add(struct['settings']['foreground'].lower())
+
+                    if 'background' in struct['settings']:
+                        colors.add(struct['settings']['background'].lower())
+
+                    if 'fontStyle' in struct['settings']:
+                        styles.add(struct['settings']['fontStyle'].lower())
+
+            report_data.append({
+                'color_scheme': color_scheme,
+                'syntaxes': syntaxes,
+                'colors': colors,
+                'scopes': scopes,
+                'styles': styles
+            })
+
+        self.output.write('{: <50} {:12} {:6} {:6}\n'.format('Name', 'Syntax tests', 'Colors', 'Scopes'))
+        self.output.write('-----------------------------------------------------------------------------\n')
+
+        for info in report_data:
+            self.output.write('{: <50} {:12} {:6} {:6}\n'.format(
+                info['color_scheme'],
+                len(info['syntaxes']),
+                len(info['colors']),
+                len(info['scopes'])
+            ))
+
+        self.output.write('\n')
+
+        for i, info in enumerate(report_data, start=1):
+            self.output.write('{}) {}\n'.format(i, info['color_scheme']))
+
+            self.output.write('  Colors ({})\n'.format(len(info['colors'])))
+            for color in sorted(info['colors']):
+                self.output.write('    {}\n'.format(color))
+
+            self.output.write('  Syntaxes tested ({})\n'.format(len(info['syntaxes'])))
+            for syntax in sorted(info['syntaxes']):
+                self.output.write('    {}\n'.format(syntax))
+
+            self.output.write('  Minimal scope coverage\n')
+            for scope in sorted(minimal_scopes):
+                has_scope = True if scope in info['scopes'] else False
+                self.output.write('    {:<1} {}\n'.format(has_scope, scope))
+
+            # self.output.write('  Styles ({})\n'.format(len(info['styles'])))
+            # for style in sorted(info['styles']):
+            #     self.output.write('    {}\n'.format(style))
+
+            # self.output.write('  Scopes ({})\n'.format(len(info['scopes'])))
+            # for scope in sorted(info['scopes']):
+            #     self.output.write('    {}\n'.format(scope))
+
+            self.output.write('\n')
+
+        self.output.write('\n')
+
+
+def run_color_scheme_test(test, window, result_printer, code_coverage):
     error = False
     failures = []
     assertion_count = 0
@@ -247,6 +370,7 @@ def run_color_scheme_test(test, window, result_printer):
         # on_test_start method will have extra information like the color
         # scheme and syntax to print out if debugging is enabled.
         result_printer.on_test_start(test, {'color_scheme': color_scheme, 'syntax': syntax})
+        code_coverage.on_test_start(test, {'color_scheme': color_scheme, 'syntax': syntax})
 
         test_view.view.settings().set('color_scheme', color_scheme)
         test_view.view.assign_syntax(syntax)
@@ -398,6 +522,7 @@ class ColorSchemeUnit():
         output.write("\n")
 
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
+        code_coverage = CodeCoverage(output, self.view.settings().get('color_scheme_unit.coverage'))
 
         errors = []
         failures = []
@@ -406,13 +531,16 @@ class ColorSchemeUnit():
         result_printer.on_tests_start(tests)
 
         for i, test in enumerate(tests):
-            test_result = run_color_scheme_test(test, self.window, result_printer)
+            test_result = run_color_scheme_test(test, self.window, result_printer, code_coverage)
             if test_result['error']:
                 errors += [test_result['error']]
             failures += test_result['failures']
             total_assertions += test_result['assertions']
 
         result_printer.on_tests_end(errors, failures, total_assertions)
+
+        if not errors and not failures:
+            code_coverage.on_tests_end()
 
 
 class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
