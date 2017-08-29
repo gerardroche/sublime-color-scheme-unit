@@ -1,5 +1,13 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.4.2] - 2017-08-29
+
+### Fixed
+
+* Fixed: Doc: [Test](https://github.com/gerardroche/sublime-test) support
+* Fixed: Update metadata
+* Fixed: Update licence year
+
 ## [1.4.1] - 2017-08-27
 
 ### Fixed
@@ -239,6 +247,8 @@
 
 * Initial import
 
+[1.4.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.1...1.4.2
+[1.4.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.3.0...1.4.0
 [1.3.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.1.0...1.2.0
