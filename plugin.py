@@ -38,7 +38,7 @@ class TestView():
             self.view.close()
 
     def set_content(self, content):
-        self.view.run_command('color_scheme_unit_set_view_content', {
+        self.view.run_command('color_scheme_unit_setup_test_fixture', {
             'content': content
         })
 
@@ -127,10 +127,52 @@ class ResultPrinter():
         self.tests_total = len(tests)
         self.start_time = timer()
 
-    def on_tests_end(self):
+    def on_tests_end(self, errors, failures, total_assertions):
         self.output.write('\n\n')
         self.output.write('Time: %.2f secs\n' % (timer() - self.start_time))
         self.output.write('\n')
+
+        if len(errors) > 0:
+            self.output.write("There %s %s errors%s:\n\n" % (
+                'was' if len(errors) == 1 else 'were',
+                len(errors),
+                '' if len(errors) == 1 else 's',
+            ))
+            self.output.write("\n")
+            for i, error in enumerate(errors, start=1):
+                self.output.write("%d) %s\n" % (i, error['message']))
+                self.output.write("%s:%d:%d\n" % (error['file'], error['row'], error['col']))
+                self.output.write("\n")
+
+        if len(failures) > 0:
+            self.output.write("There %s %s failure%s:\n\n" % (
+                'was' if len(failures) == 1 else 'were',
+                len(failures),
+                '' if len(failures) == 1 else 's',
+            ))
+
+            for i, failure in enumerate(failures, start=1):
+                self.output.write("%d) %s\n" % (i, failure['assertion']))
+                self.output.write("Failed asserting %s equals %s\n" % (
+                    str(failure['actual']), str(failure['expected'])))
+                # TODO failure diff
+                # self.output.write("--- Expected\n")
+                # self.output.write("+++ Actual\n")
+                # self.output.write("@@ @@\n")
+                # self.output.write("{{diff}}\n\n")
+                self.output.write("%s:%d:%d\n" % (failure['file'], failure['row'], failure['col']))
+                self.output.write("\n")
+
+        if len(errors) == 0 and len(failures) == 0:
+            self.output.write("OK (%d tests, %d assertions)\n" % (self.tests, total_assertions))
+        else:
+            self.output.write("FAILURES!\n")
+            self.output.write("Tests: %d, Assertions: %d" % (self.tests, total_assertions))
+            if len(errors) > 0:
+                self.output.write(", Errors: %d" % (len(errors)))
+            self.output.write(", Failures: %d" % (len(failures)))
+            self.output.write(".")
+            self.output.write("\n")
 
     def on_test_start(self, test, data):
         if self.debug:
@@ -200,10 +242,7 @@ def run_color_scheme_test(test, window, result_printer):
         # This is down here rather than at the start of the function so that the
         # on_test_start method will have extra information like the color
         # scheme and syntax to print out if debugging is enabled.
-        result_printer.on_test_start(test, {
-            'color_scheme': color_scheme,
-            'syntax': syntax
-        })
+        result_printer.on_test_start(test, {'color_scheme': color_scheme, 'syntax': syntax})
 
         test_view.view.settings().set('color_scheme', color_scheme)
         test_view.view.assign_syntax(syntax)
@@ -306,9 +345,9 @@ class ColorSchemeUnit():
         self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
     def run(self, file=None):
-        set_timeout_async(lambda: self.run_async(file))
+        set_timeout_async(lambda: self._run(file))
 
-    def run_async(self, test_file):
+    def _run(self, test_file):
         file_name = self.view.file_name()
         if not file_name:
             return status_message('ColorSchemeUnit: file not found')
@@ -351,6 +390,7 @@ class ColorSchemeUnit():
         output.write("Package: %s\n" % tests_package_name)
         if test_file:
             output.write("File:    %s\n" % test_file)
+
         output.write("\n")
 
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
@@ -360,54 +400,15 @@ class ColorSchemeUnit():
         total_assertions = 0
 
         result_printer.on_tests_start(tests)
+
         for i, test in enumerate(tests):
             test_result = run_color_scheme_test(test, self.window, result_printer)
             if test_result['error']:
                 errors += [test_result['error']]
             failures += test_result['failures']
             total_assertions += test_result['assertions']
-        result_printer.on_tests_end()
 
-        if len(errors) > 0:
-            output.write("There %s %s errors%s:\n\n" % (
-                'was' if len(errors) == 1 else 'were',
-                len(errors),
-                '' if len(errors) == 1 else 's',
-            ))
-            output.write("\n")
-            for i, error in enumerate(errors, start=1):
-                output.write("%d) %s\n" % (i, error['message']))
-                output.write("%s:%d:%d\n" % (error['file'], error['row'], error['col']))
-                output.write("\n")
-
-        if len(failures) > 0:
-            output.write("There %s %s failure%s:\n\n" % (
-                'was' if len(failures) == 1 else 'were',
-                len(failures),
-                '' if len(failures) == 1 else 's',
-            ))
-
-            for i, failure in enumerate(failures, start=1):
-                output.write("%d) %s\n" % (i, failure['assertion']))
-                output.write("Failed asserting %s equals %s\n" % (str(failure['actual']), str(failure['expected'])))
-                # TODO failure diff
-                # output.write("--- Expected\n")
-                # output.write("+++ Actual\n")
-                # output.write("@@ @@\n")
-                # output.write("{{diff}}\n\n")
-                output.write("%s:%d:%d\n" % (failure['file'], failure['row'], failure['col']))
-                output.write("\n")
-
-        if len(errors) == 0 and len(failures) == 0:
-            output.write("OK (%d tests, %d assertions)\n" % (len(tests), total_assertions))
-        else:
-            output.write("FAILURES!\n")
-            output.write("Tests: %d, Assertions: %d" % (len(tests), total_assertions))
-            if len(errors) > 0:
-                output.write(", Errors: %d" % (len(errors)))
-            output.write(", Failures: %d" % (len(failures)))
-            output.write(".")
-            output.write("\n")
+        result_printer.on_tests_end(errors, failures, total_assertions)
 
 
 class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
@@ -475,7 +476,7 @@ class ColorSchemeUnitSetColorSchemeOnLoadEvent(EventListener):
                           .format(color_scheme, file_name))
 
 
-class ColorSchemeUnitSetViewContent(TextCommand):
+class ColorSchemeUnitSetupTestFixtureCommand(TextCommand):
 
     def run(self, edit, content):
         self.view.erase(edit, Region(0, self.view.size()))
