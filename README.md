@@ -41,6 +41,8 @@ Command Palette | Command | Description
 `:TestResults` | `color_scheme_unit_test_results` | Show the test results panel.
 `:ShowScopeAndColors` | `color_scheme_unit_show_scope_name_and_styles` | Show the scope name and applied colors of scheme at point under cursor.
 
+*You can also use the [Test](https://github.com/gerardroche/sublime-test) plugin, which unifies ST testing plugin commands.*
+
 ## KEY BINDINGS
 
 Add your preferred key bindings:
@@ -62,6 +64,8 @@ Key | Description
 --- | -----------
 `F4` | Jump to Next Failure
 `Shift+F4` | Jump to Previous Failure
+
+*You can also use the [Test](https://github.com/gerardroche/sublime-test) plugin, which unifies ST testing plugin key bindings.*
 
 ## CONFIGURATION
 
