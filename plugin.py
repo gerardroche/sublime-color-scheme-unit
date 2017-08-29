@@ -76,24 +76,26 @@ class TestOutputPanel():
 class ColorSchemeStyle():
 
     def __init__(self, view):
-        self.view = view
+        self._view = view
+        self._scope_style_cache = {}
 
-        color_scheme = self.view.settings().get('color_scheme')
-        color_scheme_resource = load_resource(color_scheme)
-        color_scheme_plist = plistlib.readPlistFromBytes(bytes(color_scheme_resource, 'UTF-8'))
-        self.color_scheme_plist_settings = color_scheme_plist['settings']
+        color_scheme = self._view.settings().get('color_scheme')
+        self._plist = plistlib.readPlistFromBytes(bytes(load_resource(color_scheme), 'UTF-8'))
 
-        self.default_style = dict()
-        for color_scheme_plist_dict in self.color_scheme_plist_settings:
-            if 'scope' not in color_scheme_plist_dict:
-                self.default_style.update(color_scheme_plist_dict['settings'])
+        self._default_styles = {}
+        for plist_settings_dict in self._plist['settings']:
+            if 'scope' not in plist_settings_dict:
+                self._default_styles.update(plist_settings_dict['settings'])
 
     def at_point(self, point):
-        scope = self.view.scope_name(point).strip()
+        scope = self._view.scope_name(point).strip()
 
-        style = self.default_style.copy()
+        if scope in self._scope_style_cache:
+            return self._scope_style_cache[scope]
+
+        style = self._default_styles.copy()
         scored_styles = []
-        for color_scheme_definition in self.color_scheme_plist_settings:
+        for color_scheme_definition in self._plist['settings']:
             if 'scope' in color_scheme_definition:
                 score = score_selector(scope, color_scheme_definition['scope'])
                 if score:
@@ -102,6 +104,8 @@ class ColorSchemeStyle():
 
         for s in sorted(scored_styles, key=lambda k: k['score']):
             style.update(s['settings'])
+
+        self._scope_style_cache[scope] = style
 
         return style
 
