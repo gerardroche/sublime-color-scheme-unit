@@ -1,5 +1,9 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## Unreleased
+
+* Added: More debug mode messages
+
 ## [1.4.2] - 2017-08-29
 
 ### Fixed

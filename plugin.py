@@ -108,7 +108,7 @@ class ColorSchemeStyle():
 
 class ResultPrinter():
 
-    def __init__(self, output, debug=True):
+    def __init__(self, output, debug=False):
         self.assertions = 0
         self.tests = 0
         self.tests_total = 0
@@ -126,6 +126,10 @@ class ResultPrinter():
     def on_tests_start(self, tests):
         self.tests_total = len(tests)
         self.start_time = timer()
+        if self.debug:
+            self.output.write('Starting %d test(s):\n' % len(tests))
+            for test in tests:
+                self.output.write('  \'%s\'\n' % test)
 
     def on_tests_end(self, errors, failures, total_assertions):
         self.output.write('\n\n')
@@ -176,7 +180,7 @@ class ResultPrinter():
 
     def on_test_start(self, test, data):
         if self.debug:
-            self.output.write('\n\nStarting test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n\n'
+            self.output.write('\n\nStarting test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n'
                               .format(test, data['color_scheme'], data['syntax']))
 
     def on_test_end(self):
@@ -190,10 +194,6 @@ class ResultPrinter():
     def on_assertion_failure(self, failure_trace):
         self.output.write('F')
         self.assertions += 1
-
-        # if self.debug:
-        #     self.output.write('\nFailure trace: %s\n' % str(failure_trace))
-
         self._wrap_progress()
 
 
