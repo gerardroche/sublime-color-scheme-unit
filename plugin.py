@@ -17,8 +17,8 @@ from sublime_plugin import EventListener
 from sublime_plugin import TextCommand
 from sublime_plugin import WindowCommand
 
-__version__ = "1.4.1"
-__version_info__ = (1, 4, 1)
+__version__ = "1.5.0-dev"
+__version_info__ = (1, 5, 0, 'dev')
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
     '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?'
@@ -62,6 +62,8 @@ class TestView():
 class TestOutputPanel():
 
     def __init__(self, name, window):
+        self.window = window
+        self.name = name
         self.view = window.create_output_panel(name)
 
         settings = self.view.settings()
@@ -80,15 +82,27 @@ class TestOutputPanel():
             if color_scheme:
                 settings.set('color_scheme', color_scheme)
 
-        window.run_command('show_panel', {
-            'panel': 'output.' + name
-        })
+        self.show()
+
+        self.closed = False
 
     def write(self, text):
         self.view.run_command('append', {
             'characters': text,
             'scroll_to_end': True
         })
+
+    def writeln(self, s):
+        self.write(s + "\n")
+
+    def flush(self):
+        pass
+
+    def show(self):
+        self.window.run_command("show_panel", {"panel": "output." + self.name})
+
+    def close(self):
+        self.closed = True
 
 
 class ColorSchemeStyle():
@@ -393,27 +407,21 @@ class CodeCoverage():
             })
 
         cs_col_w = max([len(x['color_scheme']) for x in report_data])
-        template = '{: <' + str(cs_col_w) + '} {: >12} {: >8} {: >14} {: >7}\n'
+        template = '{: <' + str(cs_col_w) + '} {: >20} {: >20}\n'
 
-        self.output.write(template.format('Name', '', 'Syntaxes', 'Scopes', 'Colors'))
-        self.output.write(('-' * cs_col_w) + '---------------------------------------------\n')
+        self.output.write(template.format('Name', 'Minimal Syntax Tests', 'Minimal Scopes'))
+        self.output.write(('-' * cs_col_w) + '------------------------------------------\n')
         for info in sorted(report_data, key=lambda x: x['color_scheme']):
             self.output.write(template.format(
                 info['color_scheme'],
-                '{} ({}/{})'.format(len(info['syntaxes']), len(info['minimal_syntaxes']), len(minimal_syntaxes)),
-                '({}/{})'.format(len(info['default_syntaxes']), len(default_syntaxes)),
-                '{} ({}/{})'.format(len(info['scopes']), len(info['minimal_scopes']), len(minimal_scopes)),
-                len(info['colors']),
+                '{} / {}'.format(len(info['minimal_syntaxes']), len(minimal_syntaxes)),
+                '{} / {}'.format(len(info['minimal_scopes']), len(minimal_scopes))
             ))
 
         self.output.write('\n')
 
         for i, info in enumerate(sorted(report_data, key=lambda x: x['color_scheme']), start=1):
-            self.output.write('{}) {}\n\n'.format(i, info['color_scheme']))
-            self.output.write('   Colors ({}) {}\n'.format(len(info['colors']), sorted(info['colors'])))
-            self.output.write('   Styles ({}) {}\n'.format(len(info['styles']), sorted(info['styles'])))
-            self.output.write('   Syntaxes ({}) {}\n'.format(len(info['syntaxes']), sorted(info['syntaxes'])))
-            self.output.write('   Scopes ({}) {}\n'.format(len(info['scopes']), sorted(info['scopes'])))
+            self.output.write('{}) {}\n'.format(i, info['color_scheme']))
 
             syntaxes_not_covered = [s for s in sorted(minimal_syntaxes) if s not in info['syntaxes']]
             scopes_not_covered = [s for s in sorted(minimal_scopes) if s not in info['scopes']]
@@ -429,7 +437,7 @@ class CodeCoverage():
 
                 if syntaxes_not_covered:
                     self.output.write('\n')
-                    self.output.write('   Minimal syntaxes not covered ({}):\n\n'.format(len(syntaxes_not_covered)))
+                    self.output.write('   Minimal syntaxes tests not covered ({}):\n\n'.format(len(syntaxes_not_covered)))
                     for i, syntax in enumerate(syntaxes_not_covered, start=1):
                         self.output.write('   * {}\n'.format(syntax))
 
@@ -439,6 +447,13 @@ class CodeCoverage():
                     for i, scope in enumerate(scopes_not_covered, start=1):
                         self.output.write('   * {}\n'.format(scope))
 
+                self.output.write('\n')
+
+            self.output.write('   Information:\n\n')
+            self.output.write('   Colors   {: >3} {}\n'.format(len(info['colors']), sorted(info['colors'])))
+            self.output.write('   Styles   {: >3} {}\n'.format(len(info['styles']), sorted(info['styles'])))
+            self.output.write('   Syntaxes {: >3} {}\n'.format(len(info['syntaxes']), sorted(info['syntaxes'])))
+            self.output.write('   Scopes   {: >3} {}\n'.format(len(info['scopes']), sorted(info['scopes'])))
             self.output.write('\n')
 
         self.output.write('\n')
@@ -592,10 +607,12 @@ class ColorSchemeUnit():
     def results(self):
         self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
-    def run(self, file=None):
-        set_timeout_async(lambda: self._run(file))
+    def run(self, file=None, output=None):
+        set_timeout_async(lambda: self._run(file, output))
 
-    def _run(self, test_file):
+    def _run(self, test_file, output=None):
+        unittesting = True if output else False
+
         file_name = self.view.file_name()
         if not file_name:
             return status_message('ColorSchemeUnit: file not found')
@@ -632,7 +649,8 @@ class ColorSchemeUnit():
             return status_message(
                 'ColorSchemeUnit: no tests found; be sure run tests from within the packages directory')
 
-        output = TestOutputPanel('color_scheme_unit', self.window)
+        if not output:
+            output = TestOutputPanel('color_scheme_unit', self.window)
         output.write("ColorSchemeUnit %s\n\n" % __version__)
         output.write("Runtime: %s build %s\n" % (platform(), version()))
         output.write("Package: %s\n" % tests_package_name)
@@ -661,6 +679,18 @@ class ColorSchemeUnit():
 
         if not errors and not failures:
             code_coverage.on_tests_end()
+
+        if unittesting:
+            if errors or failures:
+                output.write('\n')
+                output.write("FAILED.\n")
+            else:
+                output.write('\n')
+                output.write("OK.\n")
+
+            output.write('\n')
+            output.write("UnitTesting: Done.\n")
+            output.close()
 
 
 class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
@@ -733,6 +763,22 @@ class ColorSchemeUnitSetupTestFixtureCommand(TextCommand):
     def run(self, edit, content):
         self.view.erase(edit, Region(0, self.view.size()))
         self.view.insert(edit, 0, content)
+
+
+class ColorSchemeUnitUnitTestingCommand(WindowCommand):
+    def run(self, *args, **kwargs):
+        package = kwargs.get('package')
+        output = kwargs.get('output')
+
+        tests = find_resources("color_scheme_test*")
+        if package != "__all__":
+            tests = [t for t in tests if t.startswith("Packages/%s/" % package)]
+
+        self.window.open_file(packages_path().rstrip('Packages') + tests[0])
+
+        stream = open(output, "w")
+
+        ColorSchemeUnit(self.window).run(output=stream)
 
 
 class ColorSchemeUnitTestSuiteCommand(WindowCommand):
