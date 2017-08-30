@@ -20,18 +20,31 @@ from sublime_plugin import WindowCommand
 __version__ = "1.4.1"
 __version_info__ = (1, 4, 1)
 
-_COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile('^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"(?:\s*(?:--\>|\?\>|\*\/))?')  # noqa: E501
-_COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile('^\s*(//|#|\/\*|\<\!--)\s*(?P<repeat>\^+)(?: fg=(?P<fg>[^ ]+)?)?(?: bg=(?P<bg>[^ ]+)?)?(?: fs=(?P<fs>[^=]*)?)?$')  # noqa: E501
+_COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
+    '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?'
+    'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"'
+    '(?:\s*(?:--\>|\?\>|\*\/))?')
+
+_COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
+    '^\s*(//|#|\/\*|\<\!--)\s*'
+    '(?P<repeat>\^+)'
+    '(?: fg=(?P<fg>[^ ]+)?)?'
+    '(?: bg=(?P<bg>[^ ]+)?)?'
+    '(?: fs=(?P<fs>[^=]*)?)?'
+    '$')
 
 
 class TestView():
 
-    def __init__(self, name, window):
-        self.name = name + '_test_view'
+    def __init__(self, window, name):
         self.window = window
+        self.name = name + '_test_view'
 
     def setUp(self):
-        self.view = self.window.create_output_panel(self.name, unlisted=True)
+        self.view = self.window.create_output_panel(
+            self.name,
+            unlisted=True
+        )
 
     def tearDown(self):
         if self.view:
@@ -61,16 +74,21 @@ class TestOutputPanel():
 
         self.view.assign_syntax('Packages/color_scheme_unit/res/text-ui-result.sublime-syntax')
 
-        active_view = window.active_view()
-        if active_view:
-            active_color_scheme = active_view.settings().get('color_scheme')
-            if active_color_scheme:
-                settings.set('color_scheme', active_color_scheme)
+        view = window.active_view()
+        if view:
+            color_scheme = view.settings().get('color_scheme')
+            if color_scheme:
+                settings.set('color_scheme', color_scheme)
 
-        window.run_command('show_panel', {'panel': 'output.' + name})
+        window.run_command('show_panel', {
+            'panel': 'output.' + name
+        })
 
     def write(self, text):
-        self.view.run_command('append', {'characters': text, 'scroll_to_end': True})
+        self.view.run_command('append', {
+            'characters': text,
+            'scroll_to_end': True
+        })
 
 
 class ColorSchemeStyle():
@@ -329,7 +347,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
     failures = []
     assertion_count = 0
 
-    test_view = TestView('color_scheme_unit', window)
+    test_view = TestView(window, 'color_scheme_unit')
     test_view.setUp()
 
     try:
