@@ -377,7 +377,6 @@ class CodeCoverage():
             'storage.modifier',
             'storage.type',
             'string',
-            'support',
             'variable',
             'variable.function',
             'variable.language',
