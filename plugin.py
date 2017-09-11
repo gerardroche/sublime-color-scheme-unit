@@ -22,7 +22,7 @@ __version_info__ = (1, 5, 0, 'dev')
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
     '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'
-    'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"'
+    'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)"(?: "(?P<syntax_name>[^"]+)")?'
     '(?:\s*(?:--\>|\?\>|\*\/))?')
 
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
@@ -36,9 +36,10 @@ _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
 
 class TestView():
 
-    def __init__(self, window, name):
+    def __init__(self, window, test):
         self.window = window
-        self.name = name + '_test_view'
+        self.test = test
+        self.name = 'color_scheme_unit_test_view'
 
     def setUp(self):
         self.view = self.window.create_output_panel(
@@ -46,9 +47,15 @@ class TestView():
             unlisted=True
         )
 
+    def settings(self):
+        return self.view.settings()
+
     def tearDown(self):
         if self.view:
             self.view.close()
+
+    def file_name(self):
+        return os.path.join(os.path.dirname(packages_path()), self.test)
 
     def set_content(self, content):
         self.view.run_command('color_scheme_unit_setup_test_fixture', {
@@ -153,7 +160,7 @@ class ResultPrinter():
 
     def _wrap_progress(self):
         if self.assertions % 80 == 0:
-            self.output.write(' %d / %s (%6.2f%%)\n' % (
+            self.output.write(' %d / %s (%3.1f%%)\n' % (
                 self.tests,
                 self.tests_total,
                 (self.tests / self.tests_total) * 100)
@@ -163,9 +170,13 @@ class ResultPrinter():
         self.tests_total = len(tests)
         self.start_time = timer()
         if self.debug:
-            self.output.write('Starting %d test(s):\n' % len(tests))
-            for test in tests:
-                self.output.write('  \'%s\'\n' % test)
+            self.output.write('Starting {} test{}:\n\n'.format(
+                len(tests),
+                's' if len(tests) > 1 else ''
+            ))
+
+            for i, test in enumerate(tests, start=1):
+                self.output.write('%d) %s\n' % (i, test))
 
     def on_tests_end(self, errors, failures, total_assertions):
         self.output.write('\n\n')
@@ -216,8 +227,11 @@ class ResultPrinter():
 
     def on_test_start(self, test, data):
         if self.debug:
-            self.output.write('\n\nStarting test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n'
-                              .format(test, data['color_scheme'], data['syntax']))
+            settings = data.settings()
+            color_scheme = settings.get('color_scheme')
+            syntax = settings.get('syntax')
+            self.output.write('\nStarting test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n'
+                              .format(test, color_scheme, syntax))
 
     def on_test_end(self):
         self.tests += 1
@@ -240,8 +254,14 @@ class CodeCoverage():
         self.tests_info = {}
         self.enabled = enabled
 
-    def on_test_start(self, test, info):
-        self.tests_info[test] = info
+    def on_test_start(self, test, data):
+        settings = data.settings()
+        color_scheme = settings.get('color_scheme')
+        syntax = settings.get('syntax')
+        self.tests_info[test] = {
+            'color_scheme': color_scheme,
+            'syntax': syntax
+        }
 
     def on_tests_end(self):
         if not self.enabled:
@@ -437,7 +457,8 @@ class CodeCoverage():
 
                 if syntaxes_not_covered:
                     self.output.write('\n')
-                    self.output.write('   Minimal syntaxes tests not covered ({}):\n\n'.format(len(syntaxes_not_covered)))
+                    self.output.write('   Minimal syntaxes tests not covered ({}):\n\n'
+                                      .format(len(syntaxes_not_covered)))
                     for i, syntax in enumerate(syntaxes_not_covered, start=1):
                         self.output.write('   * {}\n'.format(syntax))
 
@@ -447,8 +468,7 @@ class CodeCoverage():
                     for i, scope in enumerate(scopes_not_covered, start=1):
                         self.output.write('   * {}\n'.format(scope))
 
-                self.output.write('\n')
-
+            self.output.write('\n')
             self.output.write('   Information:\n\n')
             self.output.write('   Colors   {: >3} {}\n'.format(len(info['colors']), sorted(info['colors'])))
             self.output.write('   Styles   {: >3} {}\n'.format(len(info['styles']), sorted(info['styles'])))
@@ -464,7 +484,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
     failures = []
     assertion_count = 0
 
-    test_view = TestView(window, 'color_scheme_unit')
+    test_view = TestView(window, test)
     test_view.setUp()
 
     try:
@@ -472,46 +492,34 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
 
         color_test_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
         if not color_test_params:
-            error = {
-                'message': 'Invalid color scheme test: unable to find valid COLOR SCHEME TEST marker',
-                'file': os.path.join(os.path.dirname(packages_path()), test),
-                'row': 0,
-                'col': 0
-            }
+            error = {'message': 'Invalid COLOR SCHEME TEST header', 'file': test_view.file_name(), 'row': 0, 'col': 0}
             raise RuntimeError(error['message'])
 
-        syntaxes = find_resources(color_test_params.group('syntax_name') + '.sublime-syntax')
+        syntax = color_test_params.group('syntax_name')
+        if not syntax:
+            syntax = os.path.splitext(test)[1].lstrip('.').upper()
+
+        syntaxes = find_resources(syntax + '.sublime-syntax')
+
         if len(syntaxes) > 1:
-            error = {
-                'message': 'Too many syntaxes found',
-                'file': os.path.join(os.path.dirname(packages_path()), test),
-                'row': 0,
-                'col': 0
-            }
-            raise RuntimeError(error['message'])
-        if len(syntaxes) is not 1:
-            error = {
-                'message': 'Syntaxes not found',
-                'file': os.path.join(os.path.dirname(packages_path()), test),
-                'row': 0,
-                'col': 0
-            }
+            error = {'message': 'More than one syntax found', 'file': test_view.file_name(), 'row': 0, 'col': 0}
             raise RuntimeError(error['message'])
 
-        color_scheme = 'Packages/' + color_test_params.group('color_scheme')
-        syntax = syntaxes[0]
+        if len(syntaxes) != 1:
+            error = {'message': 'Syntax not found', 'file': test_view.file_name(), 'row': 0, 'col': 0}
+            raise RuntimeError(error['message'])
+
+        test_view.view.assign_syntax(syntaxes[0])
+        test_view.view.settings().set('color_scheme', 'Packages/' + color_test_params.group('color_scheme'))
+        test_view.set_content(test_content)
+
+        color_scheme_style = ColorSchemeStyle(test_view.view)
 
         # This is down here rather than at the start of the function so that the
         # on_test_start method will have extra information like the color
         # scheme and syntax to print out if debugging is enabled.
-        result_printer.on_test_start(test, {'color_scheme': color_scheme, 'syntax': syntax})
-        code_coverage.on_test_start(test, {'color_scheme': color_scheme, 'syntax': syntax})
-
-        test_view.view.settings().set('color_scheme', color_scheme)
-        test_view.view.assign_syntax(syntax)
-        test_view.set_content(test_content)
-
-        color_scheme_style = ColorSchemeStyle(test_view.view)
+        result_printer.on_test_start(test, test_view)
+        code_coverage.on_test_start(test, test_view)
 
         consecutive_test_lines = 0
         for line_number, line in enumerate(test_content.splitlines()):
@@ -525,41 +533,48 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             assertion = assertion_params.group(0)
             assertion_row = line_number - consecutive_test_lines
             assertion_begin = line.find('^')
-            assertion_end = assertion_begin + len(assertion_params.group('repeat'))
-            expected_styles = {}
-            if assertion_params.group('fg') is not None:
-                expected_styles['foreground'] = assertion_params.group('fg')
-            if assertion_params.group('bg') is not None:
-                expected_styles['background'] = assertion_params.group('bg')
-            if assertion_params.group('fs') is not None:
-                expected_styles['fontStyle'] = assertion_params.group('fs')
+            assertion_repeat = assertion_params.group('repeat')
+            assertion_end = assertion_begin + len(assertion_repeat)
+            assertion_fg = assertion_params.group('fg')
+            assertion_bg = assertion_params.group('bg')
+            assertion_fs = assertion_params.group('fs')
+
+            expected = {}
+
+            if assertion_fg is not None:
+                expected['foreground'] = assertion_fg
+
+            if assertion_bg is not None:
+                expected['background'] = assertion_bg
+
+            if assertion_fs is not None:
+                expected['fontStyle'] = assertion_fs
 
             for col in range(assertion_begin, assertion_end):
                 assertion_count += 1
                 assertion_point = test_view.view.text_point(assertion_row, col)
-                actual_styles_at_point = color_scheme_style.at_point(assertion_point)
+                actual_styles = color_scheme_style.at_point(assertion_point)
 
-                actual_styles = {}
-                for style in expected_styles:
-                    if style in actual_styles_at_point:
-                        if actual_styles_at_point[style]:
-                            actual_styles[style] = actual_styles_at_point[style].lower()
+                actual = {}
+                for style in expected:
+                    if style in actual_styles:
+                        if actual_styles[style]:
+                            actual[style] = actual_styles[style].lower()
                         else:
-                            actual_styles[style] = actual_styles_at_point[style]
+                            actual[style] = actual_styles[style]
                     else:
-                        actual_styles[style] = ''
+                        actual[style] = ''
 
-                if actual_styles == expected_styles:
+                if actual == expected:
                     result_printer.on_assertion_success()
                 else:
-
                     failure_trace = {
-                        'assertion': assertion,
-                        'file': os.path.join(os.path.dirname(packages_path()), test),
+                        'assertion': assertion_params.group(0),
+                        'file': test_view.file_name(),
                         'row': assertion_row + 1,
                         'col': col + 1,
-                        'actual': actual_styles,
-                        'expected': expected_styles,
+                        'actual': actual,
+                        'expected': expected,
                     }
 
                     result_printer.on_assertion_failure(failure_trace)
@@ -747,14 +762,14 @@ class ColorSchemeUnitSetColorSchemeOnLoadEvent(EventListener):
         file_name = view.file_name()
         if file_name:
             if is_valid_color_scheme_test_file_name(file_name):
-
                 color_scheme_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(
-                    view.substr(Region(0, view.size())))
+                    view.substr(Region(0, view.size()))
+                )
 
                 if color_scheme_params:
                     color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
                     view.settings().set('color_scheme', color_scheme)
-                    print('ColorSchemeUnit: applied color scheme \'{}\' to test view=[file=\'{}\''
+                    print('ColorSchemeUnit: apply color scheme \'{}\' to view=[file=\'{}\''
                           .format(color_scheme, file_name))
 
 
