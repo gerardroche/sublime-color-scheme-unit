@@ -31,6 +31,7 @@ _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
     '(?: fg=(?P<fg>[^ ]+)?)?'
     '(?: bg=(?P<bg>[^ ]+)?)?'
     '(?: fs=(?P<fs>[^=]*)?)?'
+    '(?: build\\>=(?P<build>[^=]*)?)?'
     '$')
 
 
@@ -530,7 +531,11 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
 
             consecutive_test_lines += 1
 
-            assertion = assertion_params.group(0)
+            requires_build = assertion_params.group('build')
+            if requires_build:
+                if int(version()) < int(requires_build):
+                    continue
+
             assertion_row = line_number - consecutive_test_lines
             assertion_begin = line.find('^')
             assertion_repeat = assertion_params.group('repeat')
