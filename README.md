@@ -42,6 +42,7 @@ Command Palette | Command | Description
 `:TestFile` | `color_scheme_unit_test_file` | Run tests for the current file.
 `:TestResults` | `color_scheme_unit_test_results` | Show the test results panel.
 `:ShowScopeAndColors` | `color_scheme_unit_show_scope_name_and_styles` | Show the scope name and applied colors of scheme at point under cursor.
+`:InsertAssertions` | `color_scheme_unit_insert_assertions` | Inserts assertions for the current line.
 
 *You can also use the [Test](https://github.com/gerardroche/sublime-test) plugin, which unifies ST testing plugin commands.*
 
@@ -49,7 +50,7 @@ Command Palette | Command | Description
 
 Add your preferred key bindings:
 
-*The [Test](https://github.com/gerardroche/sublime-test) plugin is highly recommended. It unifies testing key bindings.*
+*The [Test](https://github.com/gerardroche/sublime-test) plugin is highly recommended to unify the test related key bindings.*
 
 `Menu > Preferences > Key Bindings`
 
@@ -59,6 +60,7 @@ Add your preferred key bindings:
     { "keys": ["ctrl+shift+f"], "command": "color_scheme_unit_test_file" },
     { "keys": ["ctrl+shift+r"], "command": "color_scheme_unit_test_results" },
     { "keys": ["ctrl+shift+alt+p"], "command": "color_scheme_unit_show_scope_name_and_styles" },
+    { "keys": ["ctrl+a"], "command": "color_scheme_unit_insert_assertions" },
 ]
 ```
 

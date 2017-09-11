@@ -784,6 +784,55 @@ class ColorSchemeUnitSetupTestFixtureCommand(TextCommand):
         self.view.insert(edit, 0, content)
 
 
+class ColorSchemeUnitInsertAssertions(TextCommand):
+
+    def run(self, edit):
+
+        # TODO needs improvments; this is a bit of a mess, but it gets enough of the job done
+
+        line = self.view.line(self.view.sel()[0].begin())
+        line_styles = []
+        view_styles = ColorSchemeStyle(self.view)
+        for i in range(line.begin(), line.end()):
+            style = view_styles.at_point(i)
+            if 'fontStyle' not in style:
+                style['fontStyle'] = ''
+            line_styles.append('fg={} fs={}'.format(style['foreground'], style['fontStyle']))
+
+        line_styles_count = len(line_styles)
+        repeat_count = 0
+        indent_count = 0
+        prev_style = None
+        assertions = []
+        for i, x in enumerate(line_styles):
+            if x == prev_style:
+                repeat_count += 1
+            else:
+                if prev_style is not None:
+                    assertions.append((indent_count * ' ') + ('^' * repeat_count) + ' ' + prev_style)
+                    indent_count += repeat_count
+                    repeat_count = 1
+                else:
+                    repeat_count += 1
+            prev_style = x
+            if line_styles_count == i + 1:
+                assertions.append((indent_count * ' ') + ('^' * repeat_count) + ' ' + prev_style)
+
+        comment_start = ''
+        comment_end = ''
+        for v in self.view.meta_info('shellVariables', self.view.sel()[0].begin()):
+            if v['name'] == 'TM_COMMENT_START':
+                comment_start = v['value']
+            if v['name'] == 'TM_COMMENT_END':
+                comment_end = v['value']
+
+        assertion_str = ''
+        for assertion in assertions:
+            assertion_str += comment_start + assertion[len(comment_start):] + comment_end + '\n'
+
+        self.view.insert(edit, line.end(), '\n' + assertion_str)
+
+
 class ColorSchemeUnitUnitTestingCommand(WindowCommand):
     def run(self, *args, **kwargs):
         output = kwargs.get('output')

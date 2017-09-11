@@ -1,5 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## Unreleased
+
+### Added
+
+* Added: Insert Assertions command
+
 ## [1.6.0] - 2017-09-12
 
 ### Added

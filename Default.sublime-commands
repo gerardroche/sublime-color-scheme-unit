@@ -3,4 +3,5 @@
     { "caption": "ColorSchemeUnit: Test File", "command": "color_scheme_unit_test_file" },
     { "caption": "ColorSchemeUnit: Test Results", "command": "color_scheme_unit_test_results" },
     { "caption": "ColorSchemeUnit: Test Suite", "command": "color_scheme_unit_test_suite" }
+    { "caption": "ColorSchemeUnit: Insert Assertions", "command": "color_scheme_unit_insert_assertions" }
 ]
