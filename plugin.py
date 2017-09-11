@@ -398,11 +398,11 @@ class CodeCoverage():
             report_data.append({
                 'color_scheme': color_scheme,
                 'syntaxes': syntaxes,
-                'default_syntaxes': syntaxes & set(default_syntaxes),
-                'minimal_syntaxes': syntaxes & set(minimal_syntaxes),
+                'default_syntaxes': set(default_syntaxes) & syntaxes,
+                'minimal_syntaxes': set(minimal_syntaxes) & syntaxes,
                 'colors': colors,
                 'scopes': scopes,
-                'minimal_scopes': scopes & set(minimal_scopes),
+                'minimal_scopes': set(minimal_scopes) & scopes,
                 'styles': styles
             })
 
