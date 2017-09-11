@@ -21,12 +21,12 @@ __version__ = "1.5.0-dev"
 __version_info__ = (1, 5, 0, 'dev')
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
-    '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--)\s*)?'
+    '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'
     'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)" "(?P<syntax_name>[^"]+)"'
     '(?:\s*(?:--\>|\?\>|\*\/))?')
 
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
-    '^\s*(//|#|\/\*|\<\!--)\s*'
+    '^\s*(//|#|\/\*|\<\!--|--)\s*'
     '(?P<repeat>\^+)'
     '(?: fg=(?P<fg>[^ ]+)?)?'
     '(?: bg=(?P<bg>[^ ]+)?)?'
