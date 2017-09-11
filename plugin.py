@@ -568,7 +568,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
 
     except Exception as e:
         if not error:
-            result_printer.write("\nAn error occurred: %s\n" % str(e))
+            result_printer.output.write("\nAn error occurred: %s\n" % str(e))
     finally:
         test_view.tearDown()
 
