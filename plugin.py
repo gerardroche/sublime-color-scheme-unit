@@ -786,15 +786,7 @@ class ColorSchemeUnitSetupTestFixtureCommand(TextCommand):
 
 class ColorSchemeUnitUnitTestingCommand(WindowCommand):
     def run(self, *args, **kwargs):
-        package = kwargs.get('package')
         output = kwargs.get('output')
-
-        tests = find_resources("color_scheme_test*")
-        if package != "__all__":
-            tests = [t for t in tests if t.startswith("Packages/%s/" % package)]
-
-        self.window.open_file(packages_path().rstrip('Packages') + tests[0])
-
         stream = open(output, "w")
 
         ColorSchemeUnit(self.window).run(output=stream)
