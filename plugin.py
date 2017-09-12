@@ -17,8 +17,8 @@ from sublime_plugin import EventListener
 from sublime_plugin import TextCommand
 from sublime_plugin import WindowCommand
 
-__version__ = "1.5.0-dev"
-__version_info__ = (1, 5, 0, 'dev')
+__version__ = "1.6.0"
+__version_info__ = (1, 6, 0)
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
     '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'

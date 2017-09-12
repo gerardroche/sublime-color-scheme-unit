@@ -1,5 +1,13 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.6.0] - 2017-09-12
+
+### Added
+
+* Added: Code coverage report
+* Added: `build>={NUMBER}` assertion parameter
+* Added: SQL comment support
+
 ## [1.5.0] - 2017-08-29
 
 * Added: Basic code coverage report
@@ -253,6 +261,7 @@
 
 * Initial import
 
+[1.6.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.2...1.5.0
 [1.4.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.0...1.4.1
