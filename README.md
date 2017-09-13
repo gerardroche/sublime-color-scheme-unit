@@ -120,7 +120,7 @@ Description | Examples
 ----------- | --------
 Foreground color | `fg=#f8f8f2`
 Background color | `bg=#272822`
-Font style (comma delimited list) | `fs=italic`, `fs=italic,bold`
+Font style (space delimited list) | `fs=italic`, `fs=italic bold`
 Sublime Text build version (only `>=` constraint is supported) | `build>=3127`
 
 One or more assertions are required, and they **must be specified in the order**: `fg`, `bg`, `fs`, and `build`.
@@ -133,6 +133,7 @@ def somefunc(param1='', param2=0):
 # ^ bg=#272822
 # ^ fs=italic
 # ^ fg=#66d9ef bg=#272822 fs=italic build>=3127
+# ^ fg=#66d9ef bg=#272822 fs=italic bold
 # ^ fg=#66d9ef bg=#272822
 # ^ fg=#66d9ef fs=italic
 # ^ bg=#272822 fs=italic
