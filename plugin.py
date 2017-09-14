@@ -43,10 +43,10 @@ class TestView():
         self.name = 'color_scheme_unit_test_view'
 
     def setUp(self):
-        self.view = self.window.create_output_panel(
-            self.name,
-            unlisted=True
-        )
+        if int(version()) > 3083:
+            self.view = self.window.create_output_panel(self.name, unlisted=True)
+        else:
+            self.view = self.window.create_output_panel(self.name)
 
     def settings(self):
         return self.view.settings()
@@ -82,7 +82,8 @@ class TestOutputPanel():
         settings.set('rulers', [])
         settings.set('scroll_past_end', False)
 
-        self.view.assign_syntax('Packages/color_scheme_unit/res/text-ui-result.sublime-syntax')
+        if int(version()) > 3083:
+            self.view.assign_syntax('Packages/color_scheme_unit/res/text-ui-result.sublime-syntax')
 
         view = window.active_view()
         if view:
@@ -500,6 +501,8 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             syntax = os.path.splitext(test)[1].lstrip('.').upper()
 
         syntaxes = find_resources(syntax + '.sublime-syntax')
+        if not syntaxes:
+            syntaxes = find_resources(syntax + '.tmLanguage')
 
         if len(syntaxes) > 1:
             error = {'message': 'More than one syntax found', 'file': test_view.file_name(), 'row': 0, 'col': 0}
