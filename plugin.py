@@ -831,7 +831,9 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
 
         assertion_str = ''
         for assertion in assertions:
-            assertion_str += comment_start + assertion[len(comment_start):] + comment_end + '\n'
+            assertion = assertion[len(comment_start):]
+            if assertion.lstrip(' ').startswith('^'):
+                assertion_str += comment_start + assertion + comment_end + '\n'
 
         self.view.insert(edit, line.end(), '\n' + assertion_str)
 
