@@ -827,7 +827,7 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
             if v['name'] == 'TM_COMMENT_START':
                 comment_start = v['value']
             if v['name'] == 'TM_COMMENT_END':
-                comment_end = v['value']
+                comment_end = ' ' + v['value']
 
         assertion_str = ''
         for assertion in assertions:
