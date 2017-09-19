@@ -2,7 +2,7 @@
 
 A testing framework for Sublime Text color schemes.
 
-[![Minimum Sublime Version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&label=stable)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square)](https://packagecontrol.io/packages/color_scheme_unit) [![Author](https://img.shields.io/badge/twitter-gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
+[![Build Status](https://img.shields.io/travis/gerardroche/sublime_color_scheme_unit/master.svg?style=flat-square)](https://travis-ci.org/gerardroche/sublime_color_scheme_unit) [![Coverage Status](https://img.shields.io/coveralls/gerardroche/sublime_color_scheme_unit/master.svg?style=flat-square)](https://coveralls.io/github/gerardroche/sublime_color_scheme_unit?branch=master) [![Minimum Sublime Version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime_color_scheme_unit.svg?style=flat-square&label=stable)](https://github.com/gerardroche/sublime_color_scheme_unit/tags) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime_color_scheme_unit.svg?style=flat-square)](https://github.com/gerardroche/sublime_color_scheme_unit/stargazers) [![Downloads](https://img.shields.io/packagecontrol/dt/color_scheme_unit.svg?style=flat-square)](https://packagecontrol.io/packages/color_scheme_unit) [![Author](https://img.shields.io/badge/twitter-gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
 
 Many color schemes available for Sublime Text are not kept up to date, don't support plugins, use too many variants of the same colors, or only exist to be compatible with a specific theme. They tend to go out of date and break in unexpected and unknown ways. [ColorSchemeUnit](https://github.com/gerardroche/sublime_color_scheme_unit), which is a testing framework for Sublime Text color schemes, helps improve the quality of color schemes and prevent regressions.
 
@@ -27,12 +27,11 @@ The preferred method of installation is [Package Control](https://packagecontrol
 
 ### Manual installation
 
-1. Close Sublime Text.
-2. Download or clone this repository to a directory named **`color_scheme_unit`** in the Sublime Text Packages directory for your platform:
-    * Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
-    * OS X: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
-    * Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
-3. Done!
+Close Sublime Text then download or clone this repository to a directory named `color_scheme_unit` in the Sublime Text Packages directory for your platform:
+
+* Linux: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/.config/sublime-text-3/Packages/color_scheme_unit`
+* OSX: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/color_scheme_unit`
+* Windows: `git clone https://github.com/gerardroche/sublime_color_scheme_unit.git %APPDATA%\Sublime/ Text/ 3/Packages/color_scheme_unit`
 
 ## COMMANDS
 

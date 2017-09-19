@@ -1,0 +1,41 @@
+language: python
+
+env:
+    global:
+        - PACKAGE="color_scheme_unit"
+    matrix:
+        - SUBLIME_TEXT_VERSION="3"
+
+matrix:
+    include:
+        - os: linux
+          python: 3.3
+
+before_install:
+    - curl -OL https://raw.githubusercontent.com/gerardroche/UnitTesting/develop/sbin/travis.sh
+
+install:
+    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+            pip install flake8;
+            pip install flake8-docstrings;
+            pip install python-coveralls;
+      elif [ "$TRAVIS_OS_NAME" == "osx" ]; then
+            brew update;
+            brew install python3;
+            pip3 install flake8;
+            pip3 install flake8-docstrings;
+            pip3 install python-coveralls;
+      fi
+    - sh travis.sh bootstrap --with-color-scheme-unit
+
+script:
+    - flake8 --statistics
+    - sh travis.sh run_tests --coverage
+    - sh travis.sh run_syntax_tests
+    - sh travis.sh run_color_scheme_tests --coverage
+
+after_success:
+    - coveralls
+
+notifications:
+    email: false
