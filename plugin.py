@@ -810,7 +810,7 @@ def _generate_assertions(styles, comment_start, comment_end):
     assertions_str = ''
     for assertion in assertions:
         assertion = assertion[len(comment_start):]
-        if assertion.lstrip(' ').startswith('^'):
+        if assertion.lstrip(' ').startswith('^') and assertion.strip(' ^') != '':
             assertions_str += comment_start + assertion + comment_end + '\n'
 
     return assertions_str

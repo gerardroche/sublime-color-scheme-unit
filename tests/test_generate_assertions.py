@@ -56,3 +56,39 @@ class TestGenerateAssertions(TestCase):
         # ^ c
         #  ^ d
         """).lstrip(), _generate_assertions(['a', 'b', 'c', 'd'], '#', ''))
+
+    def test_generate_assertions_with_blanks(self):
+        self.assertEquals(dedent("""
+        ^ a
+          ^ b
+        """).lstrip(), _generate_assertions(['a', '', 'b'], '', ''))
+
+        self.assertEquals(dedent("""
+        ^ a
+           ^ b
+        """).lstrip(), _generate_assertions(['a', '', '', 'b'], '', ''))
+
+        self.assertEquals(dedent("""
+        ^ a
+           ^ b
+            ^ c
+                ^ d
+        """).lstrip(), _generate_assertions(['a', '', '', 'b', 'c', '', '', '', 'd'], '', ''))
+
+        self.assertEquals(dedent("""
+        #^ a
+        #  ^ b
+        """).lstrip(), _generate_assertions(['a', 'a', '', 'b'], '#', ''))
+
+    def test_generate_assertions_that_ends_in_blanks(self):
+        self.assertEquals(dedent("""
+        ^ a
+        """).lstrip(), _generate_assertions(['a', ''], '', ''))
+
+        self.assertEquals(dedent("""
+        ^ a
+        """).lstrip(), _generate_assertions(['a', '', '', ''], '', ''))
+
+        self.assertEquals(dedent("""
+        #^ a
+        """).lstrip(), _generate_assertions(['a', 'a', '', '', ''], '#', ''))

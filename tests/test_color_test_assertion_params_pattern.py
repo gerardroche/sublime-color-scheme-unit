@@ -41,10 +41,10 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertIsNone(pattern.match('// ^ foo'))
         self.assertIsNone(pattern.match('// ^ x=y'))
 
-    def test_fg_ffffff(self):
+    def test_fg(self):
         self.assertMatch('// ^ fg=#ffffff', {'repeat': '^', 'fg': '#ffffff'})
 
-    def test_bg_000000(self):
+    def test_bg(self):
         self.assertMatch('// ^ bg=#000000', {'repeat': '^', 'bg': '#000000'})
 
     def test_fs_italic(self):
