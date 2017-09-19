@@ -1,10 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
-## Unreleased
+## [1.7.0] - 2017-09-19
 
 ### Added
 
-* Added: Insert Assertions command
+* Added: Insert Assertions command `color_scheme_unit_insert_assertions`
+* Added: Backwards compatability with older builds `<=3083`
 
 ## [1.6.0] - 2017-09-12
 
@@ -267,6 +268,7 @@
 
 * Initial import
 
+[1.7.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.6.0...1.7.0
 [1.6.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.2...1.5.0
 [1.4.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.1...1.4.2
