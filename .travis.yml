@@ -32,7 +32,7 @@ script:
     - flake8 --statistics
     - sh travis.sh run_tests --coverage
     - sh travis.sh run_syntax_tests
-    - sh travis.sh run_color_scheme_tests --coverage
+    - sh travis.sh run_color_scheme_tests
 
 after_success:
     - coveralls
