@@ -849,7 +849,7 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
 
         assertions = _generate_assertions(styles, comment_start, comment_end)
 
-        self.view.insert(edit, line.end(), '\n' + assertions)
+        self.view.insert(edit, line.end(), '\n' + assertions.rstrip('\n'))
 
 
 class ColorSchemeUnitUnitTestingCommand(WindowCommand):
