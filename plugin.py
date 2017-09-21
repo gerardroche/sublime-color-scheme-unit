@@ -813,7 +813,7 @@ def _generate_assertions(styles, comment_start, comment_end):
         if assertion.lstrip(' ').startswith('^') and assertion.strip(' ^') != '':
             assertions_str += comment_start + assertion + comment_end + '\n'
 
-    return assertions_str
+    return assertions_str.rstrip('\n')
 
 
 def _get_comment_markers(view, pt):
@@ -854,7 +854,7 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
         comment_start, comment_end = _get_comment_markers(self.view, pt)
         assertions = _generate_assertions(styles, comment_start, comment_end)
 
-        self.view.insert(edit, line.end(), '\n' + assertions.rstrip('\n'))
+        self.view.insert(edit, line.end(), '\n' + assertions)
 
 
 # TODO Should this helper be in its own package because it's useful for syntax devs?
@@ -871,7 +871,7 @@ class ColorSchemeUnitInsertScopes(TextCommand):
         comment_start, comment_end = _get_comment_markers(self.view, pt)
         assertions = _generate_assertions(scopes, comment_start, comment_end)
 
-        self.view.insert(edit, line.end(), '\n' + assertions.rstrip('\n'))
+        self.view.insert(edit, line.end(), '\n' + assertions)
 
 
 class ColorSchemeUnitUnitTestingCommand(WindowCommand):
