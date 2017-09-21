@@ -421,7 +421,7 @@ class CodeCoverage():
 
                     if 'fontStyle' in struct['settings']:
                         if struct['settings']['fontStyle']:
-                            styles.add(struct['settings']['fontStyle'].lower())
+                            styles.add(struct['settings']['fontStyle'])
 
             report_data.append({
                 'color_scheme': color_scheme,
