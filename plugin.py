@@ -866,7 +866,7 @@ class ColorSchemeUnitInsertScopes(TextCommand):
 
         scopes = []
         for i in range(line.begin(), line.end()):
-            scopes.append(self.view.scope_name(i))
+            scopes.append(self.view.scope_name(i).rstrip(' '))
 
         comment_start, comment_end = _get_comment_markers(self.view, pt)
         assertions = _generate_assertions(scopes, comment_start, comment_end)
