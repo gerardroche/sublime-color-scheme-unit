@@ -816,6 +816,23 @@ def _generate_assertions(styles, comment_start, comment_end):
     return assertions_str
 
 
+def _get_comment_markers(view, pt):
+    comment_start = ''
+    comment_end = ''
+    for v in view.meta_info('shellVariables', pt):
+        if v['name'] == 'TM_COMMENT_START':
+            comment_start = v['value']
+            if not comment_start.endswith(' '):
+                comment_start = comment_start + ' '
+
+        if v['name'] == 'TM_COMMENT_END':
+            comment_end = v['value']
+            if not comment_end.startswith(' '):
+                comment_end = ' ' + comment_end
+
+    return (comment_start, comment_end)
+
+
 class ColorSchemeUnitInsertAssertions(TextCommand):
 
     def run(self, edit):
@@ -834,19 +851,7 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
 
                 styles.append('fg={} fs={}'.format(style['foreground'], style['fontStyle']))
 
-        comment_start = ''
-        comment_end = ''
-        for v in self.view.meta_info('shellVariables', pt):
-            if v['name'] == 'TM_COMMENT_START':
-                comment_start = v['value']
-                if not comment_start.endswith(' '):
-                    comment_start = comment_start + ' '
-
-            if v['name'] == 'TM_COMMENT_END':
-                comment_end = v['value']
-                if not comment_end.startswith(' '):
-                    comment_end = ' ' + comment_end
-
+        comment_start, comment_end = _get_comment_markers(self.view, pt)
         assertions = _generate_assertions(styles, comment_start, comment_end)
 
         self.view.insert(edit, line.end(), '\n' + assertions.rstrip('\n'))
@@ -863,28 +868,7 @@ class ColorSchemeUnitInsertScopes(TextCommand):
         for i in range(line.begin(), line.end()):
             scopes.append(self.view.scope_name(i))
 
-        comment_start = ''
-        comment_end = ''
-        for v in self.view.meta_info('shellVariables', self.view.sel()[0].begin()):
-            if v['name'] == 'TM_COMMENT_START':
-                comment_start = v['value']
-
-            if v['name'] == 'TM_COMMENT_END':
-                comment_end = ' ' + v['value']
-
-        comment_start = ''
-        comment_end = ''
-        for v in self.view.meta_info('shellVariables', pt):
-            if v['name'] == 'TM_COMMENT_START':
-                comment_start = v['value']
-                if not comment_start.endswith(' '):
-                    comment_start = comment_start + ' '
-
-            if v['name'] == 'TM_COMMENT_END':
-                comment_end = v['value']
-                if not comment_end.startswith(' '):
-                    comment_end = ' ' + comment_end
-
+        comment_start, comment_end = _get_comment_markers(self.view, pt)
         assertions = _generate_assertions(scopes, comment_start, comment_end)
 
         self.view.insert(edit, line.end(), '\n' + assertions.rstrip('\n'))
