@@ -852,6 +852,44 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
         self.view.insert(edit, line.end(), '\n' + assertions.rstrip('\n'))
 
 
+# TODO Should this helper be in its own package because it's useful for syntax devs?
+class ColorSchemeUnitInsertScopes(TextCommand):
+
+    def run(self, edit):
+        pt = self.view.sel()[0].begin()
+        line = self.view.line(pt)
+
+        scopes = []
+        for i in range(line.begin(), line.end()):
+            scopes.append(self.view.scope_name(i))
+
+        comment_start = ''
+        comment_end = ''
+        for v in self.view.meta_info('shellVariables', self.view.sel()[0].begin()):
+            if v['name'] == 'TM_COMMENT_START':
+                comment_start = v['value']
+
+            if v['name'] == 'TM_COMMENT_END':
+                comment_end = ' ' + v['value']
+
+        comment_start = ''
+        comment_end = ''
+        for v in self.view.meta_info('shellVariables', pt):
+            if v['name'] == 'TM_COMMENT_START':
+                comment_start = v['value']
+                if not comment_start.endswith(' '):
+                    comment_start = comment_start + ' '
+
+            if v['name'] == 'TM_COMMENT_END':
+                comment_end = v['value']
+                if not comment_end.startswith(' '):
+                    comment_end = ' ' + comment_end
+
+        assertions = _generate_assertions(scopes, comment_start, comment_end)
+
+        self.view.insert(edit, line.end(), '\n' + assertions.rstrip('\n'))
+
+
 class ColorSchemeUnitUnitTestingCommand(WindowCommand):
     def run(self, *args, **kwargs):
         output = kwargs.get('output')
