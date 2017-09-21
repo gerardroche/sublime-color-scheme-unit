@@ -404,6 +404,13 @@ class CodeCoverage():
                 if 'scope' in struct:
                     for scope in struct['scope'].split(','):
                         scopes.add(scope.strip())
+                else:
+                    if 'settings' in struct:
+                        for k, v in struct['settings'].items():
+                            if v.startswith('#'):
+                                colors.add(v.lower())
+                            else:
+                                styles.add(v)
 
                 if 'settings' in struct:
                     if 'foreground' in struct['settings']:
