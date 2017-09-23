@@ -1,7 +1,11 @@
 from textwrap import dedent
 from unittest import TestCase
 
-from color_scheme_unit.plugin import _generate_assertions
+# TODO REMOVE TMP FIX for plugin name change
+try:
+    from ColorSchemeUnit.plugin import _generate_assertions
+except:
+    from color_scheme_unit.plugin import _generate_assertions
 
 
 class TestGenerateAssertions(TestCase):

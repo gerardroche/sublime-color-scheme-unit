@@ -34,6 +34,8 @@ _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
     '(?: build\\>=(?P<build>[^=]*)?)?'
     '$')
 
+_PACKAGE_NAME = __name__.split('.')[0]
+
 
 class TestView():
 
@@ -83,7 +85,7 @@ class TestOutputPanel():
         settings.set('scroll_past_end', False)
 
         if int(version()) > 3083:
-            self.view.assign_syntax('Packages/color_scheme_unit/res/text-ui-result.sublime-syntax')
+            self.view.assign_syntax('Packages/' + _PACKAGE_NAME + '/res/text-ui-result.sublime-syntax')
 
         view = window.active_view()
         if view:

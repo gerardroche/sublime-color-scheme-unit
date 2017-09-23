@@ -1,6 +1,10 @@
 from unittest import TestCase
 
-from color_scheme_unit.plugin import _COLOR_TEST_PARAMS_COMPILED_PATTERN as pattern
+# TODO REMOVE TMP FIX for plugin name change
+try:
+    from ColorSchemeUnit.plugin import _COLOR_TEST_PARAMS_COMPILED_PATTERN as pattern
+except:
+    from color_scheme_unit.plugin import _COLOR_TEST_PARAMS_COMPILED_PATTERN as pattern
 
 
 class TestColorTestParamsPattern(TestCase):
