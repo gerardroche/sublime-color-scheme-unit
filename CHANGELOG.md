@@ -80,7 +80,7 @@
 ## Fixed
 
 * Fixed: Several result progress printing issues e.g. progress lines were not wrapping correctly
-* Fixed [#17](https://github.com/gerardroche/sublime_color_scheme_unit/issues/17): Assertions don't work when prefixed with whitespace
+* Fixed [#17](https://github.com/gerardroche/sublime-color-scheme-unit/issues/17): Assertions don't work when prefixed with whitespace
 
 ## [1.2.0] - 2017-06-13
 
@@ -103,7 +103,7 @@
 
 ### Fixed
 
-* Fixed [#13](https://github.com/gerardroche/sublime_color_scheme_unit/pull/13): Edge case test assertion failures
+* Fixed [#13](https://github.com/gerardroche/sublime-color-scheme-unit/pull/13): Edge case test assertion failures
 
 ## [0.13.1]
 
@@ -115,13 +115,13 @@
 
 ### Removed
 
-* Removed [#8](https://github.com/gerardroche/sublime_color_scheme_unit/issues/8): Deprecated code
+* Removed [#8](https://github.com/gerardroche/sublime-color-scheme-unit/issues/8): Deprecated code
 
 ## [0.12.2]
 
 ### Fixed
 
-* Fixed [#9](https://github.com/gerardroche/sublime_color_scheme_unit/issues/9): IndexError: list index out of range
+* Fixed [#9](https://github.com/gerardroche/sublime-color-scheme-unit/issues/9): IndexError: list index out of range
 
 ## [0.12.1]
 
@@ -133,12 +133,12 @@
 
 ### Deprecated
 
-* Deprecated [#7](https://github.com/gerardroche/sublime_color_scheme_unit/issues/7): Color scheme tests should use the keyword "COLOR SCHEME TEST" instead of "COLOR TEST"
+* Deprecated [#7](https://github.com/gerardroche/sublime-color-scheme-unit/issues/7): Color scheme tests should use the keyword "COLOR SCHEME TEST" instead of "COLOR TEST"
 
 ### Fixed
 
-* Fixed [#5](https://github.com/gerardroche/sublime_color_scheme_unit/issues/5): PHP test definition with trailing `?>` does not work
-* Deprecated [#6](https://github.com/gerardroche/sublime_color_scheme_unit/issues/6): Color scheme paths should no longer be prefixed with "Packages/"
+* Fixed [#5](https://github.com/gerardroche/sublime-color-scheme-unit/issues/5): PHP test definition with trailing `?>` does not work
+* Deprecated [#6](https://github.com/gerardroche/sublime-color-scheme-unit/issues/6): Color scheme paths should no longer be prefixed with "Packages/"
 
 ## [0.11.0]
 
@@ -219,7 +219,7 @@
 
 ### Removed
 
-* Removed `SUBLIME_COLOR_SCHEME_UNIT_DEV_TOOLS` environment variable, use `SUBLIME_COLOR_SCHEME_UNIT_DEBUG` instead.
+* Removed `SUBLIME-COLOR-SCHEME-UNIT_DEV_TOOLS` environment variable, use `SUBLIME-COLOR-SCHEME-UNIT_DEBUG` instead.
 
 ## [0.5.1]
 
@@ -268,32 +268,32 @@
 
 * Initial import
 
-[1.7.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.6.0...1.7.0
-[1.6.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.5.0...1.6.0
-[1.5.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.2...1.5.0
-[1.4.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.1...1.4.2
-[1.4.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.4.0...1.4.1
-[1.4.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.3.0...1.4.0
-[1.3.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.2.0...1.3.0
-[1.2.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.1.0...1.2.0
-[1.1.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/1.0.0...1.1.0
-[1.0.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.2...1.0.0
-[0.13.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.1...0.13.2
-[0.13.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.13.0...0.13.1
-[0.13.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.2...0.13.0
-[0.12.2]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.1...0.12.2
-[0.12.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.12.0...0.12.1
-[0.12.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.11.0...0.12.0
-[0.11.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.10.0...0.11.0
-[0.10.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.9.0...0.10.0
-[0.9.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.9.0...0.9.1
-[0.9.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.8.0...0.9.0
-[0.8.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.8.0...0.8.1
-[0.8.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.7.0...0.8.0
-[0.7.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.6.0...0.7.0
-[0.6.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.5.0...0.6.0
-[0.5.1]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.5.0...0.5.1
-[0.5.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.4.0...0.5.0
-[0.4.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.3.0...0.4.0
-[0.3.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.2.0...0.3.0
-[0.2.0]: https://github.com/gerardroche/sublime_color_scheme_unit/compare/0.1.0...0.2.0
+[1.7.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.6.0...1.7.0
+[1.6.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.5.0...1.6.0
+[1.5.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.4.2...1.5.0
+[1.4.2]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.4.1...1.4.2
+[1.4.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.4.0...1.4.1
+[1.4.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.3.0...1.4.0
+[1.3.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.2.0...1.3.0
+[1.2.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.1.0...1.2.0
+[1.1.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.0.0...1.1.0
+[1.0.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.13.2...1.0.0
+[0.13.2]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.13.1...0.13.2
+[0.13.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.13.0...0.13.1
+[0.13.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.12.2...0.13.0
+[0.12.2]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.12.1...0.12.2
+[0.12.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.12.0...0.12.1
+[0.12.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.11.0...0.12.0
+[0.11.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.10.0...0.11.0
+[0.10.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.9.0...0.10.0
+[0.9.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.9.0...0.9.1
+[0.9.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.8.0...0.9.0
+[0.8.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.8.0...0.8.1
+[0.8.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.7.0...0.8.0
+[0.7.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.6.0...0.7.0
+[0.6.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.5.0...0.6.0
+[0.5.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.5.0...0.5.1
+[0.5.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.4.0...0.5.0
+[0.4.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/0.1.0...0.2.0
