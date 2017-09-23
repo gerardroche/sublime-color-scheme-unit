@@ -2,7 +2,7 @@ language: python
 
 env:
     global:
-        - PACKAGE="color_scheme_unit"
+        - PACKAGE="ColorSchemeUnit"
     matrix:
         - SUBLIME_TEXT_VERSION="3"
 
