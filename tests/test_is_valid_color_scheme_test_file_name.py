@@ -1,10 +1,6 @@
 from unittest import TestCase
 
-# TODO REMOVE TMP FIX for plugin name change
-try:
-    from ColorSchemeUnit.plugin import is_valid_color_scheme_test_file_name as validate
-except:
-    from color_scheme_unit.plugin import is_valid_color_scheme_test_file_name as validate
+from ColorSchemeUnit.lib.validator import is_valid_color_scheme_test_file_name as validate
 
 
 class TestIsValidColorSchemeTestFileName(TestCase):
