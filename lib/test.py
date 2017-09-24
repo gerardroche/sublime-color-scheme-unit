@@ -1,4 +1,5 @@
 import os
+import re
 
 from sublime import packages_path
 from sublime import Region
@@ -6,6 +7,13 @@ from sublime import version
 
 
 _PACKAGE_NAME = __name__.split('.')[0]
+
+
+def is_valid_color_scheme_test_file_name(file_name):
+    if not file_name:
+        return False
+
+    return bool(re.match('^color_scheme_test.*\.[a-zA-Z0-9]+$', os.path.basename(file_name)))
 
 
 class TestView():

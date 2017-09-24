@@ -5,20 +5,21 @@ from sublime import find_resources
 from sublime import load_resource
 from sublime import packages_path
 from sublime import platform
+from sublime import Region
 from sublime import set_timeout_async
 from sublime import status_message
 from sublime import version
 
-from .coverage import CodeCoverage
+from .color_scheme import ColorSchemeStyle
+from .coverage import Coverage
 from .result import ResultPrinter
-from .style import ColorSchemeStyle
+from .test import is_valid_color_scheme_test_file_name
 from .test import TestOutputPanel
 from .test import TestView
-from .validator import is_valid_color_scheme_test_file_name
 
 
-__version__ = "1.7.0"
-__version_info__ = (1, 7, 0)
+__version__ = "1.8.0-dev"
+__version_info__ = (1, 8, 0, 'dev')
 
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
@@ -34,6 +35,12 @@ _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
     '(?: fs=(?P<fs>[^=]*)?)?'
     '(?: build\\>=(?P<build>[^=]*)?)?'
     '$')
+
+
+def get_color_scheme_test_params_color_scheme(view):
+    params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(Region(0, view.size())))
+    if params:
+        return 'Packages/' + params.group('color_scheme')
 
 
 def run_color_scheme_test(test, window, result_printer, code_coverage):
@@ -247,7 +254,7 @@ class ColorSchemeUnit():
         output.write("\n")
 
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
-        code_coverage = CodeCoverage(output, self.view.settings().get('color_scheme_unit.coverage'))
+        code_coverage = Coverage(output, self.view.settings().get('color_scheme_unit.coverage'))
 
         skipped = []
         errors = []

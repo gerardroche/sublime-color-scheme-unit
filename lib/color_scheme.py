@@ -4,6 +4,10 @@ from sublime import load_resource
 from sublime import score_selector
 
 
+def load_color_scheme_resource(color_scheme):
+    return plistlib.readPlistFromBytes(bytes(load_resource(color_scheme), 'UTF-8'))
+
+
 class ColorSchemeStyle():
 
     def __init__(self, view):
@@ -11,7 +15,7 @@ class ColorSchemeStyle():
         self._scope_style_cache = {}
 
         color_scheme = self._view.settings().get('color_scheme')
-        self._plist = plistlib.readPlistFromBytes(bytes(load_resource(color_scheme), 'UTF-8'))
+        self._plist = load_color_scheme_resource(color_scheme)
 
         self._default_styles = {}
         for plist_settings_dict in self._plist['settings']:

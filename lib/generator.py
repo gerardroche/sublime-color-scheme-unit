@@ -1,4 +1,4 @@
-from .style import ColorSchemeStyle
+from .color_scheme import ColorSchemeStyle
 
 
 def generate_color_scheme_assertions(view, pt):

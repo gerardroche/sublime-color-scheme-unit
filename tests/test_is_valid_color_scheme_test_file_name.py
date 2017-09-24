@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from ColorSchemeUnit.lib.validator import is_valid_color_scheme_test_file_name as validate
+from ColorSchemeUnit.lib.test import is_valid_color_scheme_test_file_name as validate
 
 
 class TestIsValidColorSchemeTestFileName(TestCase):

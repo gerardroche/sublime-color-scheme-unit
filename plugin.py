@@ -5,12 +5,12 @@ from sublime_plugin import EventListener
 from sublime_plugin import TextCommand
 from sublime_plugin import WindowCommand
 
+from .lib.color_scheme import ColorSchemeStyle
 from .lib.generator import generate_color_scheme_assertions
 from .lib.generator import generate_syntax_assertions
-from .lib.runner import _COLOR_TEST_PARAMS_COMPILED_PATTERN
 from .lib.runner import ColorSchemeUnit
-from .lib.style import ColorSchemeStyle
-from .lib.validator import is_valid_color_scheme_test_file_name
+from .lib.runner import get_color_scheme_test_params_color_scheme
+from .lib.test import is_valid_color_scheme_test_file_name
 
 
 class ColorSchemeUnitInsertAssertions(TextCommand):
@@ -35,18 +35,10 @@ class ColorSchemeUnitInsertScopes(TextCommand):
 class ColorSchemeUnitSetColorSchemeOnLoadEvent(EventListener):
 
     def on_load_async(self, view):
-        file_name = view.file_name()
-        if file_name:
-            if is_valid_color_scheme_test_file_name(file_name):
-                color_scheme_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(
-                    view.substr(Region(0, view.size()))
-                )
-
-                if color_scheme_params:
-                    color_scheme = 'Packages/' + color_scheme_params.group('color_scheme')
-                    view.settings().set('color_scheme', color_scheme)
-                    print('ColorSchemeUnit: apply color scheme \'{}\' to view=[file=\'{}\''
-                          .format(color_scheme, file_name))
+        if is_valid_color_scheme_test_file_name(view.file_name()):
+            color_scheme = get_color_scheme_test_params_color_scheme(view)
+            if color_scheme:
+                view.settings().set('color_scheme', color_scheme)
 
 
 class ColorSchemeUnitSetupTestFixtureCommand(TextCommand):
