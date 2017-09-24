@@ -22,7 +22,7 @@ __version_info__ = (1, 7, 0)
 
 _COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
     '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'
-    'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)"(?: "(?P<syntax_name>[^"]+)")?'
+    'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)"(?:(?P<skip_if_not_syntax> SKIP IF NOT)? "(?P<syntax_name>[^"]+)")?'
     '(?:\s*(?:--\>|\?\>|\*\/))?')
 
 _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
@@ -161,14 +161,7 @@ class ResultPrinter():
         self.tests_total = 0
         self.output = output
         self.debug = debug
-
-    def _wrap_progress(self):
-        if self.assertions % 80 == 0:
-            self.output.write(' %d / %s (%3.1f%%)\n' % (
-                self.tests,
-                self.tests_total,
-                (self.tests / self.tests_total) * 100)
-            )
+        self._progress_count = 0
 
     def on_tests_start(self, tests):
         self.tests_total = len(tests)
@@ -182,13 +175,14 @@ class ResultPrinter():
             for i, test in enumerate(tests, start=1):
                 self.output.write('%d) %s\n' % (i, test))
 
-    def on_tests_end(self, errors, failures, total_assertions):
+    def on_tests_end(self, errors, skipped, failures, total_assertions):
         self.output.write('\n\n')
         self.output.write('Time: %.2f secs\n' % (timer() - self.start_time))
         self.output.write('\n')
 
+        # ERRORS
         if len(errors) > 0:
-            self.output.write("There %s %s errors%s:\n\n" % (
+            self.output.write("There %s %s error%s:\n" % (
                 'was' if len(errors) == 1 else 'were',
                 len(errors),
                 '' if len(errors) == 1 else 's',
@@ -196,11 +190,15 @@ class ResultPrinter():
             self.output.write("\n")
             for i, error in enumerate(errors, start=1):
                 self.output.write("%d) %s\n" % (i, error['message']))
-                self.output.write("%s:%d:%d\n" % (error['file'], error['row'], error['col']))
+                self.output.write("\n%s:%d:%d\n" % (error['file'], error['row'], error['col']))
                 self.output.write("\n")
 
+        # FAILURES
         if len(failures) > 0:
-            self.output.write("There %s %s failure%s:\n\n" % (
+            if len(errors) > 0:
+                self.output.write("--\n\n")
+
+            self.output.write("There %s %s failure%s:\n" % (
                 'was' if len(failures) == 1 else 'were',
                 len(failures),
                 '' if len(failures) == 1 else 's',
@@ -218,14 +216,37 @@ class ResultPrinter():
                 self.output.write("%s:%d:%d\n" % (failure['file'], failure['row'], failure['col']))
                 self.output.write("\n")
 
+        # SKIPPED
+        if len(skipped) > 0:
+            if (len(errors) + len(failures)) > 0:
+                self.output.write("--\n\n")
+
+            self.output.write("There %s %s skipped test%s:\n" % (
+                'was' if len(skipped) == 1 else 'were',
+                len(skipped),
+                '' if len(skipped) == 1 else 's',
+            ))
+            self.output.write("\n")
+            for i, skip in enumerate(skipped, start=1):
+                self.output.write("%d) %s\n" % (i, skip['message']))
+                self.output.write("\n%s:%d:%d\n" % (skip['file'], skip['row'], skip['col']))
+                self.output.write("\n")
+
+        # TOTALS
         if len(errors) == 0 and len(failures) == 0:
-            self.output.write("OK (%d tests, %d assertions)\n" % (self.tests, total_assertions))
+            self.output.write("OK (%d tests, %d assertions" % (self.tests, total_assertions))
+            if len(skipped) > 0:
+                self.output.write(", %d skipped" % (len(skipped)))
+            self.output.write(")\n")
         else:
             self.output.write("FAILURES!\n")
             self.output.write("Tests: %d, Assertions: %d" % (self.tests, total_assertions))
             if len(errors) > 0:
                 self.output.write(", Errors: %d" % (len(errors)))
             self.output.write(", Failures: %d" % (len(failures)))
+            if len(skipped) > 0:
+                self.output.write(", Skipped: %d" % (len(skipped)))
+
             self.output.write(".")
             self.output.write("\n")
 
@@ -237,18 +258,39 @@ class ResultPrinter():
             self.output.write('\nStarting test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n'
                               .format(test, color_scheme, syntax))
 
+    def _writeProgress(self, c):
+        self.output.write(c)
+        self._progress_count += 1
+        if self._progress_count % 80 == 0:
+            self.output.write(' %d / %s (%3.1f%%)\n' % (
+                self.tests,
+                self.tests_total,
+                (self.tests / self.tests_total) * 100)
+            )
+
     def on_test_end(self):
         self.tests += 1
 
+    def addError(self, test, data):
+        self._writeProgress('E')
+
+    def addSkippedTest(self, test, data):
+        if self.debug:
+            settings = data.settings()
+            color_scheme = settings.get('color_scheme')
+            syntax = settings.get('syntax')
+            self.output.write('\nSkipping test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n'
+                              .format(test, color_scheme, syntax))
+
+        self._writeProgress('S')
+
     def on_assertion_success(self):
-        self.output.write('.')
         self.assertions += 1
-        self._wrap_progress()
+        self._writeProgress('.')
 
     def on_assertion_failure(self, failure_trace):
-        self.output.write('F')
         self.assertions += 1
-        self._wrap_progress()
+        self._writeProgress('F')
 
 
 class CodeCoverage():
@@ -270,9 +312,6 @@ class CodeCoverage():
     def on_tests_end(self):
         if not self.enabled:
             return
-
-        self.output.write('\n')
-        self.output.write('Generating code coverage report ...\n\n')
 
         default_syntaxes = [
             'Packages/R/Rd (R Documentation).sublime-syntax',
@@ -394,6 +433,12 @@ class CodeCoverage():
                 cs_tested_syntaxes[cs] = []
             cs_tested_syntaxes[cs].append(s)
 
+        if not cs_tested_syntaxes:
+            return
+
+        self.output.write('\n')
+        self.output.write('Generating code coverage report ...\n\n')
+
         report_data = []
         for color_scheme, syntaxes in cs_tested_syntaxes.items():
             color_scheme_plist = plistlib.readPlistFromBytes(bytes(load_resource(color_scheme), 'UTF-8'))
@@ -490,6 +535,7 @@ class CodeCoverage():
 
 
 def run_color_scheme_test(test, window, result_printer, code_coverage):
+    skip = False
     error = False
     failures = []
     assertion_count = 0
@@ -514,12 +560,16 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             syntaxes = find_resources(syntax + '.tmLanguage')
 
         if len(syntaxes) > 1:
-            error = {'message': 'More than one syntax found', 'file': test_view.file_name(), 'row': 0, 'col': 0}
+            error = {'message': 'More than one syntax found: {}'.format(syntaxes), 'file': test_view.file_name(), 'row': 0, 'col': 0}
             raise RuntimeError(error['message'])
 
         if len(syntaxes) != 1:
-            error = {'message': 'Syntax not found', 'file': test_view.file_name(), 'row': 0, 'col': 0}
-            raise RuntimeError(error['message'])
+            if color_test_params.group('skip_if_not_syntax'):
+                skip = {'message': 'Syntax not found: {}'.format(syntax), 'file': test_view.file_name(), 'row': 0, 'col': 0}
+                raise RuntimeError(error['message'])
+            else:
+                error = {'message': 'Syntax not found: {}'.format(syntax), 'file': test_view.file_name(), 'row': 0, 'col': 0}
+                raise RuntimeError(error['message'])
 
         test_view.view.assign_syntax(syntaxes[0])
         test_view.view.settings().set('color_scheme', 'Packages/' + color_test_params.group('color_scheme'))
@@ -598,14 +648,22 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
                     failures.append(failure_trace)
 
     except Exception as e:
-        if not error:
+        if not error and not skip:
             result_printer.output.write("\nAn error occurred: %s\n" % str(e))
+
+        if error:
+            result_printer.addError(test, test_view)
+
+        if skip:
+            result_printer.addSkippedTest(test, test_view)
+
     finally:
         test_view.tearDown()
 
     result_printer.on_test_end()
 
     return {
+        'skip': skip,
         'error': error,
         'failures': failures,
         'assertions': assertion_count
@@ -693,6 +751,7 @@ class ColorSchemeUnit():
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
         code_coverage = CodeCoverage(output, self.view.settings().get('color_scheme_unit.coverage'))
 
+        skipped = []
         errors = []
         failures = []
         total_assertions = 0
@@ -703,10 +762,12 @@ class ColorSchemeUnit():
             test_result = run_color_scheme_test(test, self.window, result_printer, code_coverage)
             if test_result['error']:
                 errors += [test_result['error']]
+            if test_result['skip']:
+                skipped += [test_result['skip']]
             failures += test_result['failures']
             total_assertions += test_result['assertions']
 
-        result_printer.on_tests_end(errors, failures, total_assertions)
+        result_printer.on_tests_end(errors, skipped, failures, total_assertions)
 
         if not errors and not failures:
             code_coverage.on_tests_end()

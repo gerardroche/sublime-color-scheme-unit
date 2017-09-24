@@ -27,6 +27,14 @@ class TestColorTestParamsPattern(TestCase):
         self.assertEquals('y', match.group('syntax_name'))
         self.assertEquals(match.group(0), 'COLOR SCHEME TEST "x" "y"')
 
+    def test_allow_skipping_syntax_if_not_found(self):
+        match = pattern.match('COLOR SCHEME TEST "x" SKIP IF NOT "y"')
+        self.assertTrue(match)
+        self.assertEquals('x', match.group('color_scheme'))
+        self.assertEquals(' SKIP IF NOT', match.group('skip_if_not_syntax'))
+        self.assertEquals('y', match.group('syntax_name'))
+        self.assertEquals(match.group(0), 'COLOR SCHEME TEST "x" SKIP IF NOT "y"')
+
     def test_allows_syntax_to_be_auto_detected(self):
         match = pattern.match('COLOR SCHEME TEST "x"')
         self.assertTrue(match)
