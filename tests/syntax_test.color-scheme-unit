@@ -2,58 +2,72 @@
 
 ColorSchemeUnit 1.0.0
 
+Runtime: linux build 3144
+Package: MonokaiFree
+File:    /path/to/sublime-text-3/Packages/MonokaiFree/tests/color_scheme_test.html
+
 .
-#<- markup.color-scheme-unit
+#<- markup.color-scheme-unit.test
 E
-#<- markup.deleted.color-scheme-unit
+#<- markup.deleted.color-scheme-unit.test
 
 F
-#<- markup.deleted.color-scheme-unit
+#<- markup.deleted.color-scheme-unit.test
 
 I
-#<- markup.changed.color-scheme-unit
+#<- markup.changed.color-scheme-unit.test
 
 R
-#<- markup.changed.color-scheme-unit
+#<- markup.changed.color-scheme-unit.test
 
 I
-#<- markup.changed.color-scheme-unit
+#<- markup.changed.color-scheme-unit.test
 
 .EFIRS
-#<- markup.color-scheme-unit
-#^ markup.deleted.color-scheme-unit
-# ^ markup.deleted.color-scheme-unit
-#  ^ markup.changed.color-scheme-unit
-#   ^ markup.changed.color-scheme-unit
-#    ^ markup.changed.color-scheme-unit
+#<- markup.color-scheme-unit.test
+#^ markup.deleted.color-scheme-unit.test
+# ^ markup.deleted.color-scheme-unit.test
+#  ^ markup.changed.color-scheme-unit.test
+#   ^ markup.changed.color-scheme-unit.test
+#    ^ markup.changed.color-scheme-unit.test
 ...
-#<- markup.color-scheme-unit
-#^^ markup.color-scheme-unit
+#<- markup.color-scheme-unit.test
+#^^ markup.color-scheme-unit.test
 
 F..S...
-#<- markup.deleted.color-scheme-unit
-#^^ markup.color-scheme-unit
-#  ^ markup.changed.color-scheme-unit
-#   ^^. markup.color-scheme-unit
+#<- markup.deleted.color-scheme-unit.test
+#^^ markup.color-scheme-unit.test
+#  ^ markup.changed.color-scheme-unit.test
+#   ^^. markup.color-scheme-unit.test
 
 Time: 385 ms, Memory: 5.50MB
 
 No tests executed!
-#<- markup.changed.color-scheme-unit
-#^^^^^^^^^^^^^^^^^ markup.changed.color-scheme-unit
+#<- markup.changed.color-scheme-unit.test
+#^^^^^^^^^^^^^^^^^ markup.changed.color-scheme-unit.test
 
 OK (45 tests, 81 assertions)
-#<- markup.inserted.color-scheme-unit
-#^^^^^^^^ markup.inserted.color-scheme-unit
+#<- markup.inserted.color-scheme-unit.test
+#^^^^^^^^ markup.inserted.color-scheme-unit.test
+
+OK (1 tests, 0 assertions, 1 skipped)
+#<- markup.inserted.color-scheme-unit.test
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ markup.inserted.color-scheme-unit.test
+
+Generating code coverage report ...
 
 OK, but incomplete, skipped, or risky tests!
-#<- markup.changed.color-scheme-unit
-#^^^^^^^^ markup.changed.color-scheme-unit
+#<- markup.changed.color-scheme-unit.test
+#^^^^^^^^ markup.changed.color-scheme-unit.test
+
+----------------------------------------------------------------------------------
+#<- markup.line.color-scheme-unit.test
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ markup.line.color-scheme-unit.test
 
 FAILURES!
-#<- markup.deleted.color-scheme-unit
-#^^^^^^^^ markup.deleted.color-scheme-unit
+#<- markup.deleted.color-scheme-unit.test
+#^^^^^^^^ markup.deleted.color-scheme-unit.test
 
 Tests: 46, Assertions: 82, Failures: 2.
-#<- markup.deleted.color-scheme-unit
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ markup.deleted.color-scheme-unit
+#<- markup.deleted.color-scheme-unit.test
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ markup.deleted.color-scheme-unit.test

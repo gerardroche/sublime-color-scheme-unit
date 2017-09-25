@@ -2,36 +2,50 @@
 ---
 # http://www.sublimetext.com/docs/3/syntax.html
 name: ColorSchemeUnit Test Result
-scope: text.test-result.color-scheme-unit
+scope: text.test-result.color-scheme-unit.test
 hidden: true
 contexts:
   main:
+
+    - match: '^--------------------[-]+$'
+      scope: markup.line.color-scheme-unit.test
+
     - include: scope:source.diff
+
     - match: ^(?=(\.|E|F|I|R|S)+\s+)
       push:
         - match: \s+(\d+\s+\/\s+\d+\s+\(\s*\d+\%\))?$
           pop: true
         - match: \.
-          scope: markup.color-scheme-unit
+          scope: markup.color-scheme-unit.test
         - match: E
-          scope: markup.deleted.color-scheme-unit
+          scope: markup.deleted.color-scheme-unit.test
         - match: F
-          scope: markup.deleted.color-scheme-unit
+          scope: markup.deleted.color-scheme-unit.test
         - match: I
-          scope: markup.changed.color-scheme-unit
+          scope: markup.changed.color-scheme-unit.test
         - match: R
-          scope: markup.changed.color-scheme-unit
+          scope: markup.changed.color-scheme-unit.test
         - match: S
-          scope: markup.changed.color-scheme-unit
+          scope: markup.changed.color-scheme-unit.test
+
     - match: '^(?:\e\[[0-9;]+m)?No tests executed\!(?:\e\[[0-9;]+m)?$'
-      scope: markup.changed.color-scheme-unit
+      scope: markup.changed.color-scheme-unit.test
+
     - match: '^(?:\e\[[0-9;]+m)?OK \(\d+ test(?:s)?, \d+ assertion(?:s)?\)(?:\e\[[0-9;]+m)?$'
-      scope: markup.inserted.color-scheme-unit
+      scope: markup.inserted.color-scheme-unit.test
+
+    - match: '^(?:\e\[[0-9;]+m)?OK \(\d+ test(?:s)?, \d+ assertion(?:s)?, \d+ skipped\)(?:\e\[[-1-9;]+m)?$'
+      scope: markup.inserted.color-scheme-unit.test
+
     - match: '^(?:\e\[[0-9;]+m)?OK, but incomplete, skipped, or risky tests\!(?:\e\[[0-9;]+m)?$'
-      scope: markup.changed.color-scheme-unit
+      scope: markup.changed.color-scheme-unit.test
+
     - match: '^(?:\e\[[0-9;]+m)?Tests\: \d+, Assertions\: \d+(?:, (?:Incomplete|Skipped|Risky)\: \d+)+\.(?:\e\[[0-9;]+m)?$'
-      scope: markup.changed.color-scheme-unit
+      scope: markup.changed.color-scheme-unit.test
+
     - match: '^(?:\e\[[0-9;]+m)?FAILURES\!(?:\e\[[0-9;]+m\s*)?$'
-      scope: markup.deleted.color-scheme-unit
+      scope: markup.deleted.color-scheme-unit.test
+
     - match: '^(?:\e\[[0-9;]+m)?Tests\: \d+, Assertions\: \d+(?:, (?:Errors|Failures|Skipped|Incomplete|Risky)\: \d+)+\.(?:\e\[[0-9;]+m)?$'
-      scope: markup.deleted.color-scheme-unit
+      scope: markup.deleted.color-scheme-unit.test
