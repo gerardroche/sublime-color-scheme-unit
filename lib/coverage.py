@@ -116,9 +116,10 @@ _minimal_scopes = [
 
 class Coverage():
 
-    def __init__(self, output, enabled):
+    def __init__(self, output, enabled, is_single_file):
         self.output = output
         self.enabled = enabled
+        self.is_single_file = is_single_file
         self.tests_info = {}
 
     def on_test_start(self, test, data):
@@ -146,7 +147,7 @@ class Coverage():
             return
 
         self.output.write('\n')
-        self.output.write('Generating code coverage report ...\n\n')
+        self.output.write('Generating code coverage report...\n\n')
 
         report_data = []
         for color_scheme, syntaxes in cs_tested_syntaxes.items():
@@ -209,7 +210,9 @@ class Coverage():
 
             syntaxes_not_covered = [s for s in sorted(_minimal_syntaxes) if s not in info['syntaxes']]
             scopes_not_covered = [s for s in sorted(_minimal_scopes) if s not in info['scopes']]
-            total_notice_count = len(syntaxes_not_covered) + len(scopes_not_covered)
+            total_notice_count = len(scopes_not_covered)
+            if not self.is_single_file:
+                total_notice_count += len(syntaxes_not_covered)
 
             if total_notice_count:
                 self.output.write('\n')
@@ -219,7 +222,7 @@ class Coverage():
                     '' if total_notice_count == 1 else 's',
                 ))
 
-                if syntaxes_not_covered:
+                if syntaxes_not_covered and not self.is_single_file:
                     self.output.write('\n')
                     self.output.write('   Minimal syntaxes tests not covered ({}):\n\n'
                                       .format(len(syntaxes_not_covered)))

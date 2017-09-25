@@ -255,7 +255,7 @@ class ColorSchemeUnit():
         output.write("\n")
 
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
-        code_coverage = Coverage(output, self.view.settings().get('color_scheme_unit.coverage'))
+        code_coverage = Coverage(output, self.view.settings().get('color_scheme_unit.coverage'), test_file)
 
         skipped = []
         errors = []
