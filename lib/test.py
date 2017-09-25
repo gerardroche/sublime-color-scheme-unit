@@ -6,7 +6,7 @@ from sublime import Region
 from sublime import version
 
 
-_PACKAGE_NAME = __name__.split('.')[0]
+_package_name = __name__.split('.')[0]
 
 
 def is_valid_color_scheme_test_file_name(file_name):
@@ -40,9 +40,7 @@ class TestView():
         return os.path.join(os.path.dirname(packages_path()), self.test)
 
     def set_content(self, content):
-        self.view.run_command('color_scheme_unit_setup_test_fixture', {
-            'content': content
-        })
+        self.view.run_command('color_scheme_unit_setup_test_fixture', {'content': content})
 
     def get_content(self):
         return self.view.substr(Region(0, self.view.size()))
@@ -64,7 +62,7 @@ class TestOutputPanel():
         settings.set('scroll_past_end', False)
 
         if int(version()) > 3083:
-            self.view.assign_syntax('Packages/' + _PACKAGE_NAME + '/res/text-ui-result.sublime-syntax')
+            self.view.assign_syntax('Packages/' + _package_name + '/res/text-ui-result.sublime-syntax')
 
         view = window.active_view()
         if view:
@@ -77,10 +75,7 @@ class TestOutputPanel():
         self.closed = False
 
     def write(self, text):
-        self.view.run_command('append', {
-            'characters': text,
-            'scroll_to_end': True
-        })
+        self.view.run_command('append', {'characters': text, 'scroll_to_end': True})
 
     def writeln(self, s):
         self.write(s + "\n")

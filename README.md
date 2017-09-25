@@ -42,6 +42,7 @@ Command Palette | Command | Description
 `:TestResults` | `color_scheme_unit_test_results` | Show the test results panel.
 `:ShowScopeAndColors` | `color_scheme_unit_show_scope_name_and_styles` | Show the scope name and applied colors of scheme at point under cursor.
 `:InsertAssertions` | `color_scheme_unit_insert_assertions` | Inserts assertions for the current line.
+`:InsertSyntaxAssertions` | `color_scheme_unit_insert_syntax_assertions` | Inserts syntax assertions for the current line.
 
 *You can also use the [Test](https://github.com/gerardroche/sublime-test) plugin, which unifies ST testing plugin commands.*
 
@@ -60,6 +61,7 @@ Add your preferred key bindings:
     { "keys": ["ctrl+shift+r"], "command": "color_scheme_unit_test_results" },
     { "keys": ["ctrl+shift+alt+p"], "command": "color_scheme_unit_show_scope_name_and_styles" },
     { "keys": ["ctrl+a"], "command": "color_scheme_unit_insert_assertions" },
+    { "keys": ["ctrl+f"], "command": "color_scheme_unit_insert_syntax_assertions" },
 ]
 ```
 

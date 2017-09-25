@@ -4,12 +4,12 @@ from timeit import default_timer as timer
 class ResultPrinter():
 
     def __init__(self, output, debug=False):
-        self.assertions = 0
-        self.tests = 0
-        self.tests_total = 0
         self.output = output
         self.debug = debug
-        self._progress_count = 0
+        self.assertions = 0
+        self.progress_count = 0
+        self.tests = 0
+        self.tests_total = 0
 
     def on_tests_start(self, tests):
         self.tests_total = len(tests)
@@ -108,13 +108,12 @@ class ResultPrinter():
 
     def _writeProgress(self, c):
         self.output.write(c)
-        self._progress_count += 1
-        if self._progress_count % 80 == 0:
+        self.progress_count += 1
+        if self.progress_count % 80 == 0:
             self.output.write(' %d / %s (%3.1f%%)\n' % (
                 self.tests,
                 self.tests_total,
-                (self.tests / self.tests_total) * 100)
-            )
+                (self.tests / self.tests_total) * 100))
 
     def on_test_end(self):
         self.tests += 1

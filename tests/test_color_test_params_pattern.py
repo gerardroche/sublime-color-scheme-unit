@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from ColorSchemeUnit.lib.runner import _COLOR_TEST_PARAMS_COMPILED_PATTERN as pattern
+from ColorSchemeUnit.lib.runner import _color_test_params_compiled_pattern as pattern
 
 
 class TestColorTestParamsPattern(TestCase):

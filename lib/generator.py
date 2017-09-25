@@ -3,6 +3,7 @@ from .color_scheme import ColorSchemeStyle
 
 def generate_color_scheme_assertions(view, pt):
     line = view.line(pt)
+
     styles = []
     color_scheme_style = ColorSchemeStyle(view)
     for i in range(line.begin(), line.end()):
@@ -50,7 +51,9 @@ def _build_assertions(styles, comment_start, comment_end):
                 repeat_count = 1
             else:
                 repeat_count += 1
+
         prev_style = style
+
         if line_styles_count == i + 1:
             assertions.append((indent_count * ' ') + ('^' * repeat_count) + ' ' + prev_style)
 

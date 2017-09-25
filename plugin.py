@@ -23,7 +23,7 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
 
 
 # TODO Should this helper be in its own package because it's useful for syntax devs?
-class ColorSchemeUnitInsertScopes(TextCommand):
+class ColorSchemeUnitInsertSyntaxAssertions(TextCommand):
 
     def run(self, edit):
         pt = self.view.sel()[0].begin()

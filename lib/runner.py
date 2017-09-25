@@ -19,15 +19,16 @@ from .test import TestView
 
 
 __version__ = "1.8.0-dev"
+
 __version_info__ = (1, 8, 0, 'dev')
 
-
-_COLOR_TEST_PARAMS_COMPILED_PATTERN = re.compile(
+_color_test_params_compiled_pattern = re.compile(
     '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'
-    'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)"(?:(?P<skip_if_not_syntax> SKIP IF NOT)? "(?P<syntax_name>[^"]+)")?'
+    'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)"'
+    '(?:(?P<skip_if_not_syntax> SKIP IF NOT)? "(?P<syntax_name>[^"]+)")?'
     '(?:\s*(?:--\>|\?\>|\*\/))?')
 
-_COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
+_color_test_assertion_compiled_pattern = re.compile(
     '^\s*(//|#|\/\*|\<\!--|--)\s*'
     '(?P<repeat>\^+)'
     '(?: fg=(?P<fg>[^ ]+)?)?'
@@ -38,7 +39,7 @@ _COLOR_TEST_ASSERTION_COMPILED_PATTERN = re.compile(
 
 
 def get_color_scheme_test_params_color_scheme(view):
-    params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(view.substr(Region(0, view.size())))
+    params = _color_test_params_compiled_pattern.match(view.substr(Region(0, view.size())))
     if params:
         return 'Packages/' + params.group('color_scheme')
 
@@ -55,7 +56,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
     try:
         test_content = load_resource(test)
 
-        color_test_params = _COLOR_TEST_PARAMS_COMPILED_PATTERN.match(test_content)
+        color_test_params = _color_test_params_compiled_pattern.match(test_content)
         if not color_test_params:
             error = {'message': 'Invalid COLOR SCHEME TEST header', 'file': test_view.file_name(), 'row': 0, 'col': 0}
             raise RuntimeError(error['message'])
@@ -94,7 +95,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
 
         consecutive_test_lines = 0
         for line_number, line in enumerate(test_content.splitlines()):
-            assertion_params = _COLOR_TEST_ASSERTION_COMPILED_PATTERN.match(line.lower().rstrip(' -->').rstrip(' */'))
+            assertion_params = _color_test_assertion_compiled_pattern.match(line.lower().rstrip(' -->').rstrip(' */'))
             if not assertion_params:
                 consecutive_test_lines = 0
                 continue

@@ -118,8 +118,8 @@ class Coverage():
 
     def __init__(self, output, enabled):
         self.output = output
-        self.tests_info = {}
         self.enabled = enabled
+        self.tests_info = {}
 
     def on_test_start(self, test, data):
         settings = data.settings()
