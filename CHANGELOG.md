@@ -1,10 +1,28 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.8.0] - 2017-09-25
+
+### Added
+
+* Added: Insert Syntax Assertions command
+* Added: Allow skipping a test if syntax is not found
+
+### Changed
+
+* Plugin has been renamed from color_scheme_unit to ColorSchemeUnit
+
+### Fixed
+
+* Fixed: Don't print minimal tests coverage running single test case
+* Fixed: Many progress report issues
+* Fixed: Several code coverage issues
+* Fixed: Several performance issues; more than 50% improvement!
+
 ## [1.7.0] - 2017-09-19
 
 ### Added
 
-* Added: Insert Assertions command `color_scheme_unit_insert_assertions`
+* Added: Insert Assertions command
 * Added: Backwards compatability with older builds `<=3083`
 
 ## [1.6.0] - 2017-09-12
@@ -268,6 +286,7 @@
 
 * Initial import
 
+[1.8.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.7.0...1.8.0
 [1.7.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.6.0...1.7.0
 [1.6.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.4.2...1.5.0
