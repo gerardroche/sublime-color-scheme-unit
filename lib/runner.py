@@ -94,6 +94,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
         code_coverage.on_test_start(test, test_view)
 
         consecutive_test_lines = 0
+        has_failed_assertion = False
         for line_number, line in enumerate(test_content.splitlines()):
             assertion_params = _color_test_assertion_compiled_pattern.match(line.lower().rstrip(' -->').rstrip(' */'))
             if not assertion_params:
@@ -127,6 +128,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
                 expected['fontStyle'] = assertion_fs
 
             for col in range(assertion_begin, assertion_end):
+                result_printer.on_assertion()
                 assertion_count += 1
                 assertion_point = test_view.view.text_point(assertion_row, col)
                 actual_styles = color_scheme_style.at_point(assertion_point)
@@ -141,21 +143,21 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
                     else:
                         actual[style] = ''
 
-                if actual == expected:
-                    result_printer.on_assertion_success()
-                else:
-                    failure_trace = {
+                if actual != expected:
+                    has_failed_assertion = True
+                    failures.append({
                         'assertion': assertion_params.group(0),
                         'file': test_view.file_name(),
                         'row': assertion_row + 1,
                         'col': col + 1,
                         'actual': actual,
                         'expected': expected,
-                    }
+                    })
 
-                    result_printer.on_assertion_failure(failure_trace)
-
-                    failures.append(failure_trace)
+            if has_failed_assertion:
+                result_printer.on_test_failure()
+            else:
+                result_printer.on_test_success()
 
     except Exception as e:
         if not error and not skip:

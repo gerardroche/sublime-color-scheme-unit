@@ -46,7 +46,7 @@ class ResultPrinter():
             if len(errors) > 0:
                 self.output.write("--\n\n")
 
-            self.output.write("There %s %s failure%s:\n" % (
+            self.output.write("There %s %s failure%s:\n\n" % (
                 'was' if len(failures) == 1 else 'were',
                 len(failures),
                 '' if len(failures) == 1 else 's',
@@ -122,6 +122,8 @@ class ResultPrinter():
         self._writeProgress('E')
 
     def addSkippedTest(self, test, data):
+        self._writeProgress('S')
+
         if self.debug:
             settings = data.settings()
             color_scheme = settings.get('color_scheme')
@@ -129,12 +131,11 @@ class ResultPrinter():
             self.output.write('\nSkipping test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n'
                               .format(test, color_scheme, syntax))
 
-        self._writeProgress('S')
-
-    def on_assertion_success(self):
-        self.assertions += 1
+    def on_test_success(self):
         self._writeProgress('.')
 
-    def on_assertion_failure(self, failure_trace):
-        self.assertions += 1
+    def on_test_failure(self):
         self._writeProgress('F')
+
+    def on_assertion(self):
+        self.assertions += 1
