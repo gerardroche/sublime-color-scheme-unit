@@ -18,9 +18,9 @@ from .test import TestOutputPanel
 from .test import TestView
 
 
-__version__ = "1.8.0-dev"
+__version__ = "1.8.1"
 
-__version_info__ = (1, 8, 0, 'dev')
+__version_info__ = (1, 8, 1)
 
 _color_test_params_compiled_pattern = re.compile(
     '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'

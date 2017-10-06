@@ -1,5 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.8.1] - 2017-10-06
+
+### Fixed
+
+* Fixed: Fallback to hidden-tmLanguage syntax for legacy syntaxes
+
 ## [1.8.0] - 2017-09-25
 
 ### Added
