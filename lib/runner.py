@@ -68,6 +68,8 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
         syntaxes = find_resources(syntax + '.sublime-syntax')
         if not syntaxes:
             syntaxes = find_resources(syntax + '.tmLanguage')
+            if not syntaxes:
+                syntaxes = find_resources(syntax + '.hidden-tmLanguage')
 
         if len(syntaxes) > 1:
             error = {'message': 'More than one syntax found: {}'.format(syntaxes), 'file': test_view.file_name(), 'row': 0, 'col': 0}  # noqa: E501
