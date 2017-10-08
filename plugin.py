@@ -112,11 +112,3 @@ class ColorSchemeUnitTestResultsCommand(WindowCommand):
 
     def run(self):
         ColorSchemeUnit(self.window).results()
-
-
-class ColorSchemeUnitUnitTestingCommand(WindowCommand):
-    def run(self, *args, **kwargs):
-        output = kwargs.get('output')
-        stream = open(output, "w")
-
-        ColorSchemeUnit(self.window).run(output=stream)
