@@ -26,7 +26,8 @@ install:
             pip3 install flake8-docstrings;
             pip3 install python-coveralls;
       fi
-    - sh travis.sh bootstrap --with-color-scheme-unit
+    - sh travis.sh bootstrap
+    - sh travis.sh install_color_scheme_unit
 
 script:
     - flake8 --statistics
