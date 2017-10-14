@@ -2,7 +2,7 @@
 
 A testing framework for Sublime Text color schemes.
 
-[![Build Status](https://img.shields.io/travis/gerardroche/sublime-color-scheme-unit/master.svg?style=flat-square)](https://travis-ci.org/gerardroche/sublime-color-scheme-unit) [![Coverage Status](https://img.shields.io/coveralls/gerardroche/sublime-color-scheme-unit/master.svg?style=flat-square)](https://coveralls.io/github/gerardroche/sublime-color-scheme-unit?branch=master) [![Minimum Sublime Version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime-color-scheme-unit.svg?style=flat-square&label=stable)](https://github.com/gerardroche/sublime-color-scheme-unit/tags) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime-color-scheme-unit.svg?style=flat-square)](https://github.com/gerardroche/sublime-color-scheme-unit/stargazers) [![Downloads](https://img.shields.io/packagecontrol/dt/ColorSchemeUnit.svg?style=flat-square)](https://packagecontrol.io/packages/ColorSchemeUnit) [![Author](https://img.shields.io/badge/twitter-gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
+[![Build Status](https://img.shields.io/travis/gerardroche/sublime-color-scheme-unit/master.svg?style=flat-square)](https://travis-ci.org/gerardroche/sublime-color-scheme-unit) [![Build status](https://img.shields.io/appveyor/ci/gerardroche/sublime-color-scheme-unit/master.svg?style=flat-square)](https://ci.appveyor.com/project/gerardroche/sublime-color-scheme-unit/branch/master) [![Coverage Status](https://img.shields.io/coveralls/gerardroche/sublime-color-scheme-unit/master.svg?style=flat-square)](https://coveralls.io/github/gerardroche/sublime-color-scheme-unit?branch=master) [![Minimum Sublime Version](https://img.shields.io/badge/sublime-%3E%3D%203.0-brightgreen.svg?style=flat-square)](https://sublimetext.com) [![Latest Stable Version](https://img.shields.io/github/tag/gerardroche/sublime-color-scheme-unit.svg?style=flat-square&label=stable)](https://github.com/gerardroche/sublime-color-scheme-unit/tags) [![GitHub stars](https://img.shields.io/github/stars/gerardroche/sublime-color-scheme-unit.svg?style=flat-square)](https://github.com/gerardroche/sublime-color-scheme-unit/stargazers) [![Downloads](https://img.shields.io/packagecontrol/dt/ColorSchemeUnit.svg?style=flat-square)](https://packagecontrol.io/packages/ColorSchemeUnit) [![Author](https://img.shields.io/badge/twitter-gerardroche-blue.svg?style=flat-square)](https://twitter.com/gerardroche)
 
 Many color schemes available for Sublime Text are not kept up to date, don't support plugins, use too many variants of the same colors, or only exist to be compatible with a specific theme. They tend to go out of date and break in unexpected and unknown ways. [ColorSchemeUnit](https://github.com/gerardroche/sublime-color-scheme-unit), which is a testing framework for Sublime Text color schemes, helps improve the quality of color schemes and prevent regressions.
 
@@ -35,6 +35,8 @@ Close Sublime Text then download or clone this repository to a directory named `
 
 ## COMMANDS
 
+*The [Test](https://github.com/gerardroche/sublime-test) plugin is recommended to unify testing commands and keymaps.*
+
 Command Palette | Command | Description
 --------------- | ------- | -----------
 `:TestSuite` | `color_scheme_unit_test_suite` | Run test suite of the current file.
@@ -44,13 +46,12 @@ Command Palette | Command | Description
 `:InsertAssertions` | `color_scheme_unit_insert_assertions` | Inserts assertions for the current line.
 `:InsertSyntaxAssertions` | `color_scheme_unit_insert_syntax_assertions` | Inserts syntax assertions for the current line.
 
-*You can also use the [Test](https://github.com/gerardroche/sublime-test) plugin, which unifies ST testing plugin commands.*
 
 ## KEY BINDINGS
 
-Add your preferred key bindings:
+*The [Test](https://github.com/gerardroche/sublime-test) plugin is recommended to unify testing commands and keymaps.*
 
-*The [Test](https://github.com/gerardroche/sublime-test) plugin is highly recommended to unify the test related key bindings.*
+Add your preferred key bindings:
 
 `Menu > Preferences > Key Bindings`
 
@@ -90,25 +91,46 @@ Key | Description | Type | Default
 
 ## Writing tests
 
-Color scheme tests are very similar to the sublime text [syntax definition tests](https://www.sublimetext.com/docs/3/syntax.html).
+Color scheme tests are very similar to [syntax tests](https://www.sublimetext.com/docs/3/syntax.html).
 
-Tests must:
+* Test must be saved within the Packages directory.
+* Tests musts use spaces (not tabs).
 
-* start with (file name) `color_scheme_test` e.g. `color_scheme_test.php`, `color_scheme_test_shortdesc.php`
-* start with (first line) `<comment_token> COLOR SCHEME TEST "<color_scheme>" "<syntax>"`
-* be saved within the Packages directory
-* use spaces (not tabs)
-
-A suggested layout for your tests:
+Test file names must begin with: "color_scheme_test" e.g. `color_scheme_test.php`, `color_scheme_test.css`, and can also contain long descriptions e.g. `color_scheme_test_long_description.js`. Here is a suggested layout for your tests:
 
     .
-    ├── MonokaiFree.tmTheme
+    ├── Name.tmTheme
     └── tests
       ├── color_scheme_test.css
       ├── color_scheme_test.html
       ├── color_scheme_test.js
       ├── color_scheme_test.json
       └── ...
+
+
+The first line of test files must begin a test case definition in the format:
+
+```
+<comment_token> COLOR SCHEME TEST "<color_scheme>" [SKIP IF NOT ]"<syntax>"
+```
+
+Python example:
+
+```python
+ # COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "Python" # flake8: noqa
+```
+
+PHP example:
+
+```php
+<?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "PHP"
+```
+
+Syntaxes can be optionally skipped if they do not exist:
+
+```php
+<?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" SKIP IF NOT "blade"
+```
 
 Each test in the syntax test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
 
@@ -126,28 +148,23 @@ Background color | `bg=#272822`
 Font style (space delimited list) | `fs=italic`, `fs=italic bold`
 Sublime Text build version (only `>=` constraint is supported) | `build>=3127`
 
-One or more assertions are required, and they **must be specified in the order**: `fg`, `bg`, `fs`, and `build`.
+One or more assertions are required, and they **must be specified in the order**: `fg`, `bg`, `fs`, and `build`. Here are some examples of valid assertions:
 
-All of the follow are valid assertions:
-
-```
+```python
 def somefunc(param1='', param2=0):
 # ^ fg=#66d9ef
 # ^ bg=#272822
 # ^ fs=italic
-# ^ fg=#66d9ef bg=#272822 fs=italic build>=3127
-# ^ fg=#66d9ef bg=#272822 fs=italic bold
 # ^ fg=#66d9ef bg=#272822
-# ^ fg=#66d9ef fs=italic
-# ^ bg=#272822 fs=italic
-# ^ fg=#66d9ef fs=italic
+# ^ fg=#66d9ef bg=#272822 fs=italic bold
+# ^ fg=#66d9ef bg=#272822 fs=italic build>=3127
 ```
-
-See the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) tests for lots more examples.
 
 **Examples**
 
-```
+Explore the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) color scheme test suite for more examples.
+
+```python
 # COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "Python" # flake8: noqa
 
 import os
@@ -175,7 +192,7 @@ def f_name(arg1='', arg2=0):
         #           ^^^^^ fg=#e6db74 fs=
 ```
 
-```
+```html
 <!-- COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "HTML" -->
 <!DOCTYPE html>
 <!-- ^^^^ fg=#f92672 fs= -->
@@ -210,7 +227,7 @@ def f_name(arg1='', arg2=0):
 <!-- ^ fg=#f92672 fs= -->
 ```
 
-```
+```php
 <?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "PHP"
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -236,9 +253,62 @@ require 'vendor/autoload.php';
 
 ## CONTINUOUS INTEGRATION
 
-Example CI configurations can be found in the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) color scheme package.
+### Travis CI
+
+Linux example:
+
+```
+language: python
+
+env:
+    global:
+        - PACKAGE="MonokaiFree"
+    matrix:
+        - SUBLIME_TEXT_VERSION="3"
+
+matrix:
+    include:
+        - os: linux
+          python: 3.3
+
+before_install:
+    - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1
+
+install:
+    - sh travis.sh bootstrap
+    - sh travis.sh install_color_scheme_unit
+
+script:
+    - sh travis.sh run_color_scheme_tests --coverage
+
+notifications:
+    email: false
+```
+
+### AppVeyor
+
+```
+environment:
+    global:
+        PACKAGE: "MonokaiFree"
+        SUBLIME_TEXT_VERSION: "3"
+
+clone_depth: 5
+
+install:
+    - ps: appveyor DownloadFile "https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/appveyor.ps1"
+    - ps: .\appveyor.ps1 "bootstrap" -verbose
+    - ps: .\appveyor.ps1 "install_color_scheme_unit" -verbose
+
+build: off
+
+test_script:
+    - ps: .\appveyor.ps1 "run_color_scheme_tests" -coverage
+```
 
 More documentation can be found in the [UnitTesting](https://github.com/randy3k/UnitTesting) documentation.
+
+You can also explore the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) for example usage.
 
 ## CONTRIBUTING
 

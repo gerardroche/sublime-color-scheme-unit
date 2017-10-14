@@ -1,0 +1,17 @@
+environment:
+    global:
+        PACKAGE: "ColorSchemeUnit"
+        SUBLIME_TEXT_VERSION: "3"
+
+clone_depth: 5
+
+install:
+    - ps: appveyor DownloadFile "https://raw.githubusercontent.com/gerardroche/UnitTesting/develop/sbin/appveyor.ps1"
+    - ps: ./appveyor.ps1 "bootstrap" -verbose
+
+build: off
+
+test_script:
+    - ps: ./appveyor.ps1 "run_tests" -coverage -verbose
+    - ps: ./appveyor.ps1 "run_syntax_tests"
+    - ps: ./appveyor.ps1 "run_color_scheme_tests" -coverage
