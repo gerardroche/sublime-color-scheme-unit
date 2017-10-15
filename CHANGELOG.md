@@ -1,5 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## Unreleased
+
+### Added
+
+* Added [#10](https://github.com/gerardroche/sublime-color-scheme-unit/issues/10): Test output in new tab like BuildView
+
 ## [1.8.1] - 2017-10-06
 
 ### Fixed

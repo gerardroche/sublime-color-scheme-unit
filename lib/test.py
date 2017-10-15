@@ -51,7 +51,18 @@ class TestOutputPanel():
     def __init__(self, name, window):
         self.window = window
         self.name = name
-        self.view = window.create_output_panel(name)
+        active_view = window.active_view()
+
+        if active_view and active_view.settings().get('color_scheme_unit.strategy') == 'view':
+            for view in window.views():
+                if view.name() == name:
+                    view.close()
+
+            self.view = window.new_file()
+            self.view.set_name(name)
+            self.view.set_scratch(True)
+        else:
+            self.view = window.create_output_panel(name)
 
         settings = self.view.settings()
         settings.set('result_file_regex', '^(.+):([0-9]+):([0-9]+)$')
@@ -64,9 +75,8 @@ class TestOutputPanel():
         if int(version()) > 3083:
             self.view.assign_syntax('Packages/' + _package_name + '/res/text-ui-result.sublime-syntax')
 
-        view = window.active_view()
-        if view:
-            color_scheme = view.settings().get('color_scheme')
+        if active_view:
+            color_scheme = active_view.settings().get('color_scheme')
             if color_scheme:
                 settings.set('color_scheme', color_scheme)
 
