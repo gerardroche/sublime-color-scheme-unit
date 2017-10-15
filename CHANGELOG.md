@@ -1,10 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
-## Unreleased
+## [1.9.0] - 2017-10-15
 
 ### Added
 
 * Added [#10](https://github.com/gerardroche/sublime-color-scheme-unit/issues/10): Test output in new tab like BuildView
+* Added: Travis CI support
 
 ## [1.8.1] - 2017-10-06
 
@@ -298,6 +299,8 @@
 
 * Initial import
 
+[1.9.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.8.1...1.9.0
+[1.8.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.8.0...1.8.1
 [1.8.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.7.0...1.8.0
 [1.7.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.6.0...1.7.0
 [1.6.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.5.0...1.6.0
