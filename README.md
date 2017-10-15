@@ -234,6 +234,12 @@ require 'vendor/autoload.php';
 //                           ^ fg=#f8f8f2 fs=
 ```
 
+## CONTINUOUS INTEGRATION
+
+Example CI configurations can be found in the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) color scheme package.
+
+More documentation can be found in the [UnitTesting](https://github.com/randy3k/UnitTesting) documentation.
+
 ## CONTRIBUTING
 
 Your issue reports and pull requests are always welcome.
