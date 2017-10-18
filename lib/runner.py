@@ -10,10 +10,9 @@ from sublime import set_timeout_async
 from sublime import status_message
 from sublime import version
 
-from .color_scheme import ColorSchemeStyle
+from .color_scheme import ViewStyle
 from .coverage import Coverage
 from .result import ResultPrinter
-from .test import is_valid_color_scheme_test_file_name
 from .test import TestOutputPanel
 from .test import TestView
 
@@ -36,6 +35,13 @@ _color_test_assertion_compiled_pattern = re.compile(
     '(?: fs=(?P<fs>[^=]*)?)?'
     '(?: build\\>=(?P<build>[^=]*)?)?'
     '$')
+
+
+def is_valid_color_scheme_test_file_name(file_name):
+    if not file_name:
+        return False
+
+    return bool(re.match('^color_scheme_test.*\.[a-zA-Z0-9]+$', os.path.basename(file_name)))
 
 
 def get_color_scheme_test_params_color_scheme(view):
@@ -87,7 +93,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
         test_view.view.settings().set('color_scheme', 'Packages/' + color_test_params.group('color_scheme'))
         test_view.set_content(test_content)
 
-        color_scheme_style = ColorSchemeStyle(test_view.view)
+        color_scheme_style = ViewStyle(test_view.view)
 
         # This is down here rather than at the start of the function so that the
         # on_test_start method will have extra information like the color

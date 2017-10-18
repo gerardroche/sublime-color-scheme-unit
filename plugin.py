@@ -1,16 +1,17 @@
 from sublime import Region
 from sublime import set_clipboard
 from sublime import status_message
+from sublime import version
 from sublime_plugin import EventListener
 from sublime_plugin import TextCommand
 from sublime_plugin import WindowCommand
 
-from .lib.color_scheme import ColorSchemeStyle
+from .lib.color_scheme import ViewStyle
 from .lib.generator import generate_color_scheme_assertions
 from .lib.generator import generate_syntax_assertions
 from .lib.runner import ColorSchemeUnit
 from .lib.runner import get_color_scheme_test_params_color_scheme
-from .lib.test import is_valid_color_scheme_test_file_name
+from .lib.runner import is_valid_color_scheme_test_file_name
 
 
 class ColorSchemeUnitInsertAssertions(TextCommand):

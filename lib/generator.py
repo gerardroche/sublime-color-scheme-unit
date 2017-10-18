@@ -1,11 +1,11 @@
-from .color_scheme import ColorSchemeStyle
+from .color_scheme import ViewStyle
 
 
 def generate_color_scheme_assertions(view, pt):
     line = view.line(pt)
 
     styles = []
-    color_scheme_style = ColorSchemeStyle(view)
+    color_scheme_style = ViewStyle(view)
     for i in range(line.begin(), line.end()):
         if view.substr(i) == ' ':
             styles.append('')

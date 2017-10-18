@@ -8,11 +8,10 @@ def load_color_scheme_resource(color_scheme):
     return plistlib.readPlistFromBytes(bytes(load_resource(color_scheme), 'UTF-8'))
 
 
-class ColorSchemeStyle():
+class ViewStyle():
 
     def __init__(self, view):
         self.view = view
-
         self.scope_style_cache = {}
 
         color_scheme = self.view.settings().get('color_scheme')

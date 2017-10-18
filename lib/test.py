@@ -1,19 +1,8 @@
 import os
-import re
 
 from sublime import packages_path
 from sublime import Region
 from sublime import version
-
-
-_package_name = __name__.split('.')[0]
-
-
-def is_valid_color_scheme_test_file_name(file_name):
-    if not file_name:
-        return False
-
-    return bool(re.match('^color_scheme_test.*\.[a-zA-Z0-9]+$', os.path.basename(file_name)))
 
 
 class TestView():
@@ -73,7 +62,7 @@ class TestOutputPanel():
         settings.set('scroll_past_end', False)
 
         if int(version()) > 3083:
-            self.view.assign_syntax('Packages/' + _package_name + '/res/text-ui-result.sublime-syntax')
+            self.view.assign_syntax('Packages/' + __name__.split('.')[0] + '/res/text-ui-result.sublime-syntax')
 
         if active_view:
             color_scheme = active_view.settings().get('color_scheme')
