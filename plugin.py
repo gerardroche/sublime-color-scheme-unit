@@ -1,7 +1,6 @@
 from sublime import Region
 from sublime import set_clipboard
 from sublime import status_message
-from sublime import version
 from sublime_plugin import EventListener
 from sublime_plugin import TextCommand
 from sublime_plugin import WindowCommand
@@ -53,7 +52,7 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
 
     def run(self, edit):
         scope = self.view.scope_name(self.view.sel()[-1].b)
-        style = ColorSchemeStyle(self.view).at_point(self.view.sel()[-1].b)
+        style = ViewStyle(self.view).at_point(self.view.sel()[-1].b)
 
         style_html = '<ul>'
         if 'foreground' in style:
