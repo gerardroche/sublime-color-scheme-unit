@@ -14,7 +14,7 @@ Many color schemes available for Sublime Text are not kept up to date, don't sup
 * [Commands](#commands)
 * [Keybindings](#key-bindings)
 * [Configuration](#configuration)
-* [Writing tests](#writing-tests)
+* [Testing](#testing)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
@@ -89,14 +89,45 @@ Key | Description | Type | Default
 }
 ```
 
-## Writing tests
+## Testing
 
-Color scheme tests are very similar to [syntax tests](https://www.sublimetext.com/docs/3/syntax.html).
+When building a color scheme, rather than manually checking the styles, you can define a color scheme test file that will do the checking for you:
 
-* Test must be saved within the Packages directory.
-* Tests musts use spaces (not tabs).
 
-Test file names must begin with: "color_scheme_test" e.g. `color_scheme_test.php`, `color_scheme_test.css`, and can also contain long descriptions e.g. `color_scheme_test_long_description.js`. Here is a suggested layout for your tests:
+```text
+// COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "C"
+
+#include <windows.h>
+// ^^^^^ fg=#f92672 fs=
+//       ^^^^^^^^^^^ fg=#e6db74 fs=
+
+typedef int myint;
+// ^^^^ fg=#66d9ef fs=italic
+//      ^^^ fg=#66d9ef fs=italic
+//          ^^^^^ fg=#a6e22e fs=
+//               ^ fg=#f8f8f2 fs=
+
+int main(int argc, char **argv) {}
+//  ^^^^ fg=#a6e22e fs=
+//      ^ fg=#f8f8f2 fs=
+//       ^^^ fg=#66d9ef fs=italic
+//           ^^^^ fg=#fd971f fs=italic
+//               ^ fg=#f8f8f2 fs=
+//                 ^^^^ fg=#66d9ef fs=italic
+//                      ^^ fg=#f92672 fs=
+//                        ^^^^ fg=#fd971f fs=italic
+//                            ^ fg=#f8f8f2 fs=
+//                              ^^ fg=#f8f8f2 fs=
+```
+
+Tests are similar to [syntax tests](https://www.sublimetext.com/docs/3/syntax.html). To make one, follow these rules:
+
+1. Ensure the file name starts with `color_scheme_test`.
+2. Ensure the file is saved somewhere within the Packages directory: next to the corresponding .sublime-syntax file is a good choice.
+3. Ensure the first line of the file starts with: `<comment_token> COLOR SCHEME TEST "<color_scheme>" [SKIP IF NOT ]"<syntax>"`. Note that `[SKIP IF NOT ]` is optional.
+4. Test files must use spaces (not tabs).
+
+Here is a suggested project layout:
 
     .
     ├── Name.tmTheme
@@ -107,39 +138,15 @@ Test file names must begin with: "color_scheme_test" e.g. `color_scheme_test.php
       ├── color_scheme_test.json
       └── ...
 
+Once the above conditions are met, running a test command from the Command Palette with a color scheme test or color scheme file selected will run the tests, and show the results in an output panel. *Next Result* (`F4`) can be used to navigate to the first failing test.
 
-The first line of test files must begin a test case definition in the format:
-
-```
-<comment_token> COLOR SCHEME TEST "<color_scheme>" [SKIP IF NOT ]"<syntax>"
-```
-
-Python example:
-
-```python
- # COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "Python" # flake8: noqa
-```
-
-PHP example:
-
-```php
-<?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "PHP"
-```
-
-Syntaxes can be optionally skipped if they do not exist:
-
-```php
-<?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" SKIP IF NOT "blade"
-```
-
-Each test in the syntax test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
+Each test in the color scheme test file must first start the comment token (established on the first line, it doesn't have to be a comment according to the syntax), and then a `^` token.
 
 There is one type of test:
 
 Caret: `^` this will test the following selector against the scope on the most recent non-test line. It will test it at the same column the `^` is in. Consecutive `^`'s will test each column against the selector. Assertions are specified after the caret.
 
 There are four types of assertions:
-
 
 Description | Examples
 ----------- | --------
@@ -148,9 +155,9 @@ Background color | `bg=#272822`
 Font style (space delimited list) | `fs=italic`, `fs=italic bold`
 Sublime Text build version (only `>=` constraint is supported) | `build>=3127`
 
-One or more assertions are required, and they **must be specified in the order**: `fg`, `bg`, `fs`, and `build`. Here are some examples of valid assertions:
+One or more assertions are required, and they *must be specified in the order*: `fg`, `bg`, `fs`, and `build`. Here are some examples of valid assertions:
 
-```python
+```text
 def somefunc(param1='', param2=0):
 # ^ fg=#66d9ef
 # ^ bg=#272822
@@ -164,7 +171,7 @@ def somefunc(param1='', param2=0):
 
 Explore the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) color scheme test suite for more examples.
 
-```python
+```text
 # COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "Python" # flake8: noqa
 
 import os
@@ -192,7 +199,7 @@ def f_name(arg1='', arg2=0):
         #           ^^^^^ fg=#e6db74 fs=
 ```
 
-```html
+```text
 <!-- COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "HTML" -->
 <!DOCTYPE html>
 <!-- ^^^^ fg=#f92672 fs= -->
@@ -227,7 +234,7 @@ def f_name(arg1='', arg2=0):
 <!-- ^ fg=#f92672 fs= -->
 ```
 
-```php
+```text
 <?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "PHP"
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -255,9 +262,7 @@ require 'vendor/autoload.php';
 
 ### Travis CI
 
-Linux example:
-
-```
+```yaml
 language: python
 
 env:
@@ -287,7 +292,7 @@ notifications:
 
 ### AppVeyor
 
-```
+```yaml
 environment:
     global:
         PACKAGE: "MonokaiFree"
