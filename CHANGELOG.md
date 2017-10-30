@@ -1,5 +1,16 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.10.0] - 2017-10-30
+
+### Added
+
+* Added [#18](https://github.com/gerardroche/sublime-color-scheme-unit/issues/18): Run ColorSchemeUnit when a package name is given
+* Added: AppVeyor support
+
+### Fixed
+
+* Fixed: Error running single test
+
 ## [1.9.0] - 2017-10-15
 
 ### Added
@@ -299,6 +310,7 @@
 
 * Initial import
 
+[1.10.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.9.0...1.10.0
 [1.9.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.8.1...1.9.0
 [1.8.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.8.0...1.8.1
 [1.8.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.7.0...1.8.0

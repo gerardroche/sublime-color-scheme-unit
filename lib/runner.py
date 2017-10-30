@@ -17,9 +17,9 @@ from .test import TestOutputPanel
 from .test import TestView
 
 
-__version__ = "1.9.0"
+__version__ = "1.10.0"
 
-__version_info__ = (1, 9, 0)
+__version_info__ = (1, 10, 0)
 
 _color_test_params_compiled_pattern = re.compile(
     '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'
@@ -35,6 +35,12 @@ _color_test_assertion_compiled_pattern = re.compile(
     '(?: fs=(?P<fs>[^=]*)?)?'
     '(?: build\\>=(?P<build>[^=]*)?)?'
     '$')
+
+
+def message(msg):
+    msg = 'ColorSchemeUnit: {}'.format(msg)
+    status_message(msg)
+    print(msg)
 
 
 def is_valid_color_scheme_test_file_name(file_name):
@@ -212,60 +218,62 @@ class ColorSchemeUnit():
     def results(self):
         self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
-    def run(self, file=None, output=None):
-        set_timeout_async(lambda: self._run(file, output))
+    def run(self, package=None, file=None, output=None, async=True):
+        if async:
+            set_timeout_async(lambda: self._run(package, file, output), 100)
+        else:
+            return self._run(package, file, output, async)
 
-    def _run(self, test_file, output=None):
+    def _run(self, package=None, file=None, output=None, async=True):
+        if package and file:
+            raise TypeError('package or file, but not both')
+
         unittesting = True if output else False
 
-        file_name = self.view.file_name()
-        if not file_name:
-            return status_message('ColorSchemeUnit: file not found')
-
-        file_name = os.path.realpath(file_name)
-
-        def normalise_resource_path(path):
-            if platform() == 'windows':
-                path = re.sub(r"/", r"\\", path)
-
-            return path
-
         tests = []
+
         resources = find_resources('color_scheme_test*')
-        for resource in resources:
-            package = resource.split('/')[1]
-            package_path = os.path.join(packages_path(), package)
-            if file_name.startswith(package_path):
-                tests_package_name = package
-                if test_file:
-                    resource_file = os.path.join(
-                        os.path.dirname(packages_path()),
-                        normalise_resource_path(resource)
-                    )
-                    if test_file == resource_file:
-                        tests.append(resource)
-                else:
+
+        if file:
+            file = os.path.realpath(file)
+            ppr = os.path.dirname(packages_path())
+            for resource in resources:
+                if file == os.path.realpath(os.path.join(ppr, resource)):
                     tests.append(resource)
+        else:
+            if not package:
+                package_file = self.view.file_name()
+                if not package_file:
+                    return message('package file not found')
+
+                package_file = os.path.realpath(package_file)
+                for resource_package in set(t.split('/')[1] for t in resources):
+                    if package_file.startswith(os.path.realpath(os.path.join(packages_path(), resource_package))):
+                        package = resource_package
+                        break
+
+                if not package:
+                    return message('package not found')
+
+            tests = [t for t in resources if t.startswith('Packages/%s/' % package)]
 
         if not len(tests):
-            print('ColorSchemeUnit: no test found')
-            print('ColorSchemeUnit: make sure you are running tests from within the packages directory')
-
-            return status_message(
-                'ColorSchemeUnit: no tests found; be sure run tests from within the packages directory')
+            return message('ColorSchemeUnit: no tests found; be sure run tests from within the packages directory')
 
         if not output:
             output = TestOutputPanel('color_scheme_unit', self.window)
+
         output.write("ColorSchemeUnit %s\n\n" % __version__)
         output.write("Runtime: %s build %s\n" % (platform(), version()))
-        output.write("Package: %s\n" % tests_package_name)
-        if test_file:
-            output.write("File:    %s\n" % test_file)
+        output.write("Package: %s\n" % package)
+
+        if file:
+            output.write("File:    %s\n" % file)
 
         output.write("\n")
 
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
-        code_coverage = Coverage(output, self.view.settings().get('color_scheme_unit.coverage'), test_file)
+        code_coverage = Coverage(output, self.view.settings().get('color_scheme_unit.coverage'), file)
 
         skipped = []
         errors = []
@@ -288,7 +296,7 @@ class ColorSchemeUnit():
         if not errors and not failures:
             code_coverage.on_tests_end()
 
-        if unittesting:
+        if unittesting and async:
             if errors or failures:
                 output.write('\n')
                 output.write("FAILED.\n")
@@ -299,3 +307,5 @@ class ColorSchemeUnit():
             output.write('\n')
             output.write("UnitTesting: Done.\n")
             output.close()
+
+        return not (errors or failures)

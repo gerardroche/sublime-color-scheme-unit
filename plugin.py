@@ -98,8 +98,8 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
 
 class ColorSchemeUnitTestSuiteCommand(WindowCommand):
 
-    def run(self):
-        ColorSchemeUnit(self.window).run()
+    def run(self, package=None):
+        ColorSchemeUnit(self.window).run(package)
 
 
 class ColorSchemeUnitTestFileCommand(WindowCommand):
