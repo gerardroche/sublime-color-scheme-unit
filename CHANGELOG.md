@@ -1,5 +1,11 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.10.1] - 2017-11-23
+
+### Fixed
+
+* Fixed: Workaround https://github.com/SublimeTextIssues/Core/issues/2044
+
 ## [1.10.0] - 2017-10-30
 
 ### Added
