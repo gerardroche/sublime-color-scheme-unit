@@ -236,8 +236,15 @@ class Coverage():
                         self.output.write('   * {}\n'.format(scope))
 
             self.output.write('\n')
-            self.output.write('   Information:\n\n')
+
             self.output.write('   Colors   {: >3} {}\n'.format(len(info['colors']), sorted(info['colors'])))
+
+            excluding_alpha = sorted(set([color[0:7] for color in info['colors']]))
+            self.output.write('            {: >3} {}\n'.format(len(excluding_alpha), sorted(excluding_alpha)))
+
+            including_alpha = sorted(set([color for color in info['colors'] if len(color) > 7]))
+            self.output.write('            {: >3} {}\n'.format(len(including_alpha), sorted(including_alpha)))
+
             self.output.write('   Styles   {: >3} {}\n'.format(len(info['styles']), sorted(info['styles'])))
             self.output.write('   Syntaxes {: >3} {}\n'.format(len(info['syntaxes']), sorted(info['syntaxes'])))
             self.output.write('   Scopes   {: >3} {}\n'.format(len(info['scopes']), sorted(info['scopes'])))
