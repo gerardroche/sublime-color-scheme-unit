@@ -1,9 +1,7 @@
 from sublime import Region
 from sublime import set_clipboard
 from sublime import status_message
-from sublime_plugin import EventListener
-from sublime_plugin import TextCommand
-from sublime_plugin import WindowCommand
+import sublime_plugin
 
 from .lib.color_scheme import ViewStyle
 from .lib.generator import generate_color_scheme_assertions
@@ -13,7 +11,7 @@ from .lib.runner import get_color_scheme_test_params_color_scheme
 from .lib.runner import is_valid_color_scheme_test_file_name
 
 
-class ColorSchemeUnitInsertAssertions(TextCommand):
+class ColorSchemeUnitInsertAssertions(sublime_plugin.TextCommand):
 
     def run(self, edit):
         pt = self.view.sel()[0].begin()
@@ -23,7 +21,7 @@ class ColorSchemeUnitInsertAssertions(TextCommand):
 
 
 # TODO Should this helper be in its own package because it's useful for syntax devs?
-class ColorSchemeUnitInsertSyntaxAssertions(TextCommand):
+class ColorSchemeUnitInsertSyntaxAssertions(sublime_plugin.TextCommand):
 
     def run(self, edit):
         pt = self.view.sel()[0].begin()
@@ -32,7 +30,7 @@ class ColorSchemeUnitInsertSyntaxAssertions(TextCommand):
         self.view.insert(edit, line.end(), '\n' + generate_syntax_assertions(self.view, pt))
 
 
-class ColorSchemeUnitSetColorSchemeOnLoadEvent(EventListener):
+class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
 
     def on_load_async(self, view):
         if is_valid_color_scheme_test_file_name(view.file_name()):
@@ -41,14 +39,14 @@ class ColorSchemeUnitSetColorSchemeOnLoadEvent(EventListener):
                 view.settings().set('color_scheme', color_scheme)
 
 
-class ColorSchemeUnitSetupTestFixtureCommand(TextCommand):
+class ColorSchemeUnitSetupTestFixtureCommand(sublime_plugin.TextCommand):
 
     def run(self, edit, content):
         self.view.erase(edit, Region(0, self.view.size()))
         self.view.insert(edit, 0, content)
 
 
-class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
+class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         scope = self.view.scope_name(self.view.sel()[-1].b)
@@ -96,19 +94,19 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(TextCommand):
         self.view.show_popup(html, max_width=512, max_height=700, on_navigate=lambda x: copy(self.view, x))
 
 
-class ColorSchemeUnitTestSuiteCommand(WindowCommand):
+class ColorSchemeUnitTestSuiteCommand(sublime_plugin.WindowCommand):
 
     def run(self, package=None):
         ColorSchemeUnit(self.window).run(package)
 
 
-class ColorSchemeUnitTestFileCommand(WindowCommand):
+class ColorSchemeUnitTestFileCommand(sublime_plugin.WindowCommand):
 
     def run(self):
         ColorSchemeUnit(self.window).run_file()
 
 
-class ColorSchemeUnitTestResultsCommand(WindowCommand):
+class ColorSchemeUnitTestResultsCommand(sublime_plugin.WindowCommand):
 
     def run(self):
         ColorSchemeUnit(self.window).results()
