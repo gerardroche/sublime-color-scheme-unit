@@ -22,14 +22,14 @@ __version__ = "1.10.0"
 __version_info__ = (1, 10, 0)
 
 _color_test_params_compiled_pattern = re.compile(
-    '^(?:(?:\<\?php )?(?://|#|\/\*|\<\!--|--)\s*)?'
+    '^(?:(?:\\<\\?php )?(?://|#|\\/\\*|\\<\\!--|--)\\s*)?'
     'COLOR SCHEME TEST "(?P<color_scheme>[^"]+)"'
     '(?:(?P<skip_if_not_syntax> SKIP IF NOT)? "(?P<syntax_name>[^"]+)")?'
-    '(?:\s*(?:--\>|\?\>|\*\/))?')
+    '(?:\\s*(?:--\\>|\\?\\>|\\*\\/))?')
 
 _color_test_assertion_compiled_pattern = re.compile(
-    '^\s*(//|#|\/\*|\<\!--|--)\s*'
-    '(?P<repeat>\^+)'
+    '^\\s*(//|#|\\/\\*|\\<\\!--|--)\\s*'
+    '(?P<repeat>\\^+)'
     '(?: fg=(?P<fg>[^ ]+)?)?'
     '(?: bg=(?P<bg>[^ ]+)?)?'
     '(?: fs=(?P<fs>[^=]*)?)?'
@@ -47,7 +47,7 @@ def is_valid_color_scheme_test_file_name(file_name):
     if not file_name:
         return False
 
-    return bool(re.match('^color_scheme_test.*\.[a-zA-Z0-9]+$', os.path.basename(file_name)))
+    return bool(re.match('^color_scheme_test.*\\.[a-zA-Z0-9]+$', os.path.basename(file_name)))
 
 
 def get_color_scheme_test_params_color_scheme(view):
