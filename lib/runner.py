@@ -73,15 +73,21 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             error = {'message': 'Invalid COLOR SCHEME TEST header', 'file': test_view.file_name(), 'row': 0, 'col': 0}
             raise RuntimeError(error['message'])
 
+        syntax_package_name = None
         syntax = color_test_params.group('syntax_name')
         if not syntax:
             syntax = os.path.splitext(test)[1].lstrip('.').upper()
+        elif '/' in syntax:
+            syntax_package_name, syntax = syntax.split('/')
 
         syntaxes = find_resources(syntax + '.sublime-syntax')
         if not syntaxes:
             syntaxes = find_resources(syntax + '.tmLanguage')
             if not syntaxes:
                 syntaxes = find_resources(syntax + '.hidden-tmLanguage')
+
+        if syntax_package_name:
+            syntaxes = [s for s in syntaxes if syntax_package_name in s]
 
         if len(syntaxes) > 1:
             error = {'message': 'More than one syntax found: {}'.format(syntaxes), 'file': test_view.file_name(), 'row': 0, 'col': 0}  # noqa: E501

@@ -15,7 +15,6 @@ Many color schemes available for Sublime Text are not kept up to date, don't sup
 * [Keybindings](#key-bindings)
 * [Configuration](#configuration)
 * [Testing](#testing)
-* [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
 
@@ -72,6 +71,8 @@ Key | Description
 --- | -----------
 `F4` | Jump to Next Failure
 `Shift+F4` | Jump to Previous Failure
+
+*You can also use the [Test](https://github.com/gerardroche/sublime-test) plugin, which unifies ST testing plugin key bindings.*
 
 ## CONFIGURATION
 
@@ -169,7 +170,7 @@ def somefunc(param1='', param2=0):
 
 **Examples**
 
-Explore the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) color scheme test suite for more examples.
+An example testing the Python syntax in MonokaiFree color scheme.
 
 ```text
 # COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "Python" # flake8: noqa
@@ -198,6 +199,8 @@ def f_name(arg1='', arg2=0):
         #         ^^ fg=#ae81ff fs=
         #           ^^^^^ fg=#e6db74 fs=
 ```
+
+An example testing the HTML syntax in MonokaiFree color scheme.
 
 ```text
 <!-- COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "HTML" -->
@@ -234,6 +237,8 @@ def f_name(arg1='', arg2=0):
 <!-- ^ fg=#f92672 fs= -->
 ```
 
+An example testing the PHP syntax in MonokaiFree color scheme.
+
 ```text
 <?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" "PHP"
 
@@ -257,6 +262,41 @@ require 'vendor/autoload.php';
 //      ^^^^^^^^^^^^^^^^^^^^^ fg=#e6db74 fs=
 //                           ^ fg=#f8f8f2 fs=
 ```
+
+An example testing the Syntax Highlighting for Sass package SCSS syntax in MonokaiFree color scheme. This package is not provided by Sublime Text by default, so we've made it optional by specifying "SKIP IF NOT". Thus allows the tests to pass even if the package is not installed.
+
+```
+/* COLOR SCHEME TEST "MonokaiFree/MonokaiFree.tmTheme" SKIP IF NOT "Syntax Highlighting for Sass/SCSS"
+
+    Tests for Syntax Highlighting for Sass package:
+    https://packagecontrol.io/packages/Syntax%20Highlighting%20for%20Sass
+
+*/
+
+        /* This indented comment is to the preceding whitespace. */
+/* ^ fg=#f8f8f2 bg=#272822 fs= */
+
+    /* x */
+/*  ^^^^^^^ fg=#75715e bg=#272822 fs= */
+
+    body {}
+/*  ^^^^ fg=#f92672 fs= */
+/*       ^^ fg=#f8f8f2 fs= */
+
+    #id {}
+/*  ^^^ fg=#fd971f fs= */
+/*      ^^ fg=#f8f8f2 fs= */
+
+    .class {}
+/*  ^^^^^^ fg=#a6e22e fs= */
+/*         ^^ fg=#f8f8f2 fs= */
+
+    @font-face {}
+/*  ^^^^^^^^^^ fg=#f92672 fs= */
+/*             ^^ fg=#f8f8f2 fs= */
+```
+
+Explore the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) color scheme test suite for detailed examples.
 
 ## CONTINUOUS INTEGRATION
 
@@ -314,10 +354,6 @@ test_script:
 More documentation can be found in the [UnitTesting](https://github.com/randy3k/UnitTesting) documentation.
 
 You can also explore the [MonokaiFree](https://github.com/gerardroche/sublime-monokai-free) for example usage.
-
-## CONTRIBUTING
-
-Your issue reports and pull requests are always welcome.
 
 ## CHANGELOG
 
