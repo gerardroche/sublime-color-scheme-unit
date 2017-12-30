@@ -24,6 +24,8 @@ class ViewStyle():
                 self.default_styles.update(plist_settings_dict['settings'])
 
     def at_point(self, point):
+        # scope_name() needs to striped due to a bug in ST:
+        # See https://github.com/SublimeTextIssues/Core/issues/657.
         scope = self.view.scope_name(point).strip()
 
         if scope in self.scope_style_cache:

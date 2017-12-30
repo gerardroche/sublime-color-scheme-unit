@@ -24,6 +24,8 @@ def generate_syntax_assertions(view, pt):
 
     scopes = []
     for i in range(line.begin(), line.end()):
+        # scope_name() needs to striped due to a bug in ST:
+        # See https://github.com/SublimeTextIssues/Core/issues/657.
         scopes.append(view.scope_name(i).rstrip(' '))
 
     return _generate_assertions(scopes, view, pt)
