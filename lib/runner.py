@@ -114,8 +114,8 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
         code_coverage.on_test_start(test, test_view)
 
         consecutive_test_lines = 0
-        has_failed_assertion = False
         for line_number, line in enumerate(test_content.splitlines()):
+            has_failed_assertion = False
             assertion_params = _color_test_assertion_compiled_pattern.match(line.lower().rstrip(' -->').rstrip(' */'))
             if not assertion_params:
                 consecutive_test_lines = 0
