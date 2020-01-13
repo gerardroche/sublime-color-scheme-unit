@@ -1,14 +1,14 @@
 # COLOR SCHEME UNIT CHANGELOG
 
-## [1.10.2] - 2017-11-30
+### [1.10.3] - 2020-01-13
 
-### Fixed
+* Fixed: Consecutive failures
+
+## [1.10.2] - 2017-11-30
 
 * Fixed: Should be able to specify package name in syntax test parameter
 
 ## [1.10.1] - 2017-11-23
-
-### Fixed
 
 * Fixed: Workaround https://github.com/SublimeTextIssues/Core/issues/2044
 
@@ -322,6 +322,7 @@
 
 * Initial import
 
+[1.10.3]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.10.2...1.10.3
 [1.10.2]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.10.1...1.10.2
 [1.10.1]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.10.0...1.10.1
 [1.10.0]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.9.0...1.10.0
