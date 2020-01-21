@@ -1,6 +1,10 @@
 # COLOR SCHEME UNIT CHANGELOG
 
-### [1.10.3] - 2020-01-13
+## Unreleased - 2020-01-21
+
+* Fixed: Support for ST4 and Python 3.8
+
+## [1.10.3] - 2020-01-13
 
 * Fixed: Consecutive failures
 
