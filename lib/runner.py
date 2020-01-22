@@ -240,13 +240,14 @@ class ColorSchemeUnit():
     def results(self):
         self.window.run_command('show_panel', {'panel': 'output.color_scheme_unit'})
 
-    def run(self, package=None, file=None, output=None, _async=True):
-        if _async:
+    def run(self, package=None, file=None, output=None, **kwargs):
+        is_async = kwargs.get('async', True)
+        if is_async:
             set_timeout_async(lambda: self._run(package, file, output), 100)
         else:
-            return self._run(package, file, output, _async)
+            return self._run(package, file, output, is_async=is_async)
 
-    def _run(self, package=None, file=None, output=None, _async=True):
+    def _run(self, package=None, file=None, output=None, is_async=True):
         if package and file:
             raise TypeError('package or file, but not both')
 
@@ -318,7 +319,7 @@ class ColorSchemeUnit():
         if not errors and not failures:
             code_coverage.on_tests_end()
 
-        if unittesting and _async:
+        if unittesting and is_async:
             if errors or failures:
                 output.write('\n')
                 output.write("FAILED.\n")
