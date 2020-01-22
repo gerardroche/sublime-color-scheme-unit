@@ -1,5 +1,9 @@
 # COLOR SCHEME UNIT CHANGELOG
 
+## [1.10.6] - 2020-01-22
+
+* Fixed: Fix version number
+
 ## [1.10.5] - 2020-01-22
 
 * Fixed: Fix for ST4
@@ -330,6 +334,7 @@
 
 * Initial import
 
+[1.10.6]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.10.5...1.10.6
 [1.10.5]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.10.4...1.10.5
 [1.10.4]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.10.3...1.10.4
 [1.10.3]: https://github.com/gerardroche/sublime-color-scheme-unit/compare/1.10.2...1.10.3
