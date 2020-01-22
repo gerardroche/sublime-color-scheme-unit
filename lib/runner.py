@@ -17,9 +17,9 @@ from ColorSchemeUnit.lib.test import TestOutputPanel
 from ColorSchemeUnit.lib.test import TestView
 
 
-__version__ = "1.10.0"
+__version__ = "1.10.5"
 
-__version_info__ = (1, 10, 0)
+__version_info__ = (1, 10, 5)
 
 _color_test_params_compiled_pattern = re.compile(
     '^(?:(?:\\<\\?php )?(?://|#|\\/\\*|\\<\\!--|--)\\s*)?'
