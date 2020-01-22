@@ -10,11 +10,11 @@ from sublime import set_timeout_async
 from sublime import status_message
 from sublime import version
 
-from .color_scheme import ViewStyle
-from .coverage import Coverage
-from .result import ResultPrinter
-from .test import TestOutputPanel
-from .test import TestView
+from ColorSchemeUnit.lib.color_scheme import ViewStyle
+from ColorSchemeUnit.lib.coverage import Coverage
+from ColorSchemeUnit.lib.result import ResultPrinter
+from ColorSchemeUnit.lib.test import TestOutputPanel
+from ColorSchemeUnit.lib.test import TestView
 
 
 __version__ = "1.10.0"
@@ -57,8 +57,8 @@ def get_color_scheme_test_params_color_scheme(view):
 
 
 def run_color_scheme_test(test, window, result_printer, code_coverage):
-    skip = False
-    error = False
+    skip = {}  # type: dict
+    error = {}  # type: dict
     failures = []
     assertion_count = 0
 
@@ -70,8 +70,12 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
 
         color_test_params = _color_test_params_compiled_pattern.match(test_content)
         if not color_test_params:
-            error = {'message': 'Invalid COLOR SCHEME TEST header', 'file': test_view.file_name(), 'row': 0, 'col': 0}
-            raise RuntimeError(error['message'])
+            err_msg = 'Invalid COLOR SCHEME TEST header'
+            error['message'] = err_msg
+            error['file'] = test_view.file_name()
+            error['row'] = 0
+            error['col'] = 0
+            raise RuntimeError(err_msg)
 
         syntax_package_name = None
         syntax = color_test_params.group('syntax_name')
@@ -90,16 +94,28 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             syntaxes = [s for s in syntaxes if syntax_package_name in s]
 
         if len(syntaxes) > 1:
-            error = {'message': 'More than one syntax found: {}'.format(syntaxes), 'file': test_view.file_name(), 'row': 0, 'col': 0}  # noqa: E501
-            raise RuntimeError(error['message'])
+            err_msg = 'More than one syntax found: {}'.format(syntaxes)
+            error['message'] = err_msg
+            error['file'] = test_view.file_name()
+            error['row'] = 0
+            error['col'] = 0
+            raise RuntimeError(err_msg)
 
         if len(syntaxes) != 1:
             if color_test_params.group('skip_if_not_syntax'):
-                skip = {'message': 'Syntax not found: {}'.format(syntax), 'file': test_view.file_name(), 'row': 0, 'col': 0}  # noqa: E501
-                raise RuntimeError(error['message'])
+                err_msg = 'Syntax not found: {}'.format(syntax)
+                skip['message'] = err_msg
+                skip['file'] = test_view.file_name()
+                skip['row'] = 0
+                skip['col'] = 0
+                raise RuntimeError(err_msg)
             else:
-                error = {'message': 'Syntax not found: {}'.format(syntax), 'file': test_view.file_name(), 'row': 0, 'col': 0}  # noqa: E501
-                raise RuntimeError(error['message'])
+                err_msg = 'Syntax not found: {}'.format(syntax)
+                error['message'] = err_msg
+                error['file'] = test_view.file_name()
+                error['row'] = 0
+                error['col'] = 0
+                raise RuntimeError(err_msg)
 
         test_view.view.assign_syntax(syntaxes[0])
         test_view.view.settings().set('color_scheme', 'Packages/' + color_test_params.group('color_scheme'))
@@ -281,9 +297,9 @@ class ColorSchemeUnit():
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
         code_coverage = Coverage(output, self.view.settings().get('color_scheme_unit.coverage'), file)
 
-        skipped = []
-        errors = []
-        failures = []
+        skipped = []  # type: list
+        errors = []  # type: list
+        failures = []  # type: list
         total_assertions = 0
 
         result_printer.on_tests_start(tests)

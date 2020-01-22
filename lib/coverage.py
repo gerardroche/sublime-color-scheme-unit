@@ -1,4 +1,4 @@
-from .color_scheme import load_color_scheme_resource
+from ColorSchemeUnit.lib.color_scheme import load_color_scheme_resource
 
 
 _default_syntaxes = [
@@ -135,7 +135,7 @@ class Coverage():
         if not self.enabled:
             return
 
-        cs_tested_syntaxes = {}
+        cs_tested_syntaxes = {}  # type: dict
         for test, info in self.tests_info.items():
             cs = info['color_scheme']
             s = info['syntax']

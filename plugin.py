@@ -3,12 +3,12 @@ from sublime import set_clipboard
 from sublime import status_message
 import sublime_plugin
 
-from .lib.color_scheme import ViewStyle
-from .lib.generator import generate_color_scheme_assertions
-from .lib.generator import generate_syntax_assertions
-from .lib.runner import ColorSchemeUnit
-from .lib.runner import get_color_scheme_test_params_color_scheme
-from .lib.runner import is_valid_color_scheme_test_file_name
+from ColorSchemeUnit.lib.color_scheme import ViewStyle
+from ColorSchemeUnit.lib.generator import generate_color_scheme_assertions
+from ColorSchemeUnit.lib.generator import generate_syntax_assertions
+from ColorSchemeUnit.lib.runner import ColorSchemeUnit
+from ColorSchemeUnit.lib.runner import get_color_scheme_test_params_color_scheme
+from ColorSchemeUnit.lib.runner import is_valid_color_scheme_test_file_name
 
 
 class ColorSchemeUnitInsertAssertions(sublime_plugin.TextCommand):

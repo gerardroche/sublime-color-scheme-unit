@@ -18,7 +18,8 @@ class ViewStyle():
 
         self.plist = load_color_scheme_resource(color_scheme)
 
-        self.default_styles = {}
+        self.default_styles = {}  # type: dict
+
         for plist_settings_dict in self.plist['settings']:
             if 'scope' not in plist_settings_dict:
                 self.default_styles.update(plist_settings_dict['settings'])
