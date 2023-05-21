@@ -45,14 +45,13 @@ Command Palette | Command | Description
 `:InsertAssertions` | `color_scheme_unit_insert_assertions` | Inserts assertions for the current line.
 `:InsertSyntaxAssertions` | `color_scheme_unit_insert_syntax_assertions` | Inserts syntax assertions for the current line.
 
-
 ## KEY BINDINGS
 
 *The [Test](https://github.com/gerardroche/sublime-test) plugin is recommended to unify testing commands and keymaps.*
 
-Add your preferred key bindings:
+Add your preferred key bindings.
 
-`Menu > Preferences > Key Bindings`
+**Menu → Preferences → Key Bindings**
 
 ```json
 [
@@ -81,7 +80,7 @@ Key | Description | Type | Default
 `color_scheme_unit.debug` | Enable debug messages. | `boolean` | `false`
 `color_scheme_unit.coverage` | Enable coverage report. | `boolean` | `true`
 
-`Menu > Preferences > Settings - User`
+**Menu → Preferences → Settings - User**
 
 ```json
 {

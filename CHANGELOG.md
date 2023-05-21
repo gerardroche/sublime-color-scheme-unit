@@ -111,7 +111,7 @@
 
 * The default key bindings have been removed, instead add your preferred key bindings:
 
-  `Menu > Preferences > Key Bindings`
+  **Menu → Preferences → Key Bindings**
 
   ```json
   [
