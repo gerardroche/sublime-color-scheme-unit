@@ -360,4 +360,4 @@ See [CHANGELOG.md](CHANGELOG.md).
 
 ## LICENSE
 
-Released under the [BSD 3-Clause License](LICENSE).
+Released under the [GPL-3.0-or-later License](LICENSE).
