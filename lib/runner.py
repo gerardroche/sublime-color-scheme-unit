@@ -17,9 +17,9 @@ from ColorSchemeUnit.lib.test import TestOutputPanel
 from ColorSchemeUnit.lib.test import TestView
 
 
-__version__ = "1.10.6"
+__version__ = "2.0.0"
 
-__version_info__ = (1, 10, 6)
+__version_info__ = (2, 0, 0)
 
 _color_test_params_compiled_pattern = re.compile(
     '^(?:(?:\\<\\?php )?(?://|#|\\/\\*|\\<\\!--|--)\\s*)?'
@@ -51,9 +51,28 @@ def is_valid_color_scheme_test_file_name(file_name):
 
 
 def get_color_scheme_test_params_color_scheme(view):
-    params = _color_test_params_compiled_pattern.match(view.substr(Region(0, view.size())))
+    params = get_color_scheme_test_params(view.substr(Region(0, view.size())))
     if params:
-        return 'Packages/' + params.group('color_scheme')
+        return params['color_scheme']
+
+
+def get_color_scheme_test_params(test_content: str):
+    color_test_params = _color_test_params_compiled_pattern.match(test_content)
+    if color_test_params:
+        if color_test_params['color_scheme'].endswith('.sublime-color-scheme'):
+            color_scheme = color_test_params.group('color_scheme')
+            if '/' in color_scheme and not color_scheme.startswith('Packages'):
+                color_scheme = 'Packages/' + color_scheme
+        else:
+            color_scheme = 'Packages/' + color_test_params.group('color_scheme')
+
+        return {
+            'syntax_name': color_test_params.group('syntax_name'),
+            'skip_if_not_syntax': color_test_params.group('skip_if_not_syntax'),
+            'color_scheme': color_scheme
+        }
+
+    return None
 
 
 def run_color_scheme_test(test, window, result_printer, code_coverage):
@@ -68,7 +87,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
     try:
         test_content = load_resource(test)
 
-        color_test_params = _color_test_params_compiled_pattern.match(test_content)
+        color_test_params = get_color_scheme_test_params(test_content)
         if not color_test_params:
             err_msg = 'Invalid COLOR SCHEME TEST header'
             error['message'] = err_msg
@@ -78,7 +97,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             raise RuntimeError(err_msg)
 
         syntax_package_name = None
-        syntax = color_test_params.group('syntax_name')
+        syntax = color_test_params['syntax_name']
         if not syntax:
             syntax = os.path.splitext(test)[1].lstrip('.').upper()
         elif '/' in syntax:
@@ -102,7 +121,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             raise RuntimeError(err_msg)
 
         if len(syntaxes) != 1:
-            if color_test_params.group('skip_if_not_syntax'):
+            if color_test_params['skip_if_not_syntax']:
                 err_msg = 'Syntax not found: {}'.format(syntax)
                 skip['message'] = err_msg
                 skip['file'] = test_view.file_name()
@@ -118,7 +137,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
                 raise RuntimeError(err_msg)
 
         test_view.view.assign_syntax(syntaxes[0])
-        test_view.view.settings().set('color_scheme', 'Packages/' + color_test_params.group('color_scheme'))
+        test_view.view.settings().set('color_scheme', color_test_params['color_scheme'])
         test_view.set_content(test_content)
 
         color_scheme_style = ViewStyle(test_view.view)
@@ -178,6 +197,9 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
                             actual[style] = actual_styles[style]
                     else:
                         actual[style] = ''
+
+                if 'fontStyle' in actual and actual['fontStyle'] == 'none':
+                    actual['fontStyle'] = ''
 
                 if actual != expected:
                     has_failed_assertion = True

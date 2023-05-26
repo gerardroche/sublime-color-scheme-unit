@@ -1,0 +1,39 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+env:
+  PACKAGE: ColorSchemeUnit
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        st-version: [3, 4]
+        os: ["ubuntu-latest", "macOS-latest", "windows-latest"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup
+        uses: SublimeText/UnitTesting/actions/setup@v1
+        with:
+          sublime-text-version: ${{ matrix.st-version }}
+          package-name: ${{ env.PACKAGE }}
+
+      - name: Tests
+        uses: SublimeText/UnitTesting/actions/run-tests@v1
+        with:
+          coverage: ${{ matrix.os == 'ubuntu-latest' && matrix.st-version == 3 }}
+          codecov-upload: ${{ matrix.os == 'ubuntu-latest' && matrix.st-version == 3 }}
+
+      - name: Syntax Tests
+        uses: SublimeText/UnitTesting/actions/run-syntax-tests@v1
+
+      - name: Coding guidelines check
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.st-version == 4 }}
+        run: |
+          pip3 install flake8 flake8-docstrings pydocstyle
+          flake8 -v

@@ -1,0 +1,34 @@
+{
+    "name": "ColorSchemeUnitTest",
+    "globals":
+    {
+        "background": "#111111",
+        "foreground": "#eeeeee"
+    },
+    "rules":
+    [
+        {
+            "scope": "comment",
+            "foreground": "#75715e"
+        },
+        {
+            "scope": "keyword.control",
+            "font_style": "italic"
+        },
+        {
+            "scope": "constant",
+            "foreground": "#800080",
+            "font_style": "none"
+        },
+        {
+            "scope": "keyword.operator",
+            "foreground": "#ff0000",
+            "font_style": "bold"
+        },
+        {
+            "scope": "string",
+            "foreground": "#ffff00",
+            "font_style": "bold italic"
+        }
+    ]
+}

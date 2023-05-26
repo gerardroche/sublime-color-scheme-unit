@@ -1,3 +1,5 @@
+import html
+
 from sublime import Region
 from sublime import set_clipboard
 from sublime import status_message
@@ -5,32 +7,21 @@ import sublime_plugin
 
 from ColorSchemeUnit.lib.color_scheme import ViewStyle
 from ColorSchemeUnit.lib.generator import generate_color_scheme_assertions
-from ColorSchemeUnit.lib.generator import generate_syntax_assertions
 from ColorSchemeUnit.lib.runner import ColorSchemeUnit
 from ColorSchemeUnit.lib.runner import get_color_scheme_test_params_color_scheme
 from ColorSchemeUnit.lib.runner import is_valid_color_scheme_test_file_name
 
 
-class ColorSchemeUnitInsertAssertions(sublime_plugin.TextCommand):
+class ColorSchemeUnitGenerateAssertions(sublime_plugin.TextCommand):
 
     def run(self, edit):
-        pt = self.view.sel()[0].begin()
-        line = self.view.line(pt)
-
-        self.view.insert(edit, line.end(), '\n' + generate_color_scheme_assertions(self.view, pt))
-
-
-# TODO Should this helper be in its own package because it's useful for syntax devs?
-class ColorSchemeUnitInsertSyntaxAssertions(sublime_plugin.TextCommand):
-
-    def run(self, edit):
-        pt = self.view.sel()[0].begin()
-        line = self.view.line(pt)
-
-        self.view.insert(edit, line.end(), '\n' + generate_syntax_assertions(self.view, pt))
+        point = self.view.sel()[0].begin()
+        line = self.view.line(point)
+        assertions = generate_color_scheme_assertions(self.view, point)
+        self.view.insert(edit, line.end(), '\n' + assertions)
 
 
-class ColorSchemeUnitSetColorSchemeOnLoadEvent(sublime_plugin.EventListener):
+class ColorSchemeUnitEvents(sublime_plugin.EventListener):
 
     def on_load_async(self, view):
         if is_valid_color_scheme_test_file_name(view.file_name()):
@@ -46,11 +37,13 @@ class ColorSchemeUnitSetupTestFixtureCommand(sublime_plugin.TextCommand):
         self.view.insert(edit, 0, content)
 
 
-class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
+class ColorSchemeUnitShowStyles(sublime_plugin.WindowCommand):
 
-    def run(self, edit):
-        scope = self.view.scope_name(self.view.sel()[-1].b)
-        style = ViewStyle(self.view).at_point(self.view.sel()[-1].b)
+    def run(self):
+        view = self.window.active_view()
+        point = view.sel()[-1].b
+        scope = view.scope_name(point)
+        style = ViewStyle(view).at_point(point)
 
         style_html = '<ul>'
         if 'foreground' in style:
@@ -63,10 +56,10 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
             style_html += "<li>fontStyle: <a href=\"{0}\">{0}</a></li>".format(style['fontStyle'].strip('#'))
             del style['fontStyle']
         for x in sorted(style):
-            style_html += "<li>{0}: <a href=\"{1}\">{1}</a></li>".format(x, style[x])
+            style_html += "<li>{0}: <a href=\"{1}\">{1}</a></li>".format(x, html.escape(str(style[x])))
         style_html += '</ul>'
 
-        html = """
+        html_str = """
             <body id=show-scope>
                 <style>
                     p {
@@ -91,22 +84,20 @@ class ColorSchemeUnitShowScopeNameAndStylesCommand(sublime_plugin.TextCommand):
             view.hide_popup()
             status_message('Scope name copied to clipboard')
 
-        self.view.show_popup(html, max_width=512, max_height=700, on_navigate=lambda x: copy(self.view, x))
+        view.show_popup(
+            html_str,
+            max_width=512,
+            max_height=700,
+            on_navigate=lambda x: copy(view, x))
 
 
-class ColorSchemeUnitTestSuiteCommand(sublime_plugin.WindowCommand):
+class ColorSchemeUnitTestSuite(sublime_plugin.WindowCommand):
 
     def run(self, package=None):
         ColorSchemeUnit(self.window).run(package)
 
 
-class ColorSchemeUnitTestFileCommand(sublime_plugin.WindowCommand):
+class ColorSchemeUnitTestFile(sublime_plugin.WindowCommand):
 
     def run(self):
         ColorSchemeUnit(self.window).run_file()
-
-
-class ColorSchemeUnitTestResultsCommand(sublime_plugin.WindowCommand):
-
-    def run(self):
-        ColorSchemeUnit(self.window).results()

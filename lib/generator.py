@@ -19,18 +19,6 @@ def generate_color_scheme_assertions(view, pt):
     return _generate_assertions(styles, view, pt)
 
 
-def generate_syntax_assertions(view, pt):
-    line = view.line(pt)
-
-    scopes = []
-    for i in range(line.begin(), line.end()):
-        # scope_name() needs to striped due to a bug in ST:
-        # See https://github.com/SublimeTextIssues/Core/issues/657.
-        scopes.append(view.scope_name(i).rstrip(' '))
-
-    return _generate_assertions(scopes, view, pt)
-
-
 def _generate_assertions(items, view, pt):
     comment_start, comment_end = _get_comment_markers(view, pt)
 
