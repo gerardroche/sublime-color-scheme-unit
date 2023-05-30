@@ -59,7 +59,7 @@ def get_color_scheme_test_params_color_scheme(view):
 def get_color_scheme_test_params(test_content: str):
     color_test_params = _color_test_params_compiled_pattern.match(test_content)
     if color_test_params:
-        if color_test_params['color_scheme'].endswith('.sublime-color-scheme'):
+        if color_test_params.group('color_scheme').endswith('.sublime-color-scheme'):
             color_scheme = color_test_params.group('color_scheme')
             if '/' in color_scheme and not color_scheme.startswith('Packages'):
                 color_scheme = 'Packages/' + color_scheme
