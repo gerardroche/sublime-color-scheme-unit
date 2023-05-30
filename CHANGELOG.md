@@ -1,5 +1,10 @@
 # ColorSchemeUnit Changelog
 
+## 2.0.1 - 2023-05-30
+
+* Disable coverage reports by default
+* Fix coverage report for sublime-color-scheme
+
 ## 2.0.0 - 2023-05-30
 
 ### Added
