@@ -2,12 +2,7 @@
 
 A testing framework for Sublime Text color schemes.
 
-<p>
-    <a href="https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml"><img alt="Continuous Integration" src="https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml/badge.svg?branch=master"></a>
-    <a href="https://ci.appveyor.com/project/gerardroche/sublime-color-scheme-unit/branch/master"><img alt="Build status" src="https://img.shields.io/appveyor/ci/gerardroche/sublime-color-scheme-unit/master.svg?style=flat-square&label=appveyor"></a>
-    <a href="https://codecov.io/gh/gerardroche/sublime-color-scheme-unit"><img alt="Codecov" src="https://codecov.io/gh/gerardroche/sublime-color-scheme-unit/branch/master/graph/badge.svg?token=PAaE5LdlOR"></a>
-    <a href="https://packagecontrol.io/packages/ColorSchemeUnit"><img alt="Downloads" src="https://img.shields.io/packagecontrol/dt/ColorSchemeUnit.svg?style=flat-square"></a>
-</p>
+[![Continuous Integration](https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml/badge.svg)](https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml) [![Build status](https://ci.appveyor.com/api/projects/status/djk37txaryaxagr1?svg=true)](https://ci.appveyor.com/project/gerardroche/sublime-color-scheme-unit) [![codecov](https://codecov.io/gh/gerardroche/sublime-color-scheme-unit/branch/master/graph/badge.svg?token=Ln3mldFyPv)](https://codecov.io/gh/gerardroche/sublime-color-scheme-unit) ![Package Control](https://img.shields.io/packagecontrol/dt/ColorSchemeUnit)
 
 ![ColorSchemeUnit](screenshot.png)
 
