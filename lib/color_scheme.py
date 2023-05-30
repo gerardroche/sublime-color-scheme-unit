@@ -81,13 +81,13 @@ class ColorSchemeResource():
 
     def __init__(self, view):
         self.color_scheme = view.settings().get('color_scheme')
-        self._content = {}
+        self._content = None
 
     def isLegacy(self) -> bool:
         return not _is_new_scheme(self.color_scheme)
 
     def content(self) -> dict:
-        if self._content == {}:
+        if self._content is None:
             self._content = load_color_scheme_resource(self.color_scheme)
 
         return self._content
