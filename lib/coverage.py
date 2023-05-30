@@ -1,3 +1,4 @@
+from ColorSchemeUnit.lib.color_scheme import is_new_scheme
 from ColorSchemeUnit.lib.color_scheme import load_color_scheme_resource
 
 
@@ -123,6 +124,9 @@ class Coverage():
         self.tests_info = {}
 
     def on_test_start(self, test, data):
+        if not self.enabled:
+            return
+
         settings = data.settings()
         color_scheme = settings.get('color_scheme')
         syntax = settings.get('syntax')
@@ -151,34 +155,51 @@ class Coverage():
 
         report_data = []
         for color_scheme, syntaxes in cs_tested_syntaxes.items():
-            color_scheme_plist = load_color_scheme_resource(color_scheme)
+            color_scheme_content = load_color_scheme_resource(color_scheme)
             syntaxes = set(syntaxes)
             colors = set()
             scopes = set()
             styles = set()
 
-            for struct in color_scheme_plist['settings']:
-                if 'scope' in struct:
-                    for scope in struct['scope'].split(','):
+            if is_new_scheme(color_scheme):
+                for k, v in color_scheme_content['globals'].items():
+                    if v.startswith('#'):
+                        colors.add(v.lower())
+                    else:
+                        styles.add(v)
+                for rule in color_scheme_content['rules']:
+                    for scope in rule['scope'].split(','):
                         scopes.add(scope.strip())
-                else:
+
+                    for k, v in rule.items():
+                        if v.startswith('#'):
+                            colors.add(v.lower())
+                        else:
+                            styles.add(v)
+
+            else:
+                for struct in color_scheme_content['settings']:
+                    if 'scope' in struct:
+                        for scope in struct['scope'].split(','):
+                            scopes.add(scope.strip())
+                    else:
+                        if 'settings' in struct:
+                            for k, v in struct['settings'].items():
+                                if v.startswith('#'):
+                                    colors.add(v.lower())
+                                else:
+                                    styles.add(v)
+
                     if 'settings' in struct:
-                        for k, v in struct['settings'].items():
-                            if v.startswith('#'):
-                                colors.add(v.lower())
-                            else:
-                                styles.add(v)
+                        if 'foreground' in struct['settings']:
+                            colors.add(struct['settings']['foreground'].lower())
 
-                if 'settings' in struct:
-                    if 'foreground' in struct['settings']:
-                        colors.add(struct['settings']['foreground'].lower())
+                        if 'background' in struct['settings']:
+                            colors.add(struct['settings']['background'].lower())
 
-                    if 'background' in struct['settings']:
-                        colors.add(struct['settings']['background'].lower())
-
-                    if 'fontStyle' in struct['settings']:
-                        if struct['settings']['fontStyle']:
-                            styles.add(struct['settings']['fontStyle'])
+                        if 'fontStyle' in struct['settings']:
+                            if struct['settings']['fontStyle']:
+                                styles.add(struct['settings']['fontStyle'])
 
             report_data.append({
                 'color_scheme': color_scheme,

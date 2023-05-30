@@ -16,13 +16,13 @@ def load_color_scheme_resource(color_scheme):
 
     resource = load_resource(color_scheme)
 
-    if not _is_new_scheme(color_scheme):
+    if not is_new_scheme(color_scheme):
         return plistlib.readPlistFromBytes(bytes(resource, 'UTF-8'))
 
     return sublime.decode_value(resource)
 
 
-def _is_new_scheme(color_scheme: str) -> bool:
+def is_new_scheme(color_scheme: str) -> bool:
     return color_scheme.endswith('.sublime-color-scheme') or color_scheme.endswith('.hidden-color-scheme')
 
 
@@ -84,7 +84,7 @@ class ColorSchemeResource():
         self._content = None
 
     def isLegacy(self) -> bool:
-        return not _is_new_scheme(self.color_scheme)
+        return not is_new_scheme(self.color_scheme)
 
     def content(self) -> dict:
         if self._content is None:
