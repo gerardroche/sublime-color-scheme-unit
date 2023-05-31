@@ -2,95 +2,23 @@ from ColorSchemeUnit.lib.color_scheme import is_new_scheme
 from ColorSchemeUnit.lib.color_scheme import load_color_scheme_resource
 
 
-_default_syntaxes = [
-    'Packages/R/Rd (R Documentation).sublime-syntax',
-    'Packages/R/R Console.sublime-syntax',
-    'Packages/R/R.sublime-syntax',
-    'Packages/ShellScript/Shell-Unix-Generic.sublime-syntax',
-    'Packages/Groovy/Groovy.sublime-syntax',
-    'Packages/Scala/Scala.sublime-syntax',
-    'Packages/Ruby/Ruby.sublime-syntax',
-    'Packages/Haskell/Haskell.sublime-syntax',
-    'Packages/Haskell/Literate Haskell.sublime-syntax',
-    'Packages/Textile/Textile.sublime-syntax',
-    'Packages/Makefile/Make Output.sublime-syntax',
-    'Packages/Makefile/Makefile.sublime-syntax',
+_MINIMAL_SYNTAXES = [
+
     'Packages/C++/C.sublime-syntax',
-    'Packages/C++/C++.sublime-syntax',
-    'Packages/HTML/HTML.sublime-syntax',
-    'Packages/Rails/HTML (Rails).sublime-syntax',
-    'Packages/Rails/SQL (Rails).sublime-syntax',
-    'Packages/Rails/Ruby on Rails.sublime-syntax',
-    'Packages/Rails/Ruby Haml.sublime-syntax',
-    'Packages/Rails/JavaScript (Rails).sublime-syntax',
-    'Packages/Objective-C/Objective-C++.sublime-syntax',
-    'Packages/Objective-C/Objective-C.sublime-syntax',
-    'Packages/PHP/PHP.sublime-syntax',
-    'Packages/PHP/PHP Source.sublime-syntax',
-    'Packages/Markdown/MultiMarkdown.sublime-syntax',
-    'Packages/Markdown/Markdown.sublime-syntax',
-    'Packages/Graphviz/DOT.sublime-syntax',
-    'Packages/ASP/HTML-ASP.sublime-syntax',
-    'Packages/ASP/ASP.sublime-syntax',
-    'Packages/LaTeX/LaTeX Log.sublime-syntax',
-    'Packages/LaTeX/Bibtex.sublime-syntax',
-    'Packages/LaTeX/LaTeX.sublime-syntax',
-    'Packages/LaTeX/TeX.sublime-syntax',
-    'Packages/JavaScript/Regular Expressions (JavaScript).sublime-syntax',
-    'Packages/JavaScript/JSON.sublime-syntax',
-    'Packages/JavaScript/JavaScript.sublime-syntax',
     'Packages/CSS/CSS.sublime-syntax',
-    'Packages/Matlab/Matlab.sublime-syntax',
-    'Packages/Rust/Cargo.sublime-syntax',
-    'Packages/Rust/Rust.sublime-syntax',
-    'Packages/Regular Expressions/RegExp.sublime-syntax',
-    'Packages/XML/XML.sublime-syntax',
-    'Packages/Lua/Lua.sublime-syntax',
-    'Packages/AppleScript/AppleScript.sublime-syntax',
-    'Packages/Java/Java.sublime-syntax',
-    'Packages/Java/JavaProperties.sublime-syntax',
-    'Packages/Java/JavaDoc.sublime-syntax',
-    'Packages/Java/Java Server Pages (JSP).sublime-syntax',
-    'Packages/ActionScript/ActionScript.sublime-syntax',
-    'Packages/SQL/SQL.sublime-syntax',
+    'Packages/HTML/HTML.sublime-syntax',
+    'Packages/JSON/JSON.sublime-syntax',
+    'Packages/JavaScript/JavaScript.sublime-syntax',
+    'Packages/Markdown/Markdown.sublime-syntax',
+    'Packages/PHP/PHP.sublime-syntax',
     'Packages/Python/Python.sublime-syntax',
-    'Packages/Python/Regular Expressions (Python).sublime-syntax',
-    'Packages/OCaml/camlp4.sublime-syntax',
-    'Packages/OCaml/OCamllex.sublime-syntax',
-    'Packages/OCaml/OCaml.sublime-syntax',
-    'Packages/OCaml/OCamlyacc.sublime-syntax',
-    'Packages/Erlang/HTML (Erlang).sublime-syntax',
-    'Packages/Erlang/Erlang.sublime-syntax',
-    'Packages/Diff/Diff.sublime-syntax',
-    'Packages/Go/Go.sublime-syntax',
-    'Packages/Pascal/Pascal.sublime-syntax',
-    'Packages/C#/Build.sublime-syntax',
-    'Packages/C#/C#.sublime-syntax',
-    'Packages/Perl/Perl.sublime-syntax',
-    'Packages/D/D.sublime-syntax',
-    'Packages/RestructuredText/reStructuredText.sublime-syntax',
-    'Packages/TCL/HTML (Tcl).sublime-syntax',
-    'Packages/TCL/Tcl.sublime-syntax',
-    'Packages/YAML/YAML.sublime-syntax',
-    'Packages/Batch File/Batch File.sublime-syntax',
-    'Packages/Clojure/Clojure.sublime-syntax',
-    'Packages/Lisp/Lisp.sublime-syntax',
+    'Packages/Ruby/Ruby.sublime-syntax',
+    'Packages/XML/XML.sublime-syntax',
+
 ]
 
-_minimal_syntaxes = [
-    'Packages/Ruby/Ruby.sublime-syntax',
-    'Packages/C++/C.sublime-syntax',
-    'Packages/HTML/HTML.sublime-syntax',
-    'Packages/PHP/PHP.sublime-syntax',
-    'Packages/Markdown/Markdown.sublime-syntax',
-    'Packages/JavaScript/JSON.sublime-syntax',
-    'Packages/JavaScript/JavaScript.sublime-syntax',
-    'Packages/CSS/CSS.sublime-syntax',
-    'Packages/XML/XML.sublime-syntax',
-    'Packages/Python/Python.sublime-syntax',
-]
+_MINIMAL_SCOPES = [
 
-_minimal_scopes = [
     'comment',
     'constant',
     'constant.character.escape',
@@ -102,16 +30,20 @@ _minimal_scopes = [
     'entity.other.attribute-name',
     'entity.other.inherited-class',
     'invalid',
+    'invalid.deprecated',
     'keyword',
     'keyword.control',
+    'keyword.declaration',
     'keyword.operator',
     'storage.modifier',
     'storage.type',
     'string',
+    'support',
     'variable',
     'variable.function',
     'variable.language',
     'variable.parameter',
+
 ]
 
 
@@ -135,6 +67,9 @@ class Coverage():
             'syntax': syntax
         }
 
+    def print(self, msg: str) -> None:
+        self.output.write(msg)
+
     def on_tests_end(self):
         if not self.enabled:
             return
@@ -150,125 +85,145 @@ class Coverage():
         if not cs_tested_syntaxes:
             return
 
-        self.output.write('\n')
-        self.output.write('Generating code coverage report...\n\n')
+        self.print('\n')
+        self.print('Generating code coverage report...\n')
+        self.print('\n')
 
         report_data = []
         for color_scheme, syntaxes in cs_tested_syntaxes.items():
             color_scheme_content = load_color_scheme_resource(color_scheme)
             syntaxes = set(syntaxes)
-            colors = set()
-            scopes = set()
-            styles = set()
 
             if is_new_scheme(color_scheme):
-                for k, v in color_scheme_content['globals'].items():
-                    if v.startswith('#'):
-                        colors.add(v.lower())
-                    else:
-                        styles.add(v)
-                for rule in color_scheme_content['rules']:
-                    for scope in rule['scope'].split(','):
-                        scopes.add(scope.strip())
-
-                    for k, v in rule.items():
-                        if v.startswith('#'):
-                            colors.add(v.lower())
-                        else:
-                            styles.add(v)
-
+                colors, scopes = _extract_new_scheme_info(color_scheme_content)
             else:
-                for struct in color_scheme_content['settings']:
-                    if 'scope' in struct:
-                        for scope in struct['scope'].split(','):
-                            scopes.add(scope.strip())
-                    else:
-                        if 'settings' in struct:
-                            for k, v in struct['settings'].items():
-                                if v.startswith('#'):
-                                    colors.add(v.lower())
-                                else:
-                                    styles.add(v)
-
-                    if 'settings' in struct:
-                        if 'foreground' in struct['settings']:
-                            colors.add(struct['settings']['foreground'].lower())
-
-                        if 'background' in struct['settings']:
-                            colors.add(struct['settings']['background'].lower())
-
-                        if 'fontStyle' in struct['settings']:
-                            if struct['settings']['fontStyle']:
-                                styles.add(struct['settings']['fontStyle'])
+                colors, scopes = _extract_old_scheme_info(color_scheme_content)
 
             report_data.append({
                 'color_scheme': color_scheme,
                 'syntaxes': syntaxes,
-                'default_syntaxes': set(_default_syntaxes) & syntaxes,
-                'minimal_syntaxes': set(_minimal_syntaxes) & syntaxes,
+                'minimal_syntaxes': set(_MINIMAL_SYNTAXES) & syntaxes,
                 'colors': colors,
                 'scopes': scopes,
-                'minimal_scopes': set(_minimal_scopes) & scopes,
-                'styles': styles
+                'minimal_scopes': set(_MINIMAL_SCOPES) & scopes,
             })
 
-        cs_col_w = max([len(x['color_scheme']) for x in report_data])
-        template = '{: <' + str(cs_col_w) + '} {: >20} {: >20}\n'
+            tpl_col_width = max([len(x['color_scheme']) for x in report_data])
+            tpl = '{: <' + str(tpl_col_width) + '} {: >20} {: >20}\n'
 
-        self.output.write(template.format('Name', 'Minimal Syntax Tests', 'Minimal Scopes'))
-        self.output.write(('-' * cs_col_w) + '------------------------------------------\n')
-        for info in sorted(report_data, key=lambda x: x['color_scheme']):
-            self.output.write(template.format(
-                info['color_scheme'],
-                '{} / {}'.format(len(info['minimal_syntaxes']), len(_minimal_syntaxes)),
-                '{} / {}'.format(len(info['minimal_scopes']), len(_minimal_scopes))
-            ))
+            self.print(tpl.format('Name', 'Minimal syntaxes', 'Minimal scopes'))
+            self.print(('-' * tpl_col_width) + '------------------------------------------\n')
+            for info in sorted(report_data, key=lambda x: x['color_scheme']):
+                self.print(tpl.format(
+                    info['color_scheme'],
+                    '{} / {}'.format(len(info['minimal_syntaxes']), len(_MINIMAL_SYNTAXES)),
+                    '{} / {}'.format(len(info['minimal_scopes']), len(_MINIMAL_SCOPES))))
 
-        self.output.write('\n')
+            self.print('\n')
 
         for i, info in enumerate(sorted(report_data, key=lambda x: x['color_scheme']), start=1):
-            self.output.write('{}) {}\n'.format(i, info['color_scheme']))
+            self.print('{}) {}\n'.format(i, info['color_scheme']))
 
-            syntaxes_not_covered = [s for s in sorted(_minimal_syntaxes) if s not in info['syntaxes']]
-            scopes_not_covered = [s for s in sorted(_minimal_scopes) if s not in info['scopes']]
-            total_notice_count = len(scopes_not_covered)
+            syntaxes_not_covered = [s for s in sorted(_MINIMAL_SYNTAXES) if s not in info['syntaxes']]
+            scopes_not_covered = [s for s in sorted(_MINIMAL_SCOPES) if s not in info['scopes']]
+            notice_count = len(scopes_not_covered)
             if not self.is_single_file:
-                total_notice_count += len(syntaxes_not_covered)
+                notice_count += len(syntaxes_not_covered)
 
-            if total_notice_count:
-                self.output.write('\n')
-                self.output.write('   There %s %s notice%s:\n' % (
-                    'is' if total_notice_count == 1 else 'are',
-                    total_notice_count,
-                    '' if total_notice_count == 1 else 's',
+            if notice_count:
+                self.print('\n')
+                self.print('   There %s %s notice%s:' % (
+                    'is' if notice_count == 1 else 'are',
+                    notice_count,
+                    '' if notice_count == 1 else 's',
                 ))
+                self.print('\n')
 
+                # Minimal syntaxes tested report
                 if syntaxes_not_covered and not self.is_single_file:
-                    self.output.write('\n')
-                    self.output.write('   Minimal syntaxes tests not covered ({}):\n\n'
-                                      .format(len(syntaxes_not_covered)))
+                    self.print('\n')
+                    self.print('   The following is a recommended minimal set of syntaxes that should be tested.\n\n')
                     for i, syntax in enumerate(syntaxes_not_covered, start=1):
-                        self.output.write('   * {}\n'.format(syntax))
+                        self.print('   {}/{}: {}\n'.format(i, len(syntaxes_not_covered), syntax))
 
+                # Minimal scopes tested report
                 if scopes_not_covered:
-                    self.output.write('\n')
-                    self.output.write('   Minimal scopes not covered ({}):\n\n'.format(len(scopes_not_covered)))
+                    self.print('\n')
+                    self.print('   The following is a recommended minimal set of scopes that your color scheme should support.\n')  # noqa: E501
+                    self.print('   See https://www.sublimetext.com/docs/scope_naming.html#minimal-scope-coverage\n\n')
                     for i, scope in enumerate(scopes_not_covered, start=1):
-                        self.output.write('   * {}\n'.format(scope))
+                        self.print('   {}/{}: {}\n'.format(i, len(scopes_not_covered), scope))
 
-            self.output.write('\n')
+            syntaxes_tested = sorted(info['syntaxes'])
+            colors_used = sorted(info['colors'])
+            colors_used_excl_alpha = sorted(set([color[0:7] for color in colors_used]))
+            colors_used_incl_alpha = sorted(set([color for color in colors_used if len(color) > 7]))
+            scopes_used = sorted(info['scopes'])
 
-            self.output.write('   Colors   {: >3} {}\n'.format(len(info['colors']), sorted(info['colors'])))
+            tpl = '   {: <18} | {:>3} | {}\n'
 
-            excluding_alpha = sorted(set([color[0:7] for color in info['colors']]))
-            self.output.write('            {: >3} {}\n'.format(len(excluding_alpha), sorted(excluding_alpha)))
+            self.print('\n')
+            self.print(tpl.format('Syntaxes tested', len(syntaxes_tested), sorted(syntaxes_tested)))
+            self.print(tpl.format('Colors used', len(colors_used), colors_used))
 
-            including_alpha = sorted(set([color for color in info['colors'] if len(color) > 7]))
-            self.output.write('            {: >3} {}\n'.format(len(including_alpha), sorted(including_alpha)))
+            if len(colors_used_excl_alpha) != len(colors_used):
+                self.print(tpl.format('Colors excl. alpha', len(colors_used_excl_alpha), colors_used_excl_alpha))
 
-            self.output.write('   Styles   {: >3} {}\n'.format(len(info['styles']), sorted(info['styles'])))
-            self.output.write('   Syntaxes {: >3} {}\n'.format(len(info['syntaxes']), sorted(info['syntaxes'])))
-            self.output.write('   Scopes   {: >3} {}\n'.format(len(info['scopes']), sorted(info['scopes'])))
-            self.output.write('\n')
+            if len(colors_used_incl_alpha):
+                self.print(tpl.format('Colors incl. alpha', len(colors_used_incl_alpha), colors_used_incl_alpha))
 
-        self.output.write('\n')
+            self.print(tpl.format('Scopes used', len(scopes_used), sorted(scopes_used)))
+            self.print('\n')
+
+        self.print('\n')
+
+
+def _extract_new_scheme_info(content: dict) -> tuple:
+    colors = set()
+
+    if 'globals' in content:
+        for k, v in content['globals'].items():
+            if v.startswith('#'):
+                colors.add(v.lower())
+    if 'variables' in content:
+        for k, v in content['variables'].items():
+            if v.startswith('#'):
+                colors.add(v.lower())
+    if 'rules' in content:
+        for rule in content['rules']:
+            for k, v in rule.items():
+                if v.startswith('#'):
+                    colors.add(v.lower())
+
+    scopes = set()
+
+    if 'rules' in content:
+        for rule in content['rules']:
+            for scope in rule['scope'].split(','):
+                scopes.add(scope.strip())
+
+    return (colors, scopes)
+
+
+def _extract_old_scheme_info(content: dict) -> tuple:
+    colors = set()
+    scopes = set()
+
+    for struct in content['settings']:
+        if 'scope' in struct:
+            for scope in struct['scope'].split(','):
+                scopes.add(scope.strip())
+        else:
+            if 'settings' in struct:
+                for k, v in struct['settings'].items():
+                    if v.startswith('#'):
+                        colors.add(v.lower())
+
+        if 'settings' in struct:
+            if 'foreground' in struct['settings']:
+                colors.add(struct['settings']['foreground'].lower())
+
+            if 'background' in struct['settings']:
+                colors.add(struct['settings']['background'].lower())
+
+    return (colors, scopes)

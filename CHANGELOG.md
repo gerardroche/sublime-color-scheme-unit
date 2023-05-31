@@ -1,5 +1,9 @@
 # ColorSchemeUnit Changelog
 
+## 2.1.0 - 2023-05-31
+
+* Coverage report improvements and fixes
+
 ## 2.0.1 - 2023-05-30
 
 * Disable coverage reports by default
