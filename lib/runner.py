@@ -47,28 +47,47 @@ def is_valid_color_scheme_test_file_name(file_name):
     if not file_name:
         return False
 
-    return bool(re.match('^color_scheme_test.*\\.[a-zA-Z0-9]+$', os.path.basename(file_name)))
+    return bool(re.match('^color_scheme_test.*\\.[a-zA-Z0-9-]+$', os.path.basename(file_name)))
 
 
-def get_color_scheme_test_params_color_scheme(view):
-    params = get_color_scheme_test_params(view.substr(Region(0, view.size())))
-    if params:
-        return params['color_scheme']
+def get_color_scheme_test_params_from_view(view):
+    return get_color_scheme_test_params(view.substr(Region(0, view.size())))
 
 
-def get_color_scheme_test_params(test_content: str):
-    color_test_params = _color_test_params_compiled_pattern.match(test_content)
-    if color_test_params:
-        if color_test_params.group('color_scheme').endswith('.sublime-color-scheme'):
-            color_scheme = color_test_params.group('color_scheme')
+def get_color_scheme_test_params(content: str, file_name=None):
+    test_params = _color_test_params_compiled_pattern.match(content)
+    if test_params:
+        syntax_name = test_params.group('syntax_name')
+        skip_if_not_syntax = test_params.group('skip_if_not_syntax')
+
+        if test_params.group('color_scheme').endswith('.sublime-color-scheme'):
+            color_scheme = test_params.group('color_scheme')
             if '/' in color_scheme and not color_scheme.startswith('Packages'):
                 color_scheme = 'Packages/' + color_scheme
         else:
-            color_scheme = 'Packages/' + color_test_params.group('color_scheme')
+            color_scheme = 'Packages/' + test_params.group('color_scheme')
+
+        syntax_package_name = None
+        syntax_name = test_params['syntax_name']
+        if not syntax_name and file_name is not None:
+            syntax_name = os.path.splitext(file_name)[1].lstrip('.').upper()
+        elif '/' in syntax_name:
+            syntax_package_name, syntax_name = syntax_name.split('/')
+
+        syntaxes = find_resources(syntax_name + '.sublime-syntax')
+        if not syntaxes:
+            syntaxes = find_resources(syntax_name + '.tmLanguage')
+            if not syntaxes:
+                syntaxes = find_resources(syntax_name + '.hidden-tmLanguage')
+
+        if syntax_package_name:
+            syntaxes = [s for s in syntaxes if syntax_package_name in s]
 
         return {
-            'syntax_name': color_test_params.group('syntax_name'),
-            'skip_if_not_syntax': color_test_params.group('skip_if_not_syntax'),
+            'syntaxes': syntaxes,
+            'syntax': syntaxes[0] if syntaxes else None,
+            'syntax_name': syntax_name,
+            'skip_if_not_syntax': skip_if_not_syntax,
             'color_scheme': color_scheme
         }
 
@@ -86,9 +105,9 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
 
     try:
         test_content = load_resource(test)
+        test_params = get_color_scheme_test_params(test_content, test)
 
-        color_test_params = get_color_scheme_test_params(test_content)
-        if not color_test_params:
+        if not test_params:
             err_msg = 'Invalid COLOR SCHEME TEST header'
             error['message'] = err_msg
             error['file'] = test_view.file_name()
@@ -96,48 +115,32 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             error['col'] = 0
             raise RuntimeError(err_msg)
 
-        syntax_package_name = None
-        syntax = color_test_params['syntax_name']
-        if not syntax:
-            syntax = os.path.splitext(test)[1].lstrip('.').upper()
-        elif '/' in syntax:
-            syntax_package_name, syntax = syntax.split('/')
-
-        syntaxes = find_resources(syntax + '.sublime-syntax')
-        if not syntaxes:
-            syntaxes = find_resources(syntax + '.tmLanguage')
-            if not syntaxes:
-                syntaxes = find_resources(syntax + '.hidden-tmLanguage')
-
-        if syntax_package_name:
-            syntaxes = [s for s in syntaxes if syntax_package_name in s]
-
-        if len(syntaxes) > 1:
-            err_msg = 'More than one syntax found: {}'.format(syntaxes)
+        if len(test_params['syntaxes']) > 1:
+            err_msg = 'More than one syntax found: {}'.format(test_params['syntaxes'])
             error['message'] = err_msg
             error['file'] = test_view.file_name()
             error['row'] = 0
             error['col'] = 0
             raise RuntimeError(err_msg)
 
-        if len(syntaxes) != 1:
-            if color_test_params['skip_if_not_syntax']:
-                err_msg = 'Syntax not found: {}'.format(syntax)
+        if len(test_params['syntaxes']) != 1:
+            if test_params['skip_if_not_syntax']:
+                err_msg = 'Syntax not found: {}'.format(test_params['syntax_name'])
                 skip['message'] = err_msg
                 skip['file'] = test_view.file_name()
                 skip['row'] = 0
                 skip['col'] = 0
                 raise RuntimeError(err_msg)
             else:
-                err_msg = 'Syntax not found: {}'.format(syntax)
+                err_msg = 'Syntax not found: {}'.format(test_params['syntax_name'])
                 error['message'] = err_msg
                 error['file'] = test_view.file_name()
                 error['row'] = 0
                 error['col'] = 0
                 raise RuntimeError(err_msg)
 
-        test_view.view.assign_syntax(syntaxes[0])
-        test_view.view.settings().set('color_scheme', color_test_params['color_scheme'])
+        test_view.view.assign_syntax(test_params['syntax'])
+        test_view.view.settings().set('color_scheme', test_params['color_scheme'])
         test_view.set_content(test_content)
 
         color_scheme_style = ViewStyle(test_view.view)

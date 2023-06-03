@@ -8,7 +8,7 @@ import sublime_plugin
 from ColorSchemeUnit.lib.color_scheme import ViewStyle
 from ColorSchemeUnit.lib.generator import generate_color_scheme_assertions
 from ColorSchemeUnit.lib.runner import ColorSchemeUnit
-from ColorSchemeUnit.lib.runner import get_color_scheme_test_params_color_scheme
+from ColorSchemeUnit.lib.runner import get_color_scheme_test_params_from_view
 from ColorSchemeUnit.lib.runner import is_valid_color_scheme_test_file_name
 
 
@@ -25,9 +25,10 @@ class ColorSchemeUnitEvents(sublime_plugin.EventListener):
 
     def on_load_async(self, view):
         if is_valid_color_scheme_test_file_name(view.file_name()):
-            color_scheme = get_color_scheme_test_params_color_scheme(view)
-            if color_scheme:
-                view.settings().set('color_scheme', color_scheme)
+            params = get_color_scheme_test_params_from_view(view)
+            if params:
+                view.settings().set('color_scheme', params['color_scheme'])
+                view.assign_syntax(params['syntax'])
 
 
 class ColorSchemeUnitSetupTestFixtureCommand(sublime_plugin.TextCommand):
