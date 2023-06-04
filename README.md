@@ -30,10 +30,10 @@ Key | Description
 
 Setting | Description | Type | Default
 :-------|:------------|:-----|:-------
-`color_scheme_unit.coverage` | Enable coverage report. | `boolean` | `true`
+`color_scheme_unit.coverage` | Enable coverage report. | `boolean` | `false`
 `color_scheme_unit.debug` | Enable debug messages. | `boolean` | `false`
 
-**Menu → Preferences → Settings**
+Menu → Preferences → Settings
 
 ```js
 "color_scheme_unit.debug": true,
@@ -42,8 +42,10 @@ Setting | Description | Type | Default
 
 ## Usage
 
+Tests are similar to Sublime Text [syntax tests](https://www.sublimetext.com/docs/3/syntax.html). Here is an
+
 ```c
-// COLOR SCHEME TEST "MonokaiFree/MonokaiFree.sublime-color-scheme" "C"
+// COLOR SCHEME TEST "MonokaiFree.sublime-color-scheme" "C"
 
 #include <windows.h>
 // ^^^^^ fg=#f92672 fs=
@@ -54,57 +56,63 @@ typedef int myint;
 //      ^^^ fg=#66d9ef fs=italic
 //          ^^^^^ fg=#a6e22e fs=
 //               ^ fg=#f8f8f2 fs=
-
-int main(int argc, char **argv) {}
-//  ^^^^ fg=#a6e22e fs=
-//      ^ fg=#f8f8f2 fs=
-//       ^^^ fg=#66d9ef fs=italic
-//           ^^^^ fg=#fd971f fs=italic
-//               ^ fg=#f8f8f2 fs=
-//                 ^^^^ fg=#66d9ef fs=italic
-//                      ^^ fg=#f92672 fs=
-//                        ^^^^ fg=#fd971f fs=italic
-//                            ^ fg=#f8f8f2 fs=
-//                              ^^ fg=#f8f8f2 fs=
 ```
 
-Tests are similar to Sublime Text [syntax tests](https://www.sublimetext.com/docs/3/syntax.html).
+### Tests
 
-### Test files
+#### File names
 
-Test files must start with "color_scheme_test" and the first line must start:
+Test must begin `color_scheme_test` e.g. `color_scheme_test.css`, `color_scheme_test.php`, `color_scheme_test.rb`.
 
-```
-<start-comment> COLOR SCHEME TEST "<color-scheme>" "<syntax>"
-```
-
-Example:
-
-```php
-// COLOR SCHEME TEST "Name/Name.sublime-color-scheme" "PHP"
-```
-
-Test files must also use spaces.
-
-To make the test conditional on the syntax existing use the `SKIP IF NOT` keyword. If the the syntax doesn't exist the test will be skipped instead of failing.
-
-```js
-// COLOR SCHEME TEST "Name/Name.sublime-color-scheme" SKIP IF NOT "Vue"
-```
-
-### Recommended package layout:
+The recommended package layout:
 
 ```sh
 .
-├── Name.sublime-color-scheme
+├── Monokai.sublime-color-scheme
 └── tests/
   ├── color_scheme_test.css
-  ├── color_scheme_test.html
-  ├── color_scheme_test.js
+  ├── color_scheme_test.php
+  ├── color_scheme_test.rb
   └── ...
 ```
 
-### Assertions
+#### Headers
+
+The first line must start:
+
+```
+<begin-comment> COLOR SCHEME TEST "<color-scheme>" "<syntax>"
+```
+
+Parameter | Description
+:-------- | :----------
+`<begin-comment>` | Any syntax comment e.g. `//`, `<!--`, `/**`, `#`, `--`
+`<color-scheme>` | Name or resource path to color scheme.
+`<syntax>` | Name or resource path to syntax.
+
+Examples:
+
+```rb
+// COLOR SCHEME TEST "MonokaiFree.sublime-color-scheme" "Ruby"
+```
+
+```rb
+// COLOR SCHEME TEST "Packages/MonokaiFree/MonokaiFree.sublime-color-scheme" "Ruby"
+```
+
+#### Conditional syntaxes
+
+If a syntax may not exist, e.g. testing third party syntax support, use the `SKIP IF NOT` keywords and if the the syntax doesn't exist the test will be skipped instead of failing.
+
+```rb
+// COLOR SCHEME TEST "Monokai.sublime-color-scheme" SKIP IF NOT "Vue"
+```
+
+#### Whitespace
+
+Test files must use spaces.
+
+#### Assertions
 
 Each assertion in the color scheme test file must first start the comment token, and then a `^` (caret) token. `^` this will assert against the scope on the most recent non-test line. It will test it at the same column as the `^`. Consecutive `^`'s will test each column. What to assert is specified after the caret.
 
@@ -113,9 +121,7 @@ Assertion | Example
 Foreground color | `fg=#f8f8f2`
 Background color | `bg=#272822`
 Font style (space delimited list) | `fs=italic`, `fs=italic bold`
-Sublime Text build version (only `>=` is supported) | `build>=3127`
-
-Assertions must be specified in the order: `fg`, `bg`, `fs`, `build`.
+Sublime Text build version (only `>=` constraint is supported) | `build>=3127`
 
 ```rb
 def somefunc(param1='', param2=0):
@@ -127,12 +133,12 @@ def somefunc(param1='', param2=0):
 # ^ fg=#66d9ef bg=#272822 fs=italic build>=3127
 ```
 
-See [MonokaiFree's](https://github.com/gerardroche/sublime-monokai-free/tests) extensive test suite to see examples.
+For more usage examples, the MonokaiFree color scheme has an [extensive test suite](https://github.com/gerardroche/sublime-monokai-free/tests).
 
-### Python example
+#### Python example
 
 ```py
-# COLOR SCHEME TEST "MonokaiFree/MonokaiFree.sublime-color-scheme" "Python" # flake8: noqa
+# COLOR SCHEME TEST "MonokaiFree.sublime-color-scheme" "Python" # flake8: noqa
 
 import os
 # ^ fg=#f8f8f2 bg=#272822 fs=
@@ -159,10 +165,10 @@ def f_name(arg1='', arg2=0):
         #           ^^^^^ fg=#e6db74 fs=
 ```
 
-### HTML example
+#### HTML example
 
 ```html
-<!-- COLOR SCHEME TEST "MonokaiFree/MonokaiFree.sublime-color-scheme" "HTML" -->
+<!-- COLOR SCHEME TEST "MonokaiFree.sublime-color-scheme" "HTML" -->
 <!DOCTYPE html>
 <!-- ^^^^ fg=#f92672 fs= -->
 <!--      ^^^^^ fg=#f8f8f2 fs= -->
@@ -196,10 +202,10 @@ def f_name(arg1='', arg2=0):
 <!-- ^ fg=#f92672 fs= -->
 ```
 
-### PHP example
+#### PHP example
 
 ```php
-<?php // COLOR SCHEME TEST "MonokaiFree/MonokaiFree.sublime-color-scheme" "PHP"
+<?php // COLOR SCHEME TEST "MonokaiFree.sublime-color-scheme" "PHP"
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 //^ fg=#f92672 fs=
