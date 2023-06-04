@@ -1,5 +1,10 @@
 # ColorSchemeUnit Changelog
 
+## 2.2.0 - 2023-06-04
+
+* Allow assertions in any order e.g. `// ^ bg=#000000 fg=#ffffff` and `// ^ fg=#ffffff bg=#000000`
+* Other fixes and enhancements
+
 ## 2.1.0 - 2023-05-31
 
 * Coverage report improvements and fixes
