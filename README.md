@@ -138,7 +138,7 @@ For more usage examples, the MonokaiFree color scheme has an [extensive test sui
 #### Python example
 
 ```py
-# COLOR SCHEME TEST "MonokaiFree.sublime-color-scheme" "Python" # flake8: noqa
+# COLOR SCHEME TEST "MonokaiFree.sublime-color-scheme" "Python"
 
 import os
 # ^ fg=#f8f8f2 bg=#272822 fs=
