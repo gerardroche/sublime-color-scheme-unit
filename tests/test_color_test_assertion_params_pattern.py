@@ -1,12 +1,12 @@
 from unittest import TestCase
 
-from ColorSchemeUnit.lib.runner import _color_test_assertion_compiled_pattern as pattern
+from ColorSchemeUnit.lib.runner import _parse_assertion
 
 
 class TestColorTestAssertionParamsPattern(TestCase):
 
     def assertMatch(self, string, expected):
-        match = pattern.match(string)
+        match = _parse_assertion(string)
 
         self.assertTrue(match)
 
@@ -25,21 +25,21 @@ class TestColorTestAssertionParamsPattern(TestCase):
         if 'build' not in expected:
             expected['build'] = None
 
-        self.assertEquals(expected['repeat'], match.group('repeat'))
-        self.assertEquals(expected['fg'], match.group('fg'))
-        self.assertEquals(expected['bg'], match.group('bg'))
-        self.assertEquals(expected['fs'], match.group('fs'))
-        self.assertEquals(expected['build'], match.group('build'))
+        self.assertEquals(expected['repeat'], match['repeat'])
+        self.assertEquals(expected['fg'], match['fg'])
+        self.assertEquals(expected['bg'], match['bg'])
+        self.assertEquals(expected['fs'], match['fs'])
+        self.assertEquals(expected['build'], match['build'])
 
     def test_invalid(self):
-        self.assertIsNone(pattern.match(''))
-        self.assertIsNone(pattern.match('foo'))
-        self.assertIsNone(pattern.match('// '))
-        self.assertIsNone(pattern.match('// foo'))
-        self.assertIsNone(pattern.match('// ^ ^'))
-        self.assertIsNone(pattern.match('// ^^^ ^'))
-        self.assertIsNone(pattern.match('// ^ foo'))
-        self.assertIsNone(pattern.match('// ^ x=y'))
+        self.assertIsNone(_parse_assertion(''))
+        self.assertIsNone(_parse_assertion('foo'))
+        self.assertIsNone(_parse_assertion('// '))
+        self.assertIsNone(_parse_assertion('// foo'))
+        self.assertIsNone(_parse_assertion('// ^ ^'))
+        self.assertIsNone(_parse_assertion('// ^^^ ^'))
+        self.assertIsNone(_parse_assertion('// ^ foo'))
+        self.assertIsNone(_parse_assertion('// ^ x=y'))
 
     def test_fg(self):
         self.assertMatch('// ^ fg=#ffffff', {'repeat': '^', 'fg': '#ffffff'})

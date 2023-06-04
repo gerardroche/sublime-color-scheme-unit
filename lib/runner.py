@@ -43,6 +43,21 @@ def message(msg):
     print(msg)
 
 
+def _parse_assertion(line: str):
+    line = line.lower().rstrip(' -->').rstrip(' */')
+    match = _color_test_assertion_compiled_pattern.match(line)
+
+    if match:
+        return {
+            'assertion': match.group(0),
+            'repeat': match.group('repeat'),
+            'fg': match.group('fg'),
+            'bg': match.group('bg'),
+            'fs': match.group('fs'),
+            'build': match.group('build'),
+        }
+
+
 def is_valid_color_scheme_test_file_name(file_name):
     if not file_name:
         return False
@@ -68,7 +83,6 @@ def get_color_scheme_test_params(content: str, file_name=None):
             color_scheme = 'Packages/' + test_params.group('color_scheme')
 
         syntax_package_name = None
-        syntax_name = test_params['syntax_name']
         if not syntax_name and file_name is not None:
             syntax_name = os.path.splitext(file_name)[1].lstrip('.').upper()
         elif '/' in syntax_name:
@@ -87,7 +101,7 @@ def get_color_scheme_test_params(content: str, file_name=None):
             'syntaxes': syntaxes,
             'syntax': syntaxes[0] if syntaxes else None,
             'syntax_name': syntax_name,
-            'skip_if_not_syntax': skip_if_not_syntax,
+            'skip_if_not_syntax': bool(skip_if_not_syntax),
             'color_scheme': color_scheme
         }
 
@@ -154,25 +168,25 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
         consecutive_test_lines = 0
         for line_number, line in enumerate(test_content.splitlines()):
             has_failed_assertion = False
-            assertion_params = _color_test_assertion_compiled_pattern.match(line.lower().rstrip(' -->').rstrip(' */'))
+            assertion_params = _parse_assertion(line)
             if not assertion_params:
                 consecutive_test_lines = 0
                 continue
 
             consecutive_test_lines += 1
 
-            requires_build = assertion_params.group('build')
+            requires_build = assertion_params['build']
             if requires_build:
                 if int(version()) < int(requires_build):
                     continue
 
             assertion_row = line_number - consecutive_test_lines
             assertion_begin = line.find('^')
-            assertion_repeat = assertion_params.group('repeat')
+            assertion_repeat = assertion_params['repeat']
             assertion_end = assertion_begin + len(assertion_repeat)
-            assertion_fg = assertion_params.group('fg')
-            assertion_bg = assertion_params.group('bg')
-            assertion_fs = assertion_params.group('fs')
+            assertion_fg = assertion_params['fg']
+            assertion_bg = assertion_params['bg']
+            assertion_fs = assertion_params['fs']
 
             expected = {}
 
@@ -207,7 +221,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
                 if actual != expected:
                     has_failed_assertion = True
                     failures.append({
-                        'assertion': assertion_params.group(0),
+                        'assertion': assertion_params['assertion'],
                         'file': test_view.file_name(),
                         'row': assertion_row + 1,
                         'col': col + 1,
