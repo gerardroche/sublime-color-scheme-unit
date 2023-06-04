@@ -27,14 +27,16 @@ _color_test_params_compiled_pattern = re.compile(
     '(?:(?P<skip_if_not_syntax> SKIP IF NOT)? "(?P<syntax_name>[^"]+)")?'
     '(?:\\s*(?:--\\>|\\?\\>|\\*\\/))?')
 
-_color_test_assertion_compiled_pattern = re.compile(
+_color_test_assertion = re.compile(
     '^\\s*(//|#|\\/\\*|\\<\\!--|--)\\s*'
-    '(?P<repeat>\\^+)'
-    '(?: fg=(?P<fg>[^ ]+)?)?'
-    '(?: bg=(?P<bg>[^ ]+)?)?'
-    '(?: fs=(?P<fs>[^=]*)?)?'
-    '(?: build\\>=(?P<build>[^=]*)?)?'
+    '(?P<repeat>\\^+)\\s+'
+    '(?P<assertions>.+)'
     '$')
+
+_color_test_assertion_fg = re.compile('fg=([^ ]+)')
+_color_test_assertion_bg = re.compile('bg=([^ ]+)')
+_color_test_assertion_fs = re.compile('fs=([a-z_]+ ?(?:[a-z_]+(?:$| ))*)')
+_color_test_assertion_build = re.compile('build\\>=([0-9]+)')
 
 
 def message(msg):
@@ -45,17 +47,27 @@ def message(msg):
 
 def _parse_assertion(line: str):
     line = line.lower().rstrip(' -->').rstrip(' */')
-    match = _color_test_assertion_compiled_pattern.match(line)
+    match = _color_test_assertion.match(line)
 
     if match:
-        return {
+        assertion = {
             'assertion': match.group(0),
-            'repeat': match.group('repeat'),
-            'fg': match.group('fg'),
-            'bg': match.group('bg'),
-            'fs': match.group('fs'),
-            'build': match.group('build'),
+            'repeat': match.group('repeat')
         }
+
+        fg = _color_test_assertion_fg.search(match.group('assertions'))
+        assertion['fg'] = fg.group(1) if fg else None
+
+        bg = _color_test_assertion_bg.search(match.group('assertions'))
+        assertion['bg'] = bg.group(1) if bg else None
+
+        fs = _color_test_assertion_fs.search(match.group('assertions'))
+        assertion['fs'] = fs.group(1).strip() if fs else None
+
+        build = _color_test_assertion_build.search(match.group('assertions'))
+        assertion['build'] = build.group(1) if build else None
+
+        return assertion
 
 
 def is_valid_color_scheme_test_file_name(file_name):
