@@ -120,6 +120,22 @@ def get_color_scheme_test_params(content: str, file_name=None):
     return None
 
 
+class ColorSchemeTest():
+
+    def __init__(self, test):
+        self.test = test
+        self.content = load_resource(self.test)
+        self.params = get_color_scheme_test_params(self.content, self.test)
+
+    def init_view(self, test_view):
+        test_view.view.assign_syntax(self.params['syntax'])
+        test_view.view.settings().set('color_scheme', self.params['color_scheme'])
+        test_view.set_content(self.content)
+
+    def get_lines(self):
+        return enumerate(self.content.splitlines())
+
+
 def run_color_scheme_test(test, window, result_printer, code_coverage):
     skip = {}  # type: dict
     error = {}  # type: dict
@@ -130,10 +146,10 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
     test_view.setUp()
 
     try:
-        test_content = load_resource(test)
-        test_params = get_color_scheme_test_params(test_content, test)
 
-        if not test_params:
+        color_scheme_test = ColorSchemeTest(test)
+
+        if not color_scheme_test.params:
             err_msg = 'Invalid COLOR SCHEME TEST header'
             error['message'] = err_msg
             error['file'] = test_view.file_name()
@@ -141,33 +157,31 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
             error['col'] = 0
             raise RuntimeError(err_msg)
 
-        if len(test_params['syntaxes']) > 1:
-            err_msg = 'More than one syntax found: {}'.format(test_params['syntaxes'])
+        if len(color_scheme_test.params['syntaxes']) > 1:
+            err_msg = 'More than one syntax found: {}'.format(color_scheme_test.params['syntaxes'])
             error['message'] = err_msg
             error['file'] = test_view.file_name()
             error['row'] = 0
             error['col'] = 0
             raise RuntimeError(err_msg)
 
-        if len(test_params['syntaxes']) != 1:
-            if test_params['skip_if_not_syntax']:
-                err_msg = 'Syntax not found: {}'.format(test_params['syntax_name'])
+        if len(color_scheme_test.params['syntaxes']) != 1:
+            if color_scheme_test.params['skip_if_not_syntax']:
+                err_msg = 'Syntax not found: {}'.format(color_scheme_test.params['syntax_name'])
                 skip['message'] = err_msg
                 skip['file'] = test_view.file_name()
                 skip['row'] = 0
                 skip['col'] = 0
                 raise RuntimeError(err_msg)
             else:
-                err_msg = 'Syntax not found: {}'.format(test_params['syntax_name'])
+                err_msg = 'Syntax not found: {}'.format(color_scheme_test.params['syntax_name'])
                 error['message'] = err_msg
                 error['file'] = test_view.file_name()
                 error['row'] = 0
                 error['col'] = 0
                 raise RuntimeError(err_msg)
 
-        test_view.view.assign_syntax(test_params['syntax'])
-        test_view.view.settings().set('color_scheme', test_params['color_scheme'])
-        test_view.set_content(test_content)
+        color_scheme_test.init_view(test_view)
 
         color_scheme_style = ViewStyle(test_view.view)
 
@@ -178,7 +192,7 @@ def run_color_scheme_test(test, window, result_printer, code_coverage):
         code_coverage.on_test_start(test, test_view)
 
         consecutive_test_lines = 0
-        for line_number, line in enumerate(test_content.splitlines()):
+        for line_number, line in color_scheme_test.get_lines():
             has_failed_assertion = False
             assertion_params = _parse_assertion(line)
             if not assertion_params:
