@@ -261,14 +261,12 @@ def run_color_scheme_test(test, window, result_printer: ResultPrinter, code_cove
                 result_printer.on_test_success()
 
     except Exception as e:
-        if not error and not skip:
-            result_printer.output.write("\nAn error occurred: %s\n" % str(e))
-
         if error:
             result_printer.addError(test, test_view)
-
-        if skip:
+        elif skip:
             result_printer.addSkippedTest(test, test_view)
+        else:
+            result_printer.addException(e)
 
     finally:
         test_view.tearDown()

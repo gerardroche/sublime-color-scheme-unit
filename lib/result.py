@@ -131,6 +131,9 @@ class ResultPrinter():
             self.output.write('\nSkipping test \'{}\'\n  color scheme: \'{}\'\n  syntax: \'{}\'\n'
                               .format(test, color_scheme, syntax))
 
+    def addException(self, exception):
+        self.output.write("\nAn error occurred: %s\n" % str(exception))
+
     def on_test_success(self):
         self._writeProgress('.')
 
