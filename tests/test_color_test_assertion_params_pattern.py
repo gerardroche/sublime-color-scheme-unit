@@ -55,6 +55,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertMatch('// ^ fs=italic stippled_underline glow', {'repeat': '^', 'fs': 'italic stippled_underline glow'})  # noqa: E501
         self.assertMatch('// ^ fs=italic stippled_underline squiggly_underline', {'repeat': '^', 'fs': 'italic stippled_underline squiggly_underline'})  # noqa: E501
         self.assertMatch('// ^ fs=italic stippled_underline squiggly_underline', {'repeat': '^', 'fs': 'italic stippled_underline squiggly_underline'})  # noqa: E501
+        self.assertMatch('// ^ fs=', {'repeat': '^', 'fs': ''})
 
     def test_build(self):
         self.assertMatch('// ^ fg=#ffffff build>=3127', {'repeat': '^', 'fg': '#ffffff', 'build': '3127'})
@@ -62,6 +63,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertMatch('// ^ fs=italic build>=4000', {'repeat': '^', 'fs': 'italic', 'build': '4000'})
         self.assertMatch('// ^ fs=italic bold build>=4000', {'repeat': '^', 'fs': 'italic bold', 'build': '4000'})
         self.assertMatch('// ^ fs=italic bold stippled_underline build>=4123', {'repeat': '^', 'fs': 'italic bold stippled_underline', 'build': '4123'})  # noqa: E501
+        self.assertMatch('// ^ fs= build>=4000', {'repeat': '^', 'fs': '', 'build': '4000'})
 
     def test_multiple_assertions(self):
         self.assertMatch('// ^ fg=#ffffff bg=#000000', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000'})
@@ -72,6 +74,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertMatch('// ^ fg=#ffffff bg=#000000 fs=bold italic stippled_underline build>=4000', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold italic stippled_underline', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ fg=#ffffff bg=#000000 fs=italic bold underline build>=3133', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'italic bold underline', 'build': '3133'})  # noqa: E501
         self.assertMatch('// ^ fg=#ffffff fs=bold', {'repeat': '^', 'fg': '#ffffff', 'fs': 'bold'})  # noqa: E501
+        self.assertMatch('// ^ fg=#ffffff fs=', {'repeat': '^', 'fg': '#ffffff', 'fs': ''})  # noqa: E501
         self.assertMatch('// ^ fg=#ffffff fs=bold build>=4000', {'repeat': '^', 'fg': '#ffffff', 'fs': 'bold', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ fg=#ffffff fs=bold squiggly_underline glow', {'repeat': '^', 'fg': '#ffffff', 'fs': 'bold squiggly_underline glow'})  # noqa: E501
         self.assertMatch('// ^ fg=#ffffff fs=bold squiggly_underline glow build>=4000', {'repeat': '^', 'fg': '#ffffff', 'fs': 'bold squiggly_underline glow', 'build': '4000'})  # noqa: E501
@@ -79,6 +82,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertMatch('// ^ bg=#000000 fs=bold build>=4000', {'repeat': '^', 'bg': '#000000', 'fs': 'bold', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 fs=bold italic', {'repeat': '^', 'bg': '#000000', 'fs': 'bold italic'})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 fs=bold italic build>=4000', {'repeat': '^', 'bg': '#000000', 'fs': 'bold italic', 'build': '4000'})  # noqa: E501
+        self.assertMatch('// ^ bg=#000000 fs= build>=4000', {'repeat': '^', 'bg': '#000000', 'fs': '', 'build': '4000'})  # noqa: E501
 
     def test_multiple_assertions_any_order(self):
         self.assertMatch('// ^ bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000'})
@@ -86,6 +90,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertMatch('// ^ build>=4000 bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 build>=4000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 fg=#ffffff fs=bold', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold'})  # noqa: E501
+        self.assertMatch('// ^ bg=#000000 fg=#ffffff fs=', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': ''})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 fg=#ffffff fs=bold build>=4000', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 fg=#ffffff fs=bold glow squiggly_underline italic stippled_underline', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold glow squiggly_underline italic stippled_underline'})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 fg=#ffffff fs=bold glow squiggly_underline italic stippled_underline build>=4000', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold glow squiggly_underline italic stippled_underline', 'build': '4000'})  # noqa: E501
@@ -94,6 +99,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertMatch('// ^ bg=#000000 fs=bold glow fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold glow'})  # noqa: E501
         self.assertMatch('// ^ bg=#000000 fs=bold glow fg=#ffffff build>=4000', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold glow', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ fs=bold bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold'})  # noqa: E501
+        self.assertMatch('// ^ fs= bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': ''})  # noqa: E501
         self.assertMatch('// ^ fs=bold bg=#000000 fg=#ffffff build>=4000', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ build>=4000 fs=bold bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ fs=bold italic bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold italic'})  # noqa: E501
@@ -101,6 +107,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
         self.assertMatch('// ^ fs=bold italic glow bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold italic glow'})  # noqa: E501
         self.assertMatch('// ^ fs=bold italic glow bg=#000000 fg=#ffffff build>=4000', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold italic glow', 'build': '4000'})  # noqa: E501
         self.assertMatch('// ^ build>=4000 fs=bold italic glow bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': 'bold italic glow', 'build': '4000'})  # noqa: E501
+        self.assertMatch('// ^ build>=4000 fs= italic glow bg=#000000 fg=#ffffff', {'repeat': '^', 'fg': '#ffffff', 'bg': '#000000', 'fs': '', 'build': '4000'})  # noqa: E501
 
     def test_repeats(self):
         self.assertMatch('// ^^ fg=#ffffff', {'repeat': '^^', 'fg': '#ffffff'})
@@ -124,6 +131,7 @@ class TestColorTestAssertionParamsPattern(TestCase):
             self.assertMatch(s + '^ fg=#ffffff' + e, {'repeat': '^', 'fg': '#ffffff'})
             self.assertMatch(s + '^ bg=#ffffff' + e, {'repeat': '^', 'bg': '#ffffff'})
             self.assertMatch(s + '^ fs=bold' + e, {'repeat': '^', 'fs': 'bold'})
+            self.assertMatch(s + '^ fs=' + e, {'repeat': '^', 'fs': ''})
             self.assertMatch(s + '^ fs=bold italic' + e, {'repeat': '^', 'fs': 'bold italic'})
             self.assertMatch(s + '^ fs=bold italic stippled_underline' + e, {'repeat': '^', 'fs': 'bold italic stippled_underline'})  # noqa: E501
             self.assertMatch(s + '^ fg=#ffffff bg=#000000' + e, {'repeat': '^', 'bg': '#000000', 'fg': '#ffffff'})

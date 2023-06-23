@@ -37,21 +37,21 @@ class TestView():
 
 class TestOutputPanel():
 
-    def __init__(self, name, window):
+    def __init__(self, window):
+        self.name = 'color_scheme_output'
         self.window = window
-        self.name = name
         active_view = window.active_view()
 
         if active_view and active_view.settings().get('color_scheme_unit.strategy') == 'view':
             for view in window.views():
-                if view.name() == name:
+                if view.name() == self.name:
                     view.close()
 
             self.view = window.new_file()
-            self.view.set_name(name)
+            self.view.set_name(self.name)
             self.view.set_scratch(True)
         else:
-            self.view = window.create_output_panel(name)
+            self.view = window.create_output_panel(self.name)
 
         settings = self.view.settings()
         settings.set('result_file_regex', '^(.+):([0-9]+):([0-9]+)$')

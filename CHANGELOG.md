@@ -1,5 +1,9 @@
 # ColorSchemeUnit Changelog
 
+## 2.2.1 - Unreleased
+
+* Fixed: `fs=` should assert no font style
+
 ## 2.2.0 - 2023-06-04
 
 * Allow assertions in any order e.g. `// ^ bg=#000000 fg=#ffffff` and `// ^ fg=#ffffff bg=#000000`

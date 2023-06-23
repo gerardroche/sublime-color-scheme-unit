@@ -42,19 +42,24 @@ class TestViewStyle(unittest.ViewTestCase):
             self.assertEquals('#111111', s['background'])
             self.assertEquals('#eeeeee', s['foreground'])
             self.assertEquals('', s['fontStyle'])
+
             s = style.at_point(8)
             self.assertEquals('#111111', s['background'])
             self.assertEquals('#75715e', s['foreground'])
             self.assertEquals('', s['fontStyle'])
+
             s = style.at_point(19)
             self.assertEquals('#eeeeee', s['foreground'])
             self.assertEquals('italic', s['fontStyle'])
+
             s = style.at_point(23)
             self.assertEquals('#800080', s['foreground'])
             self.assertEquals('', s['fontStyle'])
+
             s = style.at_point(32)
             self.assertEquals('#ff0000', s['foreground'])
             self.assertEquals('bold', s['fontStyle'])
+
             s = style.at_point(37)
             self.assertEquals('#ffff00', s['foreground'])
             self.assertEquals('bold italic', s['fontStyle'])

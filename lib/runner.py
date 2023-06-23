@@ -17,9 +17,9 @@ from ColorSchemeUnit.lib.test import TestOutputPanel
 from ColorSchemeUnit.lib.test import TestView
 
 
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 
-__version_info__ = (2, 2, 0)
+__version_info__ = (2, 2, 1)
 
 _color_test_params_compiled_pattern = re.compile(
     '^(?:(?:\\<\\?php )?(?://|#|\\/\\*|\\<\\!--|--)\\s*)?'
@@ -35,7 +35,7 @@ _color_test_assertion = re.compile(
 
 _color_test_assertion_fg = re.compile('fg=([^ ]+)')
 _color_test_assertion_bg = re.compile('bg=([^ ]+)')
-_color_test_assertion_fs = re.compile('fs=([a-z_]+ ?(?:[a-z_]+(?:$| ))*)')
+_color_test_assertion_fs = re.compile('fs=([a-z_]+ ?(?:[a-z_]+(?:$| ))*|\\s*)')
 _color_test_assertion_build = re.compile('build\\>=([0-9]+)')
 
 
@@ -136,7 +136,7 @@ class ColorSchemeTest():
         return enumerate(self.content.splitlines())
 
 
-def run_color_scheme_test(test, window, result_printer, code_coverage):
+def run_color_scheme_test(test, window, result_printer: ResultPrinter, code_coverage: Coverage):
     skip = {}  # type: dict
     error = {}  # type: dict
     failures = []
@@ -349,7 +349,7 @@ class ColorSchemeUnit():
             return message('ColorSchemeUnit: no tests found; be sure run tests from within the packages directory')
 
         if not output:
-            output = TestOutputPanel('color_scheme_unit', self.window)
+            output = TestOutputPanel(self.window)
 
         output.write("ColorSchemeUnit %s\n\n" % __version__)
         output.write("Runtime: %s build %s\n" % (platform(), version()))
@@ -361,7 +361,7 @@ class ColorSchemeUnit():
         output.write("\n")
 
         result_printer = ResultPrinter(output, debug=self.view.settings().get('color_scheme_unit.debug'))
-        code_coverage = Coverage(output, self.view.settings().get('color_scheme_unit.coverage'), file)
+        code_coverage = Coverage(output, enabled=self.view.settings().get('color_scheme_unit.coverage'), is_single_file=bool(file))  # noqa: E501
 
         skipped = []  # type: list
         errors = []  # type: list

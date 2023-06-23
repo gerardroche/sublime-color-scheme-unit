@@ -29,6 +29,11 @@
             "scope": "string",
             "foreground": "#ffff00",
             "font_style": "bold italic"
+        },
+        {
+            "scope": "support.class.builtin",
+            "foreground": "#66d9ef",
+            "font_style": "italic"
         }
     ]
 }

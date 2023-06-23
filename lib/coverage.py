@@ -49,11 +49,11 @@ _MINIMAL_SCOPES = [
 
 class Coverage():
 
-    def __init__(self, output, enabled, is_single_file):
+    def __init__(self, output, enabled: bool, is_single_file: bool):
         self.output = output
         self.enabled = enabled
         self.is_single_file = is_single_file
-        self.tests_info = {}
+        self.tests_info = {}  # type: dict
 
     def on_test_start(self, test, data):
         if not self.enabled:
