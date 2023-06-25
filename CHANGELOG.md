@@ -1,6 +1,6 @@
 # ColorSchemeUnit Changelog
 
-## 2.2.1 - Unreleased
+## 2.2.1 - 2023-06-25
 
 * Fixed: `fs=` should assert no font style
 
