@@ -31,7 +31,7 @@
             "font_style": "bold italic"
         },
         {
-            "scope": "support.class.builtin",
+            "scope": "storage.type",
             "foreground": "#66d9ef",
             "font_style": "italic"
         }
