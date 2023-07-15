@@ -1,5 +1,9 @@
 # ColorSchemeUnit Changelog
 
+## 2.2.2 - 2023-07-15
+
+* Fixed: some font styles not workings e.g. `fs=bold glow`
+
 ## 2.2.1 - 2023-06-25
 
 * Fixed: `fs=` should assert no font style

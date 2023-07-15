@@ -66,10 +66,11 @@ class ViewStyle():
             scope_style = self.view.style_for_scope(scope)
             style.update(scope_style)
             fontStyle = ''
-            if 'bold' in style and style['bold']:
-                fontStyle += ' bold'
-            if 'italic' in style and style['italic']:
-                fontStyle += ' italic'
+
+            for font_style_type in ('bold', 'italic', 'glow', 'underline', 'stippled_underline', 'squiggly_underline'):
+                if font_style_type in style and style[font_style_type]:
+                    fontStyle += ' ' + font_style_type
+
             style['fontStyle'] = fontStyle.strip()
 
         self.scope_style_cache[scope] = style
