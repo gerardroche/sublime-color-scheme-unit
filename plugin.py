@@ -26,7 +26,7 @@ class ColorSchemeUnitEvents(sublime_plugin.EventListener):
     def on_load_async(self, view):
         if is_valid_color_scheme_test_file_name(view.file_name()):
             params = get_color_scheme_test_params_from_view(view)
-            if params:
+            if params and params['syntax']:
                 view.settings().set('color_scheme', params['color_scheme'])
                 view.assign_syntax(params['syntax'])
 

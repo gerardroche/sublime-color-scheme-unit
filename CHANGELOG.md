@@ -1,5 +1,11 @@
 # ColorSchemeUnit Changelog
 
+## 2.2.3 - 2023-12-07
+
+### Fixed
+
+- Fix type error when loading test syntax
+
 ## 2.2.2 - 2023-07-15
 
 * Fixed: some font styles not workings e.g. `fs=bold glow`
