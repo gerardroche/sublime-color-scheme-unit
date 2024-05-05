@@ -1,5 +1,11 @@
 # ColorSchemeUnit Changelog
 
+## 2.2.4 - Unreleased
+
+### Fixed
+
+- Removed AppVeyor CI (no longer supported)
+
 ## 2.2.3 - 2023-12-07
 
 ### Fixed

@@ -2,7 +2,7 @@
 
 A testing framework for Sublime Text color schemes.
 
-[![Continuous Integration](https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml/badge.svg)](https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml) [![Build status](https://ci.appveyor.com/api/projects/status/djk37txaryaxagr1?svg=true)](https://ci.appveyor.com/project/gerardroche/sublime-color-scheme-unit) [![codecov](https://codecov.io/gh/gerardroche/sublime-color-scheme-unit/branch/master/graph/badge.svg?token=Ln3mldFyPv)](https://codecov.io/gh/gerardroche/sublime-color-scheme-unit) ![Package Control](https://img.shields.io/packagecontrol/dt/ColorSchemeUnit)
+[![Continuous Integration](https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml/badge.svg)](https://github.com/gerardroche/sublime-color-scheme-unit/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/gerardroche/sublime-color-scheme-unit/branch/master/graph/badge.svg?token=Ln3mldFyPv)](https://codecov.io/gh/gerardroche/sublime-color-scheme-unit) ![Package Control](https://img.shields.io/packagecontrol/dt/ColorSchemeUnit)
 
 ![ColorSchemeUnit](screenshot.png)
 
